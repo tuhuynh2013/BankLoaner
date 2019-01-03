@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name">Bank Loader</string>
+    <!--common string-->
+    <string name="id">ID</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="email">Email</string>
+    <string name="login">Log in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="sign_out">Sign out</string>
+    <string name="textview_sign_up">"Don't have an account?\nRegister Here</string>
+    <string name="textview_login">Already Registered?\nLog in Here</string>
+
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
+    <!--error messages-->
+    <string name="error_username_password">Invalid username or password</string>
+    <string name="error_empty_username">Please enter your username</string>
+    <string name="error_invalid_username">Username is invalid</string>
+    <string name="error_empty_name">Please enter your first name</string>
+    <string name="error_invalid_name">Name is invalid</string>
+    <string name="error_empty_password">Please enter your password</string>
+    <string name="error_not_match_password">Password not match</string>
+    <string name="error_empty_email">Please enter your email</string>
+    <string name="error_invalid_email">Please enter a valid email</string>
+    <string name="error_empty_amount">Amount is empty</string>
+    <string name="error_atleast_amount">Amount must greater than 100,000,000</string>
+    <string name="error_exceed_amount">Amount must less than 100,000,000,000</string>
+    <string name="error_empty_surname">Please enter your surname</string>
+    <string name="error_invalid_surname">Surname is invalid</string>
+    <string name="error_empty_identity">Please enter your identity number</string>
+    <string name="error_invalid_identity">Identity number must contains only 9 digits</string>
+    <string name="error_empty_phone">Please enter your phone number</string>
+    <string name="error_invalid_phone">Phone must contains only 10 to 11 digits</string>
+    <string name="error_empty_address">Please enter your address</string>
+    <string name="error_empty_workplace">Please enter your workplace</string>
+    <string name="error_empty_designation">Please enter your designation</string>
+
+    <!--Navigation toolbar-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="my_app_title">My App</string>
+    <string name="action_settings">Settings</string>
+    <string name="mess_setting">You chose Setting.</string>
+    <string name="mess_signout">You are sign out.</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_setting">Setting</string>
+    <string name="nav_signout">Sign out</string>
+
+    <!--Tab-->
+    <string name="title_bank_list">Bank list</string>
+    <string name="title_bank_status">Bank status</string>
+
+    <!--Bank List Fragment-->
+    <string name="bank_icon">Bank icon</string>
+    <string name="year">Year: </string>
+    <string name="interest_rate">Interest rate: </string>
+    <string name="amount">Amount</string>
+    <string name="debit_amount">Debit amount</string>
+    <string name="calculate">Calculate</string>
+    <string name="mess_retrieve_banklist_success">Retrieve list of banks successful</string>
+    <string name="error_retrieve_fail">Fail to retrieve data</string>
+
+    <!--Bank Info-->
+    <string name="month">Month</string>
+    <string name="balance">Balance</string>
+    <string name="principal">Principal</string>
+    <string name="interest">Interest</string>
+    <string name="total_payment">Total Payment</string>
+    <string name="total">Total</string>
+    <string name="title_activity_user_profile">UserProfileActivity</string>
+
+    <!--Profile-->
+    <string name="name">Name*</string>
+    <string name="surname">Surname</string>
+    <string name="identity_id">Identity ID*</string>
+    <string name="gender">Gender</string>
+    <string name="phone">Phone*</string>
+    <string name="address">Address*</string>
+    <string name="workplace">Workplace</string>
+    <string name="designation">Designation</string>
+    <string name="hint_surname">Your surname</string>
+    <string name="hint_identity_id">Your identity number</string>
+    <string name="hint_phone">Your phone number</string>
+    <string name="hint_address">Your address</string>
+    <string name="hint_workplace">Your workplace</string>
+    <string name="hint_designation">Your designation</string>
+    <string name="save_change">Save change</string>
+    <string name="mess_retrieve_customer_info_success">Retrieve customer information successful</string>
+    <string name="mess_update_successfully">Update successfully</string>
+    <string name="mess_update_error">Update error</string>
+    <string name="apply">Apply</string>
+
+    <!--Loan Application-->
+    <string name="tv_bank_name">Bank name:</string>
+    <string name="tv_month">Month:</string>
+    <string name="tv_amount">Amount:</string>
+
+</resources>
