@@ -18,7 +18,7 @@ import com.example.tuhuynh.myapplication.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.customer.CustomerInfo;
+import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +33,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
     private RadioButton rdMale, rdFemale;
     private Button btnSave;
 
-    //getting the current user
+    // Getting the current user
     User user = SharedPrefManager.getInstance(this).getUser();
 
     @Override
@@ -41,8 +41,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_editor);
 
-        //if the user is not logged in
-        //starting the login activity
+        // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -127,7 +126,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
                 if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.mess_retrieve_customer_info_success))) {
 
                     // Getting the customer info from the response
-                    JSONObject customerJson = obj.getJSONObject("customerInfo");
+                    JSONObject customerJson = obj.getJSONObject("customerProfile");
 
                     String surname = customerJson.getString("surname");
                     String identityID = customerJson.getString("identity_id");
@@ -136,7 +135,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
                     String address = customerJson.getString("address");
                     String workplace = customerJson.getString("workplace");
                     String designation = customerJson.getString("designation");
-                    CustomerInfo customerInfo = new CustomerInfo(surname, identityID, gender, phone, address, workplace, designation);
+                    CustomerProfile customerProfile = new CustomerProfile(surname, identityID, gender, phone, address, workplace, designation);
 
                     // Setting the values to the textviews
                     edtName.setText(user.getName());
@@ -144,17 +143,17 @@ public class ProfileEditorActivity extends AppCompatActivity {
                     tvEmail.setText(user.getEmail());
 
                     if (!surname.isEmpty()) {
-                        customerInfo.setSurname(surname);
+                        customerProfile.setSurname(surname);
                         edtSurname.setText(surname);
                     }
 
                     if (!identityID.isEmpty()) {
-                        customerInfo.setIdentity(identityID);
+                        customerProfile.setIdentity(identityID);
                         edtIdentity.setText(identityID);
                     }
 
                     if (!gender.isEmpty()) {
-                        customerInfo.setGender(gender);
+                        customerProfile.setGender(gender);
                         if (gender.equalsIgnoreCase(rdMale.getText().toString())) {
                             rdMale.setChecked(true);
                         } else if (gender.equalsIgnoreCase(rdFemale.getText().toString())) {
@@ -165,25 +164,25 @@ public class ProfileEditorActivity extends AppCompatActivity {
                     }
 
                     if (!phone.isEmpty()) {
-                        customerInfo.setPhone(phone);
+                        customerProfile.setPhone(phone);
                         edtPhone.setText(phone);
                     }
 
                     if (!address.isEmpty()) {
-                        customerInfo.setAddress(address);
+                        customerProfile.setAddress(address);
                         edtAddress.setText(address);
                     }
 
                     if (!workplace.isEmpty()) {
-                        customerInfo.setWorkplace(workplace);
+                        customerProfile.setWorkplace(workplace);
                         edtWorkplace.setText(workplace);
                     }
 
                     if (!designation.isEmpty()) {
-                        customerInfo.setDesignation(designation);
+                        customerProfile.setDesignation(designation);
                         edtDesignation.setText(designation);
                     }
-                    user.setCustomerInfo(customerInfo);
+                    user.setCustomerProfile(customerProfile);
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();
                 }
@@ -202,11 +201,11 @@ public class ProfileEditorActivity extends AppCompatActivity {
     class UpdateUserProfile extends AsyncTask<Void, Void, String> {
 
         User updateUser;
-        CustomerInfo customerInfo;
+        CustomerProfile customerProfile;
 
-        private UpdateUserProfile(User updateUser, CustomerInfo customerInfo) {
+        private UpdateUserProfile(User updateUser, CustomerProfile customerProfile) {
             this.updateUser = updateUser;
-            this.customerInfo = customerInfo;
+            this.customerProfile = customerProfile;
         }
 
         private ProgressBar progressBar;
@@ -225,13 +224,13 @@ public class ProfileEditorActivity extends AppCompatActivity {
             HashMap<String, String> params = new HashMap<>();
             params.put("id", Integer.toString(updateUser.getId()));
             params.put("username", updateUser.getUsername());
-            params.put("surname", customerInfo.getSurname());
-            params.put("identity", customerInfo.getIdentity());
-            params.put("gender", customerInfo.getGender());
-            params.put("phone", customerInfo.getPhone());
-            params.put("address", customerInfo.getAddress());
-            params.put("workplace", customerInfo.getWorkplace());
-            params.put("designation", customerInfo.getDesignation());
+            params.put("surname", customerProfile.getSurname());
+            params.put("identity", customerProfile.getIdentity());
+            params.put("gender", customerProfile.getGender());
+            params.put("phone", customerProfile.getPhone());
+            params.put("address", customerProfile.getAddress());
+            params.put("workplace", customerProfile.getWorkplace());
+            params.put("designation", customerProfile.getDesignation());
             // Return the response
             return requestHandler.sendPostRequest(URLs.URL_UPDATEUSERPROFILE, params);
         }
@@ -341,9 +340,9 @@ public class ProfileEditorActivity extends AppCompatActivity {
             edtDesignation.requestFocus();
             return;
         }
-        CustomerInfo customerInfo = new CustomerInfo(surname, identity, gender, phone, address, workplace, designation);
+        CustomerProfile customerProfile = new CustomerProfile(surname, identity, gender, phone, address, workplace, designation);
 
-        UpdateUserProfile updateUserProfile = new UpdateUserProfile(user, customerInfo);
+        UpdateUserProfile updateUserProfile = new UpdateUserProfile(user, customerProfile);
         updateUserProfile.execute();
     }
 

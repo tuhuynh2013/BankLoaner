@@ -22,6 +22,5 @@ public class LoanApplicationActivity extends Activity {
         final Double interest = intent.getDoubleExtra("interest", 0);
         final User user = (User) intent.getSerializableExtra("user");
 
-
     }
 }

@@ -1,5 +1,7 @@
 package com.example.tuhuynh.myapplication.customer;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
@@ -18,23 +20,25 @@ import java.util.HashMap;
 
 public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
 
-    public AsyncResponse listener = null;
+    private CustomerProfileCallBack cb;
+    @SuppressLint("StaticFieldLeak")
     private Context context;
-    private View view;
+    @SuppressLint("StaticFieldLeak")
     private ProgressBar progressBar;
     private User user;
 
-    public CustomerProfileAsyncTask(Context context, View view, User user) {
+    CustomerProfileAsyncTask(CustomerProfileCallBack cb, Context context, User user) {
+        this.cb = cb;
         this.context = context;
-        this.view = view;
+        progressBar = ((Activity) context).findViewById(R.id.progressBar);
         this.user = user;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -62,7 +66,7 @@ public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
             if (!obj.getBoolean("error") && message.equalsIgnoreCase(context.getString(R.string.mess_retrieve_customer_info_success))) {
 
                 // Getting the customer info from the response
-                JSONObject customerJson = obj.getJSONObject("customerInfo");
+                JSONObject customerJson = obj.getJSONObject("customerProfile");
 
                 String surname = customerJson.getString("surname");
                 String identityID = customerJson.getString("identity_id");
@@ -72,8 +76,8 @@ public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
                 String workplace = customerJson.getString("workplace");
                 String designation = customerJson.getString("designation");
 
-                CustomerInfo customerInfo = new CustomerInfo(surname, identityID, gender, phone, address, workplace, designation);
-                listener.processFinish(customerInfo);
+                CustomerProfile customerProfile = new CustomerProfile(surname, identityID, gender, phone, address, workplace, designation);
+                cb.callBack(customerProfile);
 
             } else {
                 Toast.makeText(context.getApplicationContext(), R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();

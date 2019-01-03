@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.BankInfo;
 import com.example.tuhuynh.myapplication.R;
@@ -29,18 +27,39 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class BankInfoScreen extends AppCompatActivity implements AsyncResponse {
+public class BankInfoScreen extends AppCompatActivity implements CustomerProfileCallBack {
 
     private EditText edtAmount;
     private RadioGroup rdgYear;
     private RadioButton rd;
     private TextView tvInterest;
     private TableLayout tblInterestTable;
-    private Button btnCalculate;
-    private Button btnApply;
 
     BankInfo bankInfo;
     User user = SharedPrefManager.getInstance(this).getUser();
+    CustomerProfileAsyncTask asyncTask;
+
+    CustomerProfile customerProfile = new CustomerProfile();
+
+    @Override
+    public void callBack(final CustomerProfile output) {
+        this.customerProfile = output;
+
+        // Get checked radio button
+        rd = findViewById(rdgYear.getCheckedRadioButtonId());
+        int month = Integer.parseInt(rd.getText().toString()) * 12;
+        Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
+        Double interest = Double.parseDouble(tvInterest.getText().toString());
+        user.setCustomerProfile(customerProfile);
+
+        Intent intent = new Intent(getApplicationContext(), LoanApplicationActivity.class);
+        intent.putExtra("bank", bankInfo);
+        intent.putExtra("month", month);
+        intent.putExtra("amount", amount);
+        intent.putExtra("interest", interest);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +80,7 @@ public class BankInfoScreen extends AppCompatActivity implements AsyncResponse {
         rdgYear = findViewById(R.id.rgpYear);
         tvInterest = findViewById(R.id.tvInterest);
         tblInterestTable = findViewById(R.id.tbl_InterestTable);
-        btnCalculate = findViewById(R.id.btnCalculate);
-        btnApply = findViewById(R.id.btn_apply);
+
 
         rdgYear.setOrientation(LinearLayout.HORIZONTAL);
         createRadioButton(bankInfo);
@@ -80,7 +98,7 @@ public class BankInfoScreen extends AppCompatActivity implements AsyncResponse {
 
         edtAmount.addTextChangedListener(onTextChangedListener());
 
-        btnCalculate.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnCalculate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tblInterestTable.removeAllViews();
@@ -93,6 +111,18 @@ public class BankInfoScreen extends AppCompatActivity implements AsyncResponse {
 
                 if (isVaildAmount(amount)) {
                     generateInterestTable(month, amount, interest);
+                }
+            }
+        });
+
+        asyncTask = new CustomerProfileAsyncTask(this, this, user);
+
+        findViewById(R.id.btn_apply).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
+                if (isVaildAmount(amount)) {
+                    asyncTask.execute();
                 }
             }
         });
@@ -345,35 +375,6 @@ public class BankInfoScreen extends AppCompatActivity implements AsyncResponse {
                 edtAmount.addTextChangedListener(this);
             }
         };
-    }
-
-    @Override
-    public void processFinish(CustomerInfo output) {
-        btnApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get checked radio button
-                rd = findViewById(rdgYear.getCheckedRadioButtonId());
-                int month = Integer.parseInt(rd.getText().toString()) * 12;
-                Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
-                Double interest = Double.parseDouble(tvInterest.getText().toString());
-
-                if (isVaildAmount(amount)) {
-                    CustomerProfileAsyncTask asyncTask = new CustomerProfileAsyncTask(getApplicationContext(), v
-                            /*findViewById(android.R.id.content).getRootView()*/, user);
-                    asyncTask.execute();
-
-                    Intent intent = new Intent(getApplicationContext(), LoanApplicationActivity.class);
-                    intent.putExtra("bank", bankInfo);
-                    intent.putExtra("month", month);
-                    intent.putExtra("amount", amount);
-                    intent.putExtra("interest", interest);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
-                }
-            }
-        });
-
     }
 
 

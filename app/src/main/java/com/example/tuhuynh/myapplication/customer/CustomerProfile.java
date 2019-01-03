@@ -1,6 +1,8 @@
 package com.example.tuhuynh.myapplication.customer;
 
-public class CustomerInfo {
+import java.io.Serializable;
+
+public class CustomerProfile implements Serializable {
 
     private String surname;
     private String identity;
@@ -10,12 +12,11 @@ public class CustomerInfo {
     private String workplace;
     private String designation;
 
-    public CustomerInfo() {
-
+    public CustomerProfile() {
     }
 
-    public CustomerInfo(String surname, String identity, String gender,
-                        String phone, String address, String workplace, String designation) {
+    public CustomerProfile(String surname, String identity, String gender,
+                           String phone, String address, String workplace, String designation) {
         this.surname = surname;
         this.identity = identity;
         this.gender = gender;
