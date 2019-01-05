@@ -9,7 +9,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -18,16 +17,18 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.tuhuynh.myapplication.BankInfo;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.user.SharedPrefManager;
+import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.util.CustomerProfileAsyncTask;
+import com.example.tuhuynh.myapplication.util.CustomerProfileCallBack;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class BankInfoScreen extends AppCompatActivity implements CustomerProfileCallBack {
+public class BankInformationActivity extends AppCompatActivity implements CustomerProfileCallBack {
 
     private EditText edtAmount;
     private RadioGroup rdgYear;
@@ -40,26 +41,6 @@ public class BankInfoScreen extends AppCompatActivity implements CustomerProfile
     CustomerProfileAsyncTask asyncTask;
 
     CustomerProfile customerProfile = new CustomerProfile();
-
-    @Override
-    public void callBack(final CustomerProfile output) {
-        this.customerProfile = output;
-
-        // Get checked radio button
-        rd = findViewById(rdgYear.getCheckedRadioButtonId());
-        int month = Integer.parseInt(rd.getText().toString()) * 12;
-        Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
-        Double interest = Double.parseDouble(tvInterest.getText().toString());
-        user.setCustomerProfile(customerProfile);
-
-        Intent intent = new Intent(getApplicationContext(), LoanApplicationActivity.class);
-        intent.putExtra("bank", bankInfo);
-        intent.putExtra("month", month);
-        intent.putExtra("amount", amount);
-        intent.putExtra("interest", interest);
-        intent.putExtra("user", user);
-        startActivity(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +110,26 @@ public class BankInfoScreen extends AppCompatActivity implements CustomerProfile
 
     }
 
+    @Override
+    public void callBack(final CustomerProfile output) {
+        this.customerProfile = output;
+
+        // Get checked radio button
+        rd = findViewById(rdgYear.getCheckedRadioButtonId());
+        int month = Integer.parseInt(rd.getText().toString()) * 12;
+        Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
+        Double interest = Double.parseDouble(tvInterest.getText().toString());
+        user.setCustomerProfile(customerProfile);
+
+        Intent intent = new Intent(getApplicationContext(), LoanApplicationActivity.class);
+        intent.putExtra("bank", bankInfo);
+        intent.putExtra("month", month);
+        intent.putExtra("amount", amount);
+        intent.putExtra("interest", interest);
+        intent.putExtra("user", user);
+        startActivity(intent);
+    }
+
     /**
      *
      */
@@ -158,7 +159,7 @@ public class BankInfoScreen extends AppCompatActivity implements CustomerProfile
     /**
      *
      */
-    private void generateInterestTable(int month, long amount, double interest) {
+    private void generateInterestTable(int month, Long amount, double interest) {
 
         createTableTitle();
 

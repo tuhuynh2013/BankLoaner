@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.user;
+package com.example.tuhuynh.myapplication.customer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.example.tuhuynh.myapplication.R;
 
-public class UserProfileActivity extends AppCompatActivity {
+public class CustomerProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,4 +47,6 @@ public class UserProfileActivity extends AppCompatActivity {
         });
 
     }
+
+
 }

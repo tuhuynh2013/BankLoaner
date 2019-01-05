@@ -13,7 +13,8 @@ import android.widget.Toast;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.customer.CustomerHome;
+import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
+import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         //if the user is already logged in we will directly start the profile activity
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(getApplicationContext(), CustomerHome.class/*ProfileEditorActivity.class*/));
+            startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class/*ProfileEditorActivity.class*/));
         }
 
         etUsername = findViewById(R.id.editTextUsername);
@@ -119,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         //starting the profile activity
                         finish();
-                        startActivity(new Intent(getApplicationContext(), CustomerHome.class));
+                        startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
                     } else {
                         Toast.makeText(getApplicationContext(), R.string.error_username_password, Toast.LENGTH_SHORT).show();
                     }

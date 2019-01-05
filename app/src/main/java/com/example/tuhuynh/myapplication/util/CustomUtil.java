@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication;
+package com.example.tuhuynh.myapplication.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
+import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.user.User;
 
 import org.json.JSONException;
@@ -27,7 +28,7 @@ public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
     private ProgressBar progressBar;
     private User user;
 
-    CustomerProfileAsyncTask(CustomerProfileCallBack cb, Context context, User user) {
+    public CustomerProfileAsyncTask(CustomerProfileCallBack cb, Context context, User user) {
         this.cb = cb;
         this.context = context;
         progressBar = ((Activity) context).findViewById(R.id.progressBar);

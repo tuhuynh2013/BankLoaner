@@ -13,11 +13,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.tuhuynh.myapplication.BankInfo;
-import com.example.tuhuynh.myapplication.InterestAmount;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
+import com.example.tuhuynh.myapplication.bank.InterestAmount;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
+import com.example.tuhuynh.myapplication.util.BankArrayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,12 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class CustomerBankList extends Fragment {
+public class BankListFragment extends Fragment {
 
     private View view;
     private List<BankInfo> banks;
 
-    public CustomerBankList() {
+    public BankListFragment() {
         // Required empty public constructor
     }
 
@@ -98,8 +99,8 @@ public class CustomerBankList extends Fragment {
                             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                                 BankInfo bank = (BankInfo) parent.getItemAtPosition(position);
                                 Toast.makeText(v.getContext(), bank.getName(), Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(parent.getContext(), BankInfoScreen.class);
-                                intent.putExtra("bank", (Serializable) bank);
+                                Intent intent = new Intent(parent.getContext(), BankInformationActivity.class);
+                                intent.putExtra("bank", bank);
                                 parent.getContext().startActivity(intent);
                             }
                         });

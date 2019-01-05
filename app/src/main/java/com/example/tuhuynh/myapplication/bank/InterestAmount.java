@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication;
+package com.example.tuhuynh.myapplication.bank;
 
 import java.io.Serializable;
 

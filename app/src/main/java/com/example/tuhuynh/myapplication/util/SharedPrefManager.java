@@ -1,8 +1,11 @@
-package com.example.tuhuynh.myapplication.user;
+package com.example.tuhuynh.myapplication.util;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.example.tuhuynh.myapplication.user.LoginActivity;
+import com.example.tuhuynh.myapplication.user.User;
 
 public class SharedPrefManager {
     //the constants

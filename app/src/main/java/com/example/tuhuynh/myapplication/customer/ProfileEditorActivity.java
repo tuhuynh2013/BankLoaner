@@ -1,5 +1,6 @@
-package com.example.tuhuynh.myapplication.user;
+package com.example.tuhuynh.myapplication.customer;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,11 +15,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tuhuynh.myapplication.CustomUtil;
+import com.example.tuhuynh.myapplication.user.LoginActivity;
+import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
+import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -198,6 +202,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
     /**
      *
      */
+    @SuppressLint("StaticFieldLeak")
     class UpdateUserProfile extends AsyncTask<Void, Void, String> {
 
         User updateUser;
@@ -282,9 +287,6 @@ public class ProfileEditorActivity extends AppCompatActivity {
             edtName.setError(getString(R.string.error_invalid_name));
             edtName.requestFocus();
             return;
-        } else {
-            // Capital first letter
-            name = name.substring(0, 1) + name.substring(1);
         }
 
         // Check surname

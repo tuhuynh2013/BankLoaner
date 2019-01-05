@@ -27,17 +27,17 @@
         </activity>
         <activity android:name=".user.RegisterActivity" />
         <activity
-            android:name=".user.UserProfileActivity"
-            android:parentActivityName=".customer.CustomerHome" />
+            android:name=".customer.CustomerProfileActivity"
+            android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
-            android:name=".user.ProfileEditorActivity"
-            android:parentActivityName=".user.UserProfileActivity" />
+            android:name=".customer.ProfileEditorActivity"
+            android:parentActivityName=".customer.CustomerProfileActivity" />
         <activity
-            android:name=".customer.CustomerHome"
+            android:name=".customer.CustomerHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".customer.BankInfoScreen"
-            android:parentActivityName=".customer.CustomerHome" />
+            android:name=".customer.BankInformationActivity"
+            android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity android:name=".customer.LoanApplicationActivity"></activity>
     </application>
 

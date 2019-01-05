@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 
 import com.example.tuhuynh.myapplication.R;
 
-public class CustomerBankStatus extends Fragment {
+public class BankStatusFragment extends Fragment {
 
-    public CustomerBankStatus() {
+    public BankStatusFragment() {
         // Required empty public constructor
     }
 

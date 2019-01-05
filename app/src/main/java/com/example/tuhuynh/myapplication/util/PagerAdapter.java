@@ -1,8 +1,11 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.util;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.example.tuhuynh.myapplication.customer.BankListFragment;
+import com.example.tuhuynh.myapplication.customer.BankStatusFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
@@ -17,9 +20,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new CustomerBankList();
+                return new BankListFragment();
             case 1:
-                return new CustomerBankStatus();
+                return new BankStatusFragment();
             default:
                 return null;
         }
@@ -29,4 +32,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mNumOfTabs;
     }
+
+
 }

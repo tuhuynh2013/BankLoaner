@@ -18,12 +18,11 @@ import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
-import com.example.tuhuynh.myapplication.user.ProfileEditorActivity;
-import com.example.tuhuynh.myapplication.user.SharedPrefManager;
+import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import com.example.tuhuynh.myapplication.user.User;
-import com.example.tuhuynh.myapplication.user.UserProfileActivity;
+import com.example.tuhuynh.myapplication.util.PagerAdapter;
 
-public class CustomerHome extends AppCompatActivity
+public class CustomerHomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
@@ -106,7 +105,7 @@ public class CustomerHome extends AppCompatActivity
      */
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer != null) {
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
@@ -126,11 +125,11 @@ public class CustomerHome extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_profile:
-                startActivity(new Intent(this, UserProfileActivity.class));
+                startActivity(new Intent(this, CustomerProfileActivity.class));
                 return true;
             case R.id.nav_setting:
                 drawer.closeDrawer(GravityCompat.START);
