@@ -38,7 +38,9 @@
         <activity
             android:name=".customer.BankInformationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
-        <activity android:name=".customer.LoanApplicationActivity"></activity>
+        <activity
+            android:name=".customer.LoanApplicationActivity"
+            android:parentActivityName=".customer.CustomerHomeActivity" />
     </application>
 
 </manifest>

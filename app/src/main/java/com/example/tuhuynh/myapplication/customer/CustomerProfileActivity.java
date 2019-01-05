@@ -45,8 +45,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
             }
         });
-
     }
+
+    // Todo: make start intent for result
 
 
 }

@@ -9,8 +9,8 @@
     <string name="login">Log in</string>
     <string name="sign_up">Sign up</string>
     <string name="sign_out">Sign out</string>
-    <string name="textview_sign_up">"Don't have an account?\nRegister Here</string>
-    <string name="textview_login">Already Registered?\nLog in Here</string>
+    <string name="tv_sign_up">"Don't have an account?\nRegister Here</string>
+    <string name="tv_login">Already Registered?\nLog in Here</string>
 
     <string name="male">Male</string>
     <string name="female">Female</string>
@@ -43,8 +43,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="my_app_title">My App</string>
     <string name="action_settings">Settings</string>
-    <string name="mess_setting">You chose Setting.</string>
-    <string name="mess_signout">You are sign out.</string>
+    <string name="msg_setting">You chose Setting.</string>
+    <string name="msg_signout">You are sign out.</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_setting">Setting</string>
     <string name="nav_signout">Sign out</string>
@@ -60,7 +60,7 @@
     <string name="amount">Amount</string>
     <string name="debit_amount">Debit amount</string>
     <string name="calculate">Calculate</string>
-    <string name="mess_retrieve_banklist_success">Retrieve list of banks successful</string>
+    <string name="msg_retrieve_banklist_success">Retrieve list of banks successful</string>
     <string name="error_retrieve_fail">Fail to retrieve data</string>
 
     <!--Bank Info-->
@@ -88,14 +88,17 @@
     <string name="hint_workplace">Your workplace</string>
     <string name="hint_designation">Your designation</string>
     <string name="save_change">Save change</string>
-    <string name="mess_retrieve_customer_info_success">Retrieve customer information successful</string>
-    <string name="mess_update_successfully">Update successfully</string>
-    <string name="mess_update_error">Update error</string>
+    <string name="msg_retrieve_customer_info_success">Retrieve customer information successful</string>
+    <string name="msg_update_successfully">Update successfully</string>
+    <string name="msg_update_not_successfully">Update NOT successfully</string>
+    <string name="msg_update_error">Update error</string>
     <string name="apply">Apply</string>
 
     <!--Loan Application-->
     <string name="tv_bank_name">Bank name:</string>
     <string name="tv_month">Month:</string>
     <string name="tv_amount">Amount:</string>
+    <string name="ckb_accept_term">I accept license terms</string>
+    <string name="note_provide_profile">*Note: Apply button will direct to Profile screen if we need more information</string>
 
 </resources>

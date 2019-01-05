@@ -82,5 +82,14 @@ public class CustomerProfile implements Serializable {
         this.designation = designation;
     }
 
+    boolean isEmpty() {
+        return this.surname.isEmpty() ||
+                this.identity.isEmpty() ||
+                this.gender.isEmpty() ||
+                this.phone.isEmpty() ||
+                this.address.isEmpty() ||
+                this.workplace.isEmpty() ||
+                this.designation.isEmpty();
+    }
 
 }

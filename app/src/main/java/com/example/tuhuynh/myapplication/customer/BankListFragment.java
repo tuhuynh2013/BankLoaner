@@ -24,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +83,7 @@ public class BankListFragment extends Fragment {
                     String message = obj.getString("message");
 
                     // If no error in response
-                    if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.mess_retrieve_banklist_success))) {
+                    if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_retrieve_banklist_success))) {
 
                         // Getting the user from the response
                         JSONArray jsonArray = obj.getJSONArray("banks");

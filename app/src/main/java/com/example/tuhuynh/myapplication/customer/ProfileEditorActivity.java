@@ -1,6 +1,7 @@
 package com.example.tuhuynh.myapplication.customer;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,7 +22,8 @@ import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.customer.CustomerProfile;
+import com.example.tuhuynh.myapplication.util.CustomerProfileAsyncTask;
+import com.example.tuhuynh.myapplication.util.CustomerProfileCallBack;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import org.json.JSONException;
@@ -29,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ProfileEditorActivity extends AppCompatActivity {
+public class ProfileEditorActivity extends AppCompatActivity implements CustomerProfileCallBack {
 
     private TextView tvUsername, tvEmail;
     private EditText edtName, edtSurname, edtIdentity, edtPhone, edtAddress, edtWorkplace, edtDesignation;
@@ -51,6 +53,7 @@ public class ProfileEditorActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
 
+        // Todo: turn off when come from LoanApplication
         // Create Up button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,117 +90,65 @@ public class ProfileEditorActivity extends AppCompatActivity {
         rdFemale = findViewById(R.id.rd_female);
         btnSave = findViewById(R.id.btn_save);
 
-        UserProfile userProfile = new UserProfile();
-        userProfile.execute();
+        // Retrieve customer profile from db
+        new CustomerProfileAsyncTask(this, this, user).execute();
+
     }
 
     /**
      * Uses to get user profile from db
      */
-    class UserProfile extends AsyncTask<Void, Void, String> {
+    @Override
+    public void callBack(CustomerProfile output) {
+        // Setting the values to the textviews
+        edtName.setText(user.getName());
+        tvUsername.setText(user.getUsername());
+        tvEmail.setText(user.getEmail());
 
-        private ProgressBar progressBar;
+        String surname = output.getSurname();
+        String identityID = output.getIdentity();
+        String gender = output.getGender();
+        String phone = output.getPhone();
+        String address = output.getAddress();
+        String workplace = output.getWorkplace();
+        String designation = output.getDesignation();
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar = findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
+        // Section to check if values are available to display on screen
+        if (!surname.isEmpty()) {
+            edtSurname.setText(surname);
         }
 
-        @Override
-        protected String doInBackground(Void... voids) {
-            // Creating request handler object
-            RequestHandler requestHandler = new RequestHandler();
-            HashMap<String, String> params = new HashMap<>();
-            params.put("id", Integer.toString(user.getId()));
-            params.put("username", user.getUsername());
-            // Return the response
-            return requestHandler.sendPostRequest(URLs.URL_USERPROFILE, params);
+        if (!identityID.isEmpty()) {
+            edtIdentity.setText(identityID);
         }
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            progressBar.setVisibility(View.GONE);
-
-            try {
-                // Converting response to json object
-                JSONObject obj = new JSONObject(s);
-                String message = obj.getString("message");
-
-                // If no error in response
-                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.mess_retrieve_customer_info_success))) {
-
-                    // Getting the customer info from the response
-                    JSONObject customerJson = obj.getJSONObject("customerProfile");
-
-                    String surname = customerJson.getString("surname");
-                    String identityID = customerJson.getString("identity_id");
-                    String gender = customerJson.getString("gender");
-                    String phone = customerJson.getString("phone");
-                    String address = customerJson.getString("address");
-                    String workplace = customerJson.getString("workplace");
-                    String designation = customerJson.getString("designation");
-                    CustomerProfile customerProfile = new CustomerProfile(surname, identityID, gender, phone, address, workplace, designation);
-
-                    // Setting the values to the textviews
-                    edtName.setText(user.getName());
-                    tvUsername.setText(user.getUsername());
-                    tvEmail.setText(user.getEmail());
-
-                    if (!surname.isEmpty()) {
-                        customerProfile.setSurname(surname);
-                        edtSurname.setText(surname);
-                    }
-
-                    if (!identityID.isEmpty()) {
-                        customerProfile.setIdentity(identityID);
-                        edtIdentity.setText(identityID);
-                    }
-
-                    if (!gender.isEmpty()) {
-                        customerProfile.setGender(gender);
-                        if (gender.equalsIgnoreCase(rdMale.getText().toString())) {
-                            rdMale.setChecked(true);
-                        } else if (gender.equalsIgnoreCase(rdFemale.getText().toString())) {
-                            rdFemale.setChecked(true);
-                        } else {
-                            rdgGender.check(rdMale.getId());
-                        }
-                    }
-
-                    if (!phone.isEmpty()) {
-                        customerProfile.setPhone(phone);
-                        edtPhone.setText(phone);
-                    }
-
-                    if (!address.isEmpty()) {
-                        customerProfile.setAddress(address);
-                        edtAddress.setText(address);
-                    }
-
-                    if (!workplace.isEmpty()) {
-                        customerProfile.setWorkplace(workplace);
-                        edtWorkplace.setText(workplace);
-                    }
-
-                    if (!designation.isEmpty()) {
-                        customerProfile.setDesignation(designation);
-                        edtDesignation.setText(designation);
-                    }
-                    user.setCustomerProfile(customerProfile);
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (!gender.isEmpty()) {
+            if (gender.equalsIgnoreCase(rdMale.getText().toString())) {
+                rdMale.setChecked(true);
+            } else if (gender.equalsIgnoreCase(rdFemale.getText().toString())) {
+                rdFemale.setChecked(true);
+            } else {
+                rdgGender.check(rdMale.getId());
             }
         }
 
-    }
+        if (!phone.isEmpty()) {
+            edtPhone.setText(phone);
+        }
 
+        if (!address.isEmpty()) {
+            edtAddress.setText(address);
+        }
+
+        if (!workplace.isEmpty()) {
+            edtWorkplace.setText(workplace);
+        }
+
+        if (!designation.isEmpty()) {
+            edtDesignation.setText(designation);
+        }
+
+    }
 
     /**
      *
@@ -250,10 +201,12 @@ public class ProfileEditorActivity extends AppCompatActivity {
                 JSONObject obj = new JSONObject(s);
                 String message = obj.getString("message");
                 // If no error in response
-                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.mess_update_successfully))) {
-                    Toast.makeText(getApplicationContext(), R.string.mess_update_successfully, Toast.LENGTH_LONG).show();
+                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_update_successfully))) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_update_successfully, Toast.LENGTH_LONG).show();
+                    returnIntent(Activity.RESULT_OK, getString(R.string.msg_update_successfully));
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.mess_update_error, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.msg_update_error, Toast.LENGTH_LONG).show();
+                    returnIntent(Activity.RESULT_CANCELED, getString(R.string.msg_update_error));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -346,7 +299,29 @@ public class ProfileEditorActivity extends AppCompatActivity {
 
         UpdateUserProfile updateUserProfile = new UpdateUserProfile(user, customerProfile);
         updateUserProfile.execute();
+
     }
+
+    /**
+     * Return intent to previous activity with message
+     *
+     * @param resultCode result of action is OK or Canceled
+     * @param msg        message
+     */
+    private void returnIntent(int resultCode, String msg) {
+        Intent intent = new Intent();
+        intent.putExtra("msg", msg);
+        setResult(resultCode, intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        returnIntent(Activity.RESULT_CANCELED, getString(R.string.msg_update_not_successfully));
+        super.onBackPressed();
+    }
+
+    //Todo: check change and show confirm message to discard
 
 
 }

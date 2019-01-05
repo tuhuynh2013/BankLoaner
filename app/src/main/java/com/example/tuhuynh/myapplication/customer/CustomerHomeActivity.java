@@ -133,14 +133,14 @@ public class CustomerHomeActivity extends AppCompatActivity
                 return true;
             case R.id.nav_setting:
                 drawer.closeDrawer(GravityCompat.START);
-                displayToast(getString(R.string.mess_setting));
+                displayToast(getString(R.string.msg_setting));
                 return true;
             case R.id.nav_signout:
                 // Handle the sign out action (for now display a toast).
                 finish();
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 drawer.closeDrawer(GravityCompat.START);
-                displayToast(getString(R.string.mess_signout));
+                displayToast(getString(R.string.msg_signout));
                 return true;
             default:
                 return false;

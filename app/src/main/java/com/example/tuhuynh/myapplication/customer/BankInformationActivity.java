@@ -28,7 +28,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class BankInformationActivity extends AppCompatActivity implements CustomerProfileCallBack {
+public class BankInformationActivity extends AppCompatActivity {
 
     private EditText edtAmount;
     private RadioGroup rdgYear;
@@ -37,10 +37,6 @@ public class BankInformationActivity extends AppCompatActivity implements Custom
     private TableLayout tblInterestTable;
 
     BankInfo bankInfo;
-    User user = SharedPrefManager.getInstance(this).getUser();
-    CustomerProfileAsyncTask asyncTask;
-
-    CustomerProfile customerProfile = new CustomerProfile();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,42 +92,34 @@ public class BankInformationActivity extends AppCompatActivity implements Custom
             }
         });
 
-        asyncTask = new CustomerProfileAsyncTask(this, this, user);
+
 
         findViewById(R.id.btn_apply).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Get checked radio button
+                rd = findViewById(rdgYear.getCheckedRadioButtonId());
+                int month = Integer.parseInt(rd.getText().toString()) * 12;
                 Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
+
                 if (isVaildAmount(amount)) {
-                    asyncTask.execute();
+                    Intent intent = new Intent(getApplicationContext(), LoanApplicationActivity.class);
+                    intent.putExtra("bank", bankInfo);
+                    intent.putExtra("month", Integer.toString(month));
+                    intent.putExtra("amount", edtAmount.getText().toString());
+                    intent.putExtra("interest", tvInterest.getText().toString());
+                    startActivity(intent);
                 }
             }
         });
 
     }
 
-    @Override
-    public void callBack(final CustomerProfile output) {
-        this.customerProfile = output;
-
-        // Get checked radio button
-        rd = findViewById(rdgYear.getCheckedRadioButtonId());
-        int month = Integer.parseInt(rd.getText().toString()) * 12;
-        Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
-        Double interest = Double.parseDouble(tvInterest.getText().toString());
-        user.setCustomerProfile(customerProfile);
-
-        Intent intent = new Intent(getApplicationContext(), LoanApplicationActivity.class);
-        intent.putExtra("bank", bankInfo);
-        intent.putExtra("month", month);
-        intent.putExtra("amount", amount);
-        intent.putExtra("interest", interest);
-        intent.putExtra("user", user);
-        startActivity(intent);
-    }
-
     /**
+     * Check amount that user inputted is correct or not
      *
+     * @param amount amount
+     * @return true if amount is valid
      */
     private boolean isVaildAmount(Long amount) {
         if (amount != null) {
@@ -157,7 +145,11 @@ public class BankInformationActivity extends AppCompatActivity implements Custom
     }
 
     /**
+     * Generate a table show amount of money that customer must repayment every month
      *
+     * @param month month
+     * @param amount customer loan amount
+     * @param interest bank interest
      */
     private void generateInterestTable(int month, Long amount, double interest) {
 
@@ -260,6 +252,7 @@ public class BankInformationActivity extends AppCompatActivity implements Custom
 
         // Adding table row to table layout
         tblInterestTable.addView(trTitle);
+
     }
 
     /**

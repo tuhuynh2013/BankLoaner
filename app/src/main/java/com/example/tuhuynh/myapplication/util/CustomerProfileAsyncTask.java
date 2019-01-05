@@ -64,7 +64,7 @@ public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
             String message = obj.getString("message");
 
             // If no error in response
-            if (!obj.getBoolean("error") && message.equalsIgnoreCase(context.getString(R.string.mess_retrieve_customer_info_success))) {
+            if (!obj.getBoolean("error") && message.equalsIgnoreCase(context.getString(R.string.msg_retrieve_customer_info_success))) {
 
                 // Getting the customer info from the response
                 JSONObject customerJson = obj.getJSONObject("customerProfile");
