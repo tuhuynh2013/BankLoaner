@@ -1,5 +1,6 @@
 package com.example.tuhuynh.myapplication.user;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,8 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if user pressed on button register
-                //here we will register the user to server
+                // If user pressed on button register, we will register the user to server
                 registerUser();
             }
         });
@@ -55,8 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if user pressed on login
-                //we will open the login screen
+                // If user pressed on login, we will open the login screen
                 finish();
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             }
@@ -130,24 +129,25 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        //if it passes all the validations
+        // If it passes all the validations
+        @SuppressLint("StaticFieldLeak")
         class RegisterUser extends AsyncTask<Void, Void, String> {
 
             private ProgressBar progressBar;
 
             @Override
             protected String doInBackground(Void... voids) {
-                //creating request handler object
+                // Creating request handler object
                 RequestHandler requestHandler = new RequestHandler();
 
-                //creating request parameters
+                // Creating request parameters
                 HashMap<String, String> params = new HashMap<>();
                 params.put("username", username);
                 params.put("name", name);
                 params.put("email", email);
                 params.put("password", password);
 
-                //return the response
+                // Return the response
                 return requestHandler.sendPostRequest(URLs.URL_REGISTER, params);
             }
 
@@ -166,17 +166,17 @@ public class RegisterActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
 
                 try {
-                    //converting response to json object
+                    // Converting response to json object
                     JSONObject obj = new JSONObject(s);
 
-                    //if no error in response
+                    // If no error in response
                     if (!obj.getBoolean("error")) {
                         Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
 
-                        //getting the user from the response
+                        // Getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
-                        //creating a new user object
+                        // Creating a new user object
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("username"),
@@ -184,10 +184,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 userJson.getString("email")
                         );
 
-                        //storing the user in shared preferences
+                        // Storing the user in shared preferences
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
-                        //starting the profile activity
+                        // Starting the profile activity
                         finish();
                         startActivity(new Intent(getApplicationContext(), ProfileEditorActivity.class));
                     } else {
@@ -200,7 +200,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
         }
-        //executing the async task
+        // Executing the async task
         RegisterUser ru = new RegisterUser();
         ru.execute();
 

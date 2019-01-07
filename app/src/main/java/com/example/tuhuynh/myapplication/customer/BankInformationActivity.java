@@ -19,14 +19,9 @@ import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.util.SharedPrefManager;
-import com.example.tuhuynh.myapplication.user.User;
-import com.example.tuhuynh.myapplication.util.CustomerProfileAsyncTask;
-import com.example.tuhuynh.myapplication.util.CustomerProfileCallBack;
+import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 public class BankInformationActivity extends AppCompatActivity {
 
@@ -83,7 +78,7 @@ public class BankInformationActivity extends AppCompatActivity {
                 // Get checked radio button
                 rd = findViewById(rdgYear.getCheckedRadioButtonId());
                 int month = Integer.parseInt(rd.getText().toString()) * 12;
-                Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
+                Long amount = CustomUtil.convertFormattedStringToLong(edtAmount.getText().toString());
                 Double interest = Double.parseDouble(tvInterest.getText().toString());
 
                 if (isVaildAmount(amount)) {
@@ -93,14 +88,13 @@ public class BankInformationActivity extends AppCompatActivity {
         });
 
 
-
         findViewById(R.id.btn_apply).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get checked radio button
                 rd = findViewById(rdgYear.getCheckedRadioButtonId());
                 int month = Integer.parseInt(rd.getText().toString()) * 12;
-                Long amount = convertFormattedStringToLong(edtAmount.getText().toString());
+                Long amount = CustomUtil.convertFormattedStringToLong(edtAmount.getText().toString());
 
                 if (isVaildAmount(amount)) {
                     Intent intent = new Intent(getApplicationContext(), LoanApplicationActivity.class);
@@ -147,8 +141,8 @@ public class BankInformationActivity extends AppCompatActivity {
     /**
      * Generate a table show amount of money that customer must repayment every month
      *
-     * @param month month
-     * @param amount customer loan amount
+     * @param month    month
+     * @param amount   customer loan amount
      * @param interest bank interest
      */
     private void generateInterestTable(int month, Long amount, double interest) {
@@ -157,7 +151,7 @@ public class BankInformationActivity extends AppCompatActivity {
 
         // Calculate principal
         long principal = calculatePrincipal((long) month, amount);
-        String formattedPrincipal = convertLongToFormattedString(principal);
+        String formattedPrincipal = CustomUtil.convertLongToFormattedString(principal);
 
         long totalInterest = 0;
 
@@ -178,23 +172,23 @@ public class BankInformationActivity extends AppCompatActivity {
 
             monthCell.setText(String.valueOf(i));
             if (i == 0) {
-                balanceCell.setText(convertLongToFormattedString(amount));
+                balanceCell.setText(CustomUtil.convertLongToFormattedString(amount));
             } else if (i == month + 1) {
                 monthCell.setText(R.string.total);
                 setTitleProperties(monthCell);
-                interestCell.setText(convertLongToFormattedString(totalInterest));
+                interestCell.setText(CustomUtil.convertLongToFormattedString(totalInterest));
                 setTitleProperties(interestCell);
             } else {
                 principalCell.setText(formattedPrincipal);
 
-                long tempInterest = calculateInterest(amount, (long) interest);
+                long tempInterest = (long) calculateInterest(amount, interest);
                 totalInterest += tempInterest;
-                interestCell.setText(convertLongToFormattedString(tempInterest));
+                interestCell.setText(CustomUtil.convertLongToFormattedString(tempInterest));
 
                 amount = amount - principal;
-                balanceCell.setText(convertLongToFormattedString(amount));
+                balanceCell.setText(CustomUtil.convertLongToFormattedString(amount));
 
-                totalPaymentCell.setText(convertLongToFormattedString(tempInterest + principal));
+                totalPaymentCell.setText(CustomUtil.convertLongToFormattedString(tempInterest + principal));
             }
 
             // Adding text views to table row
@@ -275,7 +269,7 @@ public class BankInformationActivity extends AppCompatActivity {
     /**
      *
      */
-    private long calculateInterest(long amount, long interest) {
+    private double calculateInterest(double amount, double interest) {
         return (amount * interest) / 1200;
     }
 
@@ -286,25 +280,6 @@ public class BankInformationActivity extends AppCompatActivity {
         return amount / month;
     }
 
-    /**
-     *
-     */
-    private String convertLongToFormattedString(long l) {
-        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        formatter.applyPattern("#,###,###,###");
-        return formatter.format(l);
-    }
-
-    /**
-     *
-     */
-    private Long convertFormattedStringToLong(String s) {
-        if (!s.isEmpty()) {
-            return Long.parseLong(s.replace(",", ""));
-        } else {
-            return null;
-        }
-    }
 
     /**
      *
@@ -358,7 +333,7 @@ public class BankInformationActivity extends AppCompatActivity {
                         originalString = originalString.replaceAll(",", "");
                     }
                     longval = Long.parseLong(originalString);
-                    String formattedString = convertLongToFormattedString(longval);
+                    String formattedString = CustomUtil.convertLongToFormattedString(longval);
 
                     // Setting text after format to EditText
                     edtAmount.setText(formattedString);

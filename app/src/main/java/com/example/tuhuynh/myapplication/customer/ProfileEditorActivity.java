@@ -53,11 +53,20 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
             startActivity(new Intent(this, LoginActivity.class));
         }
 
-        // Todo: turn off when come from LoanApplication
-        // Create Up button
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Turn off Up navigation, when called from LoanApplication
+        final Intent intent = this.getIntent();
+        int requestCode = intent.getIntExtra("requestCode", 0);
+        if (requestCode == 0x9345) {
+            // Create Up button
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+        } else {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
         }
+
 
         // Initial for profile editor screen
         initialProfileEditorScreen();

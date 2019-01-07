@@ -1,5 +1,6 @@
 package com.example.tuhuynh.myapplication.customer;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class BankListFragment extends Fragment {
 
     private View view;
@@ -41,7 +41,7 @@ public class BankListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = getLayoutInflater().inflate(R.layout.frag_customer_bank_list, container, false);
+        view = getLayoutInflater().inflate(R.layout.frag_bank_list, container, false);
         getBanks();
         return view;
     }
@@ -51,6 +51,7 @@ public class BankListFragment extends Fragment {
      */
     private void getBanks() {
 
+        @SuppressLint("StaticFieldLeak")
         class BankList extends AsyncTask<Void, Void, String> {
 
             private ProgressBar progressBar;
@@ -123,7 +124,7 @@ public class BankListFragment extends Fragment {
     private List<BankInfo> extractBanklist(JSONArray jsonArray) throws JSONException {
         List<BankInfo> bankList = new ArrayList<>();
         List<InterestAmount> interestAmounts = new ArrayList<>();
-        BankInfo bankInfo = null;
+        BankInfo bankInfo;
 
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject bankJson = jsonArray.getJSONObject(i);
@@ -133,13 +134,14 @@ public class BankListFragment extends Fragment {
 
             // If bankList empty or shortName doesn't exist, create new bank info and add to bankList
             if (bankList.isEmpty() || !isShortNameExist(shortName, bankList)) {
+                int id = bankJson.getInt("id");
                 String bankName = bankJson.getString("name");
 
                 interestAmounts.clear();
                 interestAmounts.add(new InterestAmount(year, interest));
 
                 //Create BankInfo and add to bankList
-                bankInfo = new BankInfo(bankName, shortName, new ArrayList<>(interestAmounts));
+                bankInfo = new BankInfo(id, bankName, shortName, new ArrayList<>(interestAmounts));
                 bankList.add(bankInfo);
             }
             // If shortName exist, add new interest into exist BankInfo

@@ -8,5 +8,6 @@ public class URLs {
     public static final String URL_GETBANKS = ROOT_URL + "getbanks";
     public static final String URL_USERPROFILE = ROOT_URL + "customerprofile";
     public static final String URL_UPDATEUSERPROFILE = ROOT_URL + "updateuserprofile";
+    public static final String URL_SUBMITAPPLICATION = ROOT_URL + "submitapplication";
 
 }

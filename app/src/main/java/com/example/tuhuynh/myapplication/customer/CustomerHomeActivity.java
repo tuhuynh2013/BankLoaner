@@ -22,6 +22,8 @@ import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.PagerAdapter;
 
+import java.util.Objects;
+
 public class CustomerHomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,8 +40,7 @@ public class CustomerHomeActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //if the user is not logged in
-        //starting the login activity
+        // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -62,8 +63,7 @@ public class CustomerHomeActivity extends AppCompatActivity
         viewPager.setAdapter(adapter);
 
         // Setting a listener for clicks.
-        viewPager.addOnPageChangeListener(new
-                TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -79,8 +79,16 @@ public class CustomerHomeActivity extends AppCompatActivity
             }
         });
 
+        // If activity was called from LoanApplication activity, set fragment to BankStatus
+        Intent intent = this.getIntent();
+        String caller = intent.getStringExtra("caller");
+        if (caller != null) {
+            if (caller.equals("SubmitApplication")) {
+                Objects.requireNonNull(tabLayout.getTabAt(1)).select();
+            }
+        }
 
-        //   initial Navigation View
+        // Initial Navigation View
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open,
@@ -183,7 +191,6 @@ public class CustomerHomeActivity extends AppCompatActivity
 
     /**
      * Displays a toast message.
-     *
      * @param message Message to display in toast
      */
     public void displayToast(String message) {

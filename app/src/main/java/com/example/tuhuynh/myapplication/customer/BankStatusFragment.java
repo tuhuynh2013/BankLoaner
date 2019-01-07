@@ -18,7 +18,7 @@ public class BankStatusFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_customer_bank_status, container, false);
+        return getLayoutInflater().inflate(R.layout.frag_bank_status, container, false);
     }
 
 }

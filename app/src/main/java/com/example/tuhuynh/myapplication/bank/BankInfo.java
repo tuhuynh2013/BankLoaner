@@ -5,14 +5,24 @@ import java.util.List;
 
 public class BankInfo implements Serializable {
     /*TODO add description*/
+    private int id;
     private String name;
     private String shortName;
     private List<InterestAmount> interestAmounts;
 
-    public BankInfo(String name, String shortName, List<InterestAmount> interestAmounts) {
+    public BankInfo(int id, String name, String shortName, List<InterestAmount> interestAmounts) {
+        this.id = id;
         this.name = name;
         this.shortName = shortName;
         this.interestAmounts = interestAmounts;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -38,5 +48,6 @@ public class BankInfo implements Serializable {
     public void setInterestAmounts(InterestAmount interest) {
         this.interestAmounts.add(interest);
     }
+
 
 }

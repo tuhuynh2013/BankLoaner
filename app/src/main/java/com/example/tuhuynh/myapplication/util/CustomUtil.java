@@ -1,5 +1,8 @@
 package com.example.tuhuynh.myapplication.util;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,7 +11,7 @@ public class CustomUtil {
     /**
      * Check username is correct format
      *
-     * @param username
+     * @param username username
      * @return true if username is correct format
      */
     public static boolean isCorrectUsername(String username) {
@@ -20,7 +23,7 @@ public class CustomUtil {
     /**
      * Check name is correct format
      *
-     * @param name
+     * @param name name
      * @return true if name is correct format
      */
     public static boolean isCorrectName(String name) {
@@ -32,7 +35,7 @@ public class CustomUtil {
     /**
      * Check identity number is correct format
      *
-     * @param identityNumber
+     * @param identityNumber identity number
      * @return true if identity number is correct format
      */
     public static boolean isCorrectIdentity(String identityNumber) {
@@ -44,7 +47,7 @@ public class CustomUtil {
     /**
      * Check phone number is correct format
      *
-     * @param phone
+     * @param phone phone number
      * @return true if phone number is correct format
      */
     public static boolean isCorrectPhone(String phone) {
@@ -52,5 +55,32 @@ public class CustomUtil {
         Matcher m = p.matcher(phone);
         return m.matches();
     }
+
+    /**
+     * Convert long to string with the format #,###,###,###
+     *
+     * @param l long
+     * @return String
+     */
+    public static String convertLongToFormattedString(long l) {
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        formatter.applyPattern("#,###,###,###");
+        return formatter.format(l);
+    }
+
+    /**
+     * Convert formatted string to long number
+     *
+     * @param s formatted string
+     * @return long
+     */
+    public static Long convertFormattedStringToLong(String s) {
+        if (!s.isEmpty()) {
+            return Long.parseLong(s.replace(",", ""));
+        } else {
+            return null;
+        }
+    }
+
 
 }

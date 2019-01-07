@@ -100,5 +100,12 @@
     <string name="tv_amount">Amount:</string>
     <string name="ckb_accept_term">I accept license terms</string>
     <string name="note_provide_profile">*Note: Apply button will direct to Profile screen if we need more information</string>
+    <string name="respond_existed_application">You already submitted application to this bank</string>
+    <string name="msg_existed_application">*Note: You already submitted application to %1$s</string>
+    <string name="tv_application">Application</string>
+    <string name="tv_application_id">Application ID:</string>
+    <string name="tv_date">Date:</string>
+    <string name="tv_text">Sample text</string>
+
 
 </resources>
