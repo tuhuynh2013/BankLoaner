@@ -36,13 +36,13 @@
             android:name=".customer.CustomerHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".customer.BankInformationActivity"
+            android:name=".bank.BankInformationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
             android:name=".customer.LoanApplicationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
-            android:name=".customer.ApplicationHistoryActivity"
+            android:name=".appication.ApplicationHistoryActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
     </application>
 

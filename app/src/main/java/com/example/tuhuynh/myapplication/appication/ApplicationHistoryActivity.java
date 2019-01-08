@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.appication;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

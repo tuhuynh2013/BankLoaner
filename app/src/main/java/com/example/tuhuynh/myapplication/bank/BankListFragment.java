@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.bank;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -14,12 +14,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.tuhuynh.myapplication.bank.BankInfo;
-import com.example.tuhuynh.myapplication.bank.InterestAmount;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.util.BankArrayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +44,7 @@ public class BankListFragment extends Fragment {
     }
 
     /**
-     *
+     * Uses to get list of banks from database
      */
     private void getBanks() {
 
@@ -70,7 +67,7 @@ public class BankListFragment extends Fragment {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("getbanks", "true");
                 // Return the response
-                return requestHandler.sendPostRequest(URLs.URL_GETBANKS, params);
+                return requestHandler.sendPostRequest(URLs.URL_GET_BANKS, params);
             }
 
             @Override
@@ -90,8 +87,8 @@ public class BankListFragment extends Fragment {
                         JSONArray jsonArray = obj.getJSONArray("banks");
                         banks = extractBanklist(jsonArray);
 
-                        ListView listView = view.findViewById(R.id.bank_list);
-                        BankArrayAdapter bankArrayAdapter = new BankArrayAdapter(view.getContext(), R.layout.bank_list, banks);
+                        ListView listView = view.findViewById(R.id.lv_bank_list);
+                        BankArrayAdapter bankArrayAdapter = new BankArrayAdapter(view.getContext(), R.layout.bank_adapter, banks);
                         listView.setAdapter(bankArrayAdapter);
 
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,7 +116,10 @@ public class BankListFragment extends Fragment {
     }
 
     /**
+     * Extract list of banks from JSONArray
      *
+     * @param jsonArray JSONArray
+     * @return List of banks
      */
     private List<BankInfo> extractBanklist(JSONArray jsonArray) throws JSONException {
         List<BankInfo> bankList = new ArrayList<>();
@@ -153,7 +153,11 @@ public class BankListFragment extends Fragment {
     }
 
     /**
+     * Check if the bank is existed in bankList or not
      *
+     * @param shortName short name of the bank
+     * @param bankList List of banks
+     * @return true if existed
      */
     private boolean isShortNameExist(String shortName, List<BankInfo> bankList) {
         for (BankInfo bankInfo : bankList) {

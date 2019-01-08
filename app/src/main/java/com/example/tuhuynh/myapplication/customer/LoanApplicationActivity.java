@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tuhuynh.myapplication.appication.ApplicationHistoryActivity;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
@@ -175,7 +176,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
             params.put("date", strDate);
 
             // Return the response
-            return requestHandler.sendPostRequest(URLs.URL_SUBMITAPPLICATION, params);
+            return requestHandler.sendPostRequest(URLs.URL_SUBMIT_APPLICATION, params);
         }
 
         @Override

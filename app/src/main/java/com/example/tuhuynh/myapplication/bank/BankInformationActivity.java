@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.bank;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.customer.LoanApplicationActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.text.DecimalFormat;

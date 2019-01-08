@@ -1,5 +1,6 @@
 package com.example.tuhuynh.myapplication.user;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
+import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import org.json.JSONException;
@@ -31,17 +33,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //if the user is already logged in we will directly start the profile activity
+        // If the user is already logged in, we will directly start the profile activity
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
-            startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class/*ProfileEditorActivity.class*/));
+            startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
         }
 
         etUsername = findViewById(R.id.editTextUsername);
         etPassword = findViewById(R.id.editTextPassword);
 
-        //if user presses on login
-        //calling the method login
+        // If user presses on login, calling the method login
         findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,11 +50,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //if user presses on not registered
+        // If user presses on not registered
         findViewById(R.id.textViewRegister).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //open register screen
+                // Open register screen
                 finish();
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
             }
@@ -61,12 +62,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void userLogin() {
-        //first getting the values
+        // First getting the values
         final String username = etUsername.getText().toString();
         final String password = etPassword.getText().toString();
 
-        //validating inputs
-        if (TextUtils.isEmpty(username)) {
+        // Validating inputs
+        if (CustomUtil.isCorrectUsername(username)) {
             etUsername.setError(getString(R.string.error_empty_username));
             etUsername.requestFocus();
             return;
@@ -78,7 +79,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        //if everything is fine
+        // If everything is fine
+        @SuppressLint("StaticFieldLeak")
         class UserLogin extends AsyncTask<Void, Void, String> {
 
             private ProgressBar progressBar;
@@ -91,23 +93,37 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
+            protected String doInBackground(Void... voids) {
+                // Creating request handler object
+                RequestHandler requestHandler = new RequestHandler();
+
+                // Creating request parameters
+                HashMap<String, String> params = new HashMap<>();
+                params.put("username", username);
+                params.put("password", password);
+
+                //returning the response
+                return requestHandler.sendPostRequest(URLs.URL_LOGIN, params);
+            }
+
+            @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 progressBar.setVisibility(View.GONE);
 
                 try {
-                    //converting response to json object
+                    // Converting response to json object
                     JSONObject obj = new JSONObject(s);
                     String message = obj.getString("message");
 
-                    //if no error in response
+                    // If no error in response
                     if (!obj.getBoolean("error") && !message.equalsIgnoreCase(getString(R.string.error_username_password))) {
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
-                        //getting the user from the response
+                        // Getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
 
-                        //creating a new user object
+                        // Creating a new user object
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("username"),
@@ -115,10 +131,10 @@ public class LoginActivity extends AppCompatActivity {
                                 userJson.getString("email")
                         );
 
-                        //storing the user in shared preferences
+                        // Storing the user in shared preferences
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
-                        //starting the profile activity
+                        // Starting the profile activity
                         finish();
                         startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
                     } else {
@@ -128,23 +144,10 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                //creating request handler object
-                RequestHandler requestHandler = new RequestHandler();
-
-                //creating request parameters
-                HashMap<String, String> params = new HashMap<>();
-                params.put("username", username);
-                params.put("password", password);
-
-                //returning the response
-                return requestHandler.sendPostRequest(URLs.URL_LOGIN, params);
-            }
         }
         UserLogin ul = new UserLogin();
         ul.execute();
+
     }
 
 

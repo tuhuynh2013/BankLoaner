@@ -107,5 +107,8 @@
     <string name="tv_date">Date:</string>
     <string name="tv_text">Sample text</string>
 
+    <!--Bank Status-->
+    <string name="tv_status">Status</string>
+
 
 </resources>

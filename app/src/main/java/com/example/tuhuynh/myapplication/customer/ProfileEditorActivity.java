@@ -197,7 +197,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
             params.put("workplace", customerProfile.getWorkplace());
             params.put("designation", customerProfile.getDesignation());
             // Return the response
-            return requestHandler.sendPostRequest(URLs.URL_UPDATEUSERPROFILE, params);
+            return requestHandler.sendPostRequest(URLs.URL_UPDATE_USER_PROFILE, params);
         }
 
         @Override

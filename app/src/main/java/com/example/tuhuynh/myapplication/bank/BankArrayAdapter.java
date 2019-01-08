@@ -1,5 +1,6 @@
-package com.example.tuhuynh.myapplication.util;
+package com.example.tuhuynh.myapplication.bank;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -9,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.tuhuynh.myapplication.bank.BankInfo;
-import com.example.tuhuynh.myapplication.bank.InterestAmount;
 import com.example.tuhuynh.myapplication.R;
 
 import java.text.DecimalFormat;
@@ -20,7 +19,7 @@ public class BankArrayAdapter extends ArrayAdapter<BankInfo> {
 
     private List<BankInfo> banks;
 
-    public BankArrayAdapter(Context context, int textViewResourceId, List<BankInfo> objects) {
+    BankArrayAdapter(Context context, int textViewResourceId, List<BankInfo> objects) {
         super(context, textViewResourceId, objects);
         this.banks = objects;
     }
@@ -30,6 +29,7 @@ public class BankArrayAdapter extends ArrayAdapter<BankInfo> {
         return super.getCount();
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -38,7 +38,7 @@ public class BankArrayAdapter extends ArrayAdapter<BankInfo> {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (rowView == null) {
-            rowView = inflater.inflate(R.layout.bank_list, null);
+            rowView = inflater.inflate(R.layout.bank_adapter, null);
         }
 
         ImageView imgBankIcon = rowView.findViewById(R.id.imgBankIcon);
