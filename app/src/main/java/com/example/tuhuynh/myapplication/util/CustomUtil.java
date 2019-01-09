@@ -15,7 +15,7 @@ public class CustomUtil {
      * @return true if username is correct format
      */
     public static boolean isCorrectUsername(String username) {
-        Pattern p = Pattern.compile("[a-z][A-Za-z0-9]{8,16}");
+        Pattern p = Pattern.compile("[a-z][A-Za-z0-9]{6,16}");
         Matcher m = p.matcher(username);
         return m.matches();
     }

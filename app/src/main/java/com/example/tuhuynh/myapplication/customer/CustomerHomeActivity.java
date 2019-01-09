@@ -51,7 +51,7 @@ public class CustomerHomeActivity extends AppCompatActivity
 
         // Set the text for each tab.
         tabLayout.addTab(tabLayout.newTab().setText(R.string.title_bank_list));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.title_bank_status));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.title_application_list));
 
         // Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

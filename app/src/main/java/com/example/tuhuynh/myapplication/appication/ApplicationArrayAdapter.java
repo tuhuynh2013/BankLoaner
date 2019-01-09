@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.text.SimpleDateFormat;
@@ -23,7 +22,7 @@ public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applicationInfos;
 
-    public ApplicationArrayAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
+    ApplicationArrayAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
         super(context, textViewResourceId, objects);
         this.applicationInfos = objects;
     }
@@ -52,17 +51,16 @@ public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
         TextView tvStatus = rowView.findViewById(R.id.tv_status);
 
         // Get value for adapter
-        BankInfo bankInfo = applicationInfos.get(position).getBankInfo();
-        String bankName = bankInfo.getName();
+        String shortName = applicationInfos.get(position).getShortName();
         Long amount = applicationInfos.get(position).getAmount();
         Date date = applicationInfos.get(position).getDate();
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("d-M-yyyy");
         String strDate = formatter.format(date);
         String status = applicationInfos.get(position).getStatus();
 
 
-        tvBankName.setText(bankName);
+        tvBankName.setText(shortName);
         tvAmount.setText(CustomUtil.convertLongToFormattedString(amount));
         tvDate.setText(strDate);
         tvStatus.setText(status);
@@ -86,8 +84,6 @@ public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
         }
 
         // Change icon based on name
-        String shortName = bankInfo.getShortName();
-
         switch (shortName) {
             case "ACB":
                 imgBankIcon.setImageResource(R.mipmap.acb_icon);

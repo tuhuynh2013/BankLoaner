@@ -51,7 +51,7 @@
 
     <!--Tab-->
     <string name="title_bank_list">Bank list</string>
-    <string name="title_bank_status">Bank status</string>
+    <string name="title_application_list">Application List</string>
 
     <!--Bank List Fragment-->
     <string name="bank_icon">Bank icon</string>
@@ -107,8 +107,9 @@
     <string name="tv_date">Date:</string>
     <string name="tv_text">Sample text</string>
 
-    <!--Bank Status-->
+    <!--Application Manager-->
     <string name="tv_status">Status</string>
+    <string name="msg_retrieve_applications_success">Retrieve list of applications successful</string>
 
 
 </resources>

@@ -1,8 +1,5 @@
 package com.example.tuhuynh.myapplication.appication;
 
-import com.example.tuhuynh.myapplication.bank.BankInfo;
-import com.example.tuhuynh.myapplication.user.User;
-
 import java.util.Date;
 
 public class ApplicationInfo {
@@ -11,29 +8,15 @@ public class ApplicationInfo {
     private int month;
     private Long amount;
     private double interest;
-    private User customer;
-    private User agent;
-    private BankInfo bankInfo;
+    private String agentName;
+    private String bankName;
+    private String shortName;
     private Date date;
     private String status;
 
-
-    public ApplicationInfo(int id, int month, Long amount,
-                           double interest, User customer, User agent,
-                           BankInfo bankInfo, Date date, String status) {
-
-        this.setId(id);
-        this.setMonth(month);
-        this.setAmount(amount);
-        this.setInterest(interest);
-        this.setCustomer(customer);
-        this.setAgent(agent);
-        this.setBankInfo(bankInfo);
-        this.setDate(date);
-        this.setStatus(status);
+    ApplicationInfo() {
 
     }
-
 
     public int getId() {
         return id;
@@ -67,28 +50,28 @@ public class ApplicationInfo {
         this.interest = interest;
     }
 
-    public User getCustomer() {
-        return customer;
+    public String getAgentName() {
+        return agentName;
     }
 
-    public void setCustomer(User customer) {
-        this.customer = customer;
+    void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 
-    public User getAgent() {
-        return agent;
+    public String getBankName() {
+        return bankName;
     }
 
-    private void setAgent(User agent) {
-        this.agent = agent;
+    void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 
-    public BankInfo getBankInfo() {
-        return bankInfo;
+    String getShortName() {
+        return shortName;
     }
 
-    private void setBankInfo(BankInfo bankInfo) {
-        this.bankInfo = bankInfo;
+    void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public Date getDate() {
@@ -99,11 +82,11 @@ public class ApplicationInfo {
         this.date = date;
     }
 
-    public String getStatus() {
+    String getStatus() {
         return status;
     }
 
-    private void setStatus(String status) {
+    void setStatus(String status) {
         this.status = status;
     }
 
