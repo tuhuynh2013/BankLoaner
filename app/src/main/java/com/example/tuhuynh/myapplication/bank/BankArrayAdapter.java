@@ -43,13 +43,13 @@ public class BankArrayAdapter extends ArrayAdapter<BankInfo> {
 
         ImageView imgBankIcon = rowView.findViewById(R.id.imgBankIcon);
         TextView tvBankName = rowView.findViewById(R.id.tvBankName);
-        TextView tvYear = rowView.findViewById(R.id.tvYear);
+        TextView tvMonth = rowView.findViewById(R.id.tv_month);
         TextView tvInterest = rowView.findViewById(R.id.tvInterest);
 
         tvBankName.setText(banks.get(position).getName());
 
         List<InterestAmount> interestAmounts = banks.get(position).getInterestAmounts();
-        tvYear.setText(new DecimalFormat("##.##").format(interestAmounts.get(0).getYear()));
+        tvMonth.setText(new DecimalFormat("##.##").format(interestAmounts.get(0).getMonth()));
         tvInterest.setText(new DecimalFormat("##.##").format(interestAmounts.get(0).getInterest()));
 
         // Change icon based on name

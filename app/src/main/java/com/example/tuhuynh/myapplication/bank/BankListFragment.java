@@ -129,7 +129,7 @@ public class BankListFragment extends Fragment {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject bankJson = jsonArray.getJSONObject(i);
             String shortName = bankJson.getString("short_name");
-            int year = bankJson.getInt("year");
+            int month = bankJson.getInt("month");
             double interest = bankJson.getDouble("interest");
 
             // If bankList empty or shortName doesn't exist, create new bank info and add to bankList
@@ -138,7 +138,7 @@ public class BankListFragment extends Fragment {
                 String bankName = bankJson.getString("name");
 
                 interestAmounts.clear();
-                interestAmounts.add(new InterestAmount(year, interest));
+                interestAmounts.add(new InterestAmount(month, interest));
 
                 //Create BankInfo and add to bankList
                 bankInfo = new BankInfo(id, bankName, shortName, new ArrayList<>(interestAmounts));
@@ -146,7 +146,7 @@ public class BankListFragment extends Fragment {
             }
             // If shortName exist, add new interest into exist BankInfo
             else {
-                bankList.get(bankList.size() - 1).setInterestAmounts(new InterestAmount(year, interest));
+                bankList.get(bankList.size() - 1).setInterestAmounts(new InterestAmount(month, interest));
             }
         }
         return bankList;

@@ -23,11 +23,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/year"
+                android:text="@string/month"
                 android:textSize="18sp" />
 
             <RadioGroup
-                android:id="@+id/rgpYear"
+                android:id="@+id/rgp_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

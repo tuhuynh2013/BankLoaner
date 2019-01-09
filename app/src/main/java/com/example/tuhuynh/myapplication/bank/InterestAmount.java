@@ -3,20 +3,20 @@ package com.example.tuhuynh.myapplication.bank;
 import java.io.Serializable;
 
 public class InterestAmount implements Serializable {
-    private int year;
+    private int month;
     private Double interest;
 
-    public InterestAmount(int year, Double interest) {
-        this.setYear(year);
+    InterestAmount(int month, Double interest) {
+        this.setMonth(month);
         this.setInterest(interest);
     }
 
-    public int getYear() {
-        return year;
+    public int getMonth() {
+        return month;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setMonth(int month) {
+        this.month = month;
     }
 
     public Double getInterest() {

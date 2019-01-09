@@ -55,7 +55,6 @@
 
     <!--Bank List Fragment-->
     <string name="bank_icon">Bank icon</string>
-    <string name="year">Year: </string>
     <string name="interest_rate">Interest rate: </string>
     <string name="amount">Amount</string>
     <string name="debit_amount">Debit amount</string>

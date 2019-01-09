@@ -171,7 +171,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
             params.put("month", month);
             params.put("amount", amount);
             params.put("interest", interest);
-            params.put("user_id", Integer.toString(user.getId()));
+            params.put("customer_id", Integer.toString(user.getId()));
             params.put("bank_id", Integer.toString(bankInfo.getId()));
             params.put("date", strDate);
 

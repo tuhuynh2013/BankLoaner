@@ -17,7 +17,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.customer.LoanApplicationActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
@@ -27,7 +26,7 @@ import java.text.DecimalFormat;
 public class BankInformationActivity extends AppCompatActivity {
 
     private EditText edtAmount;
-    private RadioGroup rdgYear;
+    private RadioGroup rdgMonth;
     private RadioButton rd;
     private TextView tvInterest;
     private TableLayout tblInterestTable;
@@ -50,19 +49,19 @@ public class BankInformationActivity extends AppCompatActivity {
 
         // Initial elements
         edtAmount = findViewById(R.id.edtAmount);
-        rdgYear = findViewById(R.id.rgpYear);
+        rdgMonth = findViewById(R.id.rgp_month);
         tvInterest = findViewById(R.id.tvInterest);
         tblInterestTable = findViewById(R.id.tbl_InterestTable);
 
 
-        rdgYear.setOrientation(LinearLayout.HORIZONTAL);
+        rdgMonth.setOrientation(LinearLayout.HORIZONTAL);
         createRadioButton(bankInfo);
         // Get checked radio button
-        rd = findViewById(rdgYear.getCheckedRadioButtonId());
+        rd = findViewById(rdgMonth.getCheckedRadioButtonId());
         // Initial interest value
         setInterest(rd.getId(), bankInfo);
 
-        rdgYear.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rdgMonth.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 setInterest(checkedId, bankInfo);
@@ -77,8 +76,8 @@ public class BankInformationActivity extends AppCompatActivity {
                 tblInterestTable.removeAllViews();
 
                 // Get checked radio button
-                rd = findViewById(rdgYear.getCheckedRadioButtonId());
-                int month = Integer.parseInt(rd.getText().toString()) * 12;
+                rd = findViewById(rdgMonth.getCheckedRadioButtonId());
+                int month = Integer.parseInt(rd.getText().toString());
                 Long amount = CustomUtil.convertFormattedStringToLong(edtAmount.getText().toString());
                 Double interest = Double.parseDouble(tvInterest.getText().toString());
 
@@ -93,8 +92,8 @@ public class BankInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Get checked radio button
-                rd = findViewById(rdgYear.getCheckedRadioButtonId());
-                int month = Integer.parseInt(rd.getText().toString()) * 12;
+                rd = findViewById(rdgMonth.getCheckedRadioButtonId());
+                int month = Integer.parseInt(rd.getText().toString());
                 Long amount = CustomUtil.convertFormattedStringToLong(edtAmount.getText().toString());
 
                 if (isVaildAmount(amount)) {
@@ -287,15 +286,15 @@ public class BankInformationActivity extends AppCompatActivity {
      */
     private void createRadioButton(BankInfo bankInfo) {
         for (int i = 0; i < bankInfo.getInterestAmounts().size(); i++) {
-            int year = bankInfo.getInterestAmounts().get(i).getYear();
+            int month = bankInfo.getInterestAmounts().get(i).getMonth();
             RadioButton rb = new RadioButton(this);
             rb.setId(i);
-            rb.setText(new DecimalFormat("##.##").format(year));
+            rb.setText(new DecimalFormat("##.##").format(month));
             if (i == 0)
                 rb.setChecked(true);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
             rb.setLayoutParams(params);
-            rdgYear.addView(rb);
+            rdgMonth.addView(rb);
         }
     }
 
