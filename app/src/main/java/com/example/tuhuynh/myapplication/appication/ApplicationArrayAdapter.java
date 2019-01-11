@@ -54,11 +54,9 @@ public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
         String shortName = applicationInfos.get(position).getShortName();
         Long amount = applicationInfos.get(position).getAmount();
         Date date = applicationInfos.get(position).getDate();
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat formatter = new SimpleDateFormat("d-M-yyyy");
-        String strDate = formatter.format(date);
+        // Convert Date to String
+        String strDate = CustomUtil.convertDateToString(date, "dd-MM-yyyy");
         String status = applicationInfos.get(position).getStatus();
-
 
         tvBankName.setText(shortName);
         tvAmount.setText(CustomUtil.convertLongToFormattedString(amount));
@@ -66,18 +64,21 @@ public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
         tvStatus.setText(status);
 
         // Set color for status
-        switch (status.toLowerCase()) {
-            case "pending":
-                tvStatus.setTextColor(Color.RED);
+        switch (status) {
+            /*case ApplicationStatus.PROGRESSING:
+                tvStatus.setTextColor(Color.parseColor("#00CC00"));
+                break;*/
+            case ApplicationStatus.VALIDATING:
+                tvStatus.setTextColor(Color.parseColor("#FFCC00"));
                 break;
-            case "approved":
-                tvStatus.setTextColor(Color.YELLOW);
+            case ApplicationStatus.APPROVED:
+                tvStatus.setTextColor(Color.parseColor("#009900"));
                 break;
-            case "rejected":
-                tvStatus.setTextColor(Color.GRAY);
+            case ApplicationStatus.REJECTED:
+                tvStatus.setTextColor(Color.parseColor("#CC0000"));
                 break;
-            case "debit":
-                tvStatus.setTextColor(Color.GREEN);
+            case ApplicationStatus.DEBIT:
+                tvStatus.setTextColor(Color.parseColor("#0033FF"));
                 break;
             default:
                 break;

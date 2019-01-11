@@ -6,14 +6,14 @@
     tools:context=".appication.ApplicationHistoryActivity">
 
     <TableLayout
-        android:layout_width="379dp"
-        android:layout_height="162dp"
+        android:layout_width="374dp"
+        android:layout_height="207dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
         android:layout_marginTop="71dp"
-        android:layout_marginBottom="278dp">
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="233dp">
 
         <TableRow
             android:layout_width="match_parent"
@@ -146,6 +146,52 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:text="@string/hint_date"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_status"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/hint_status"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_title_agent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_agent"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_agent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/hint_agent"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
         </TableRow>
@@ -174,7 +220,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="213dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="250dp"
+        android:layout_marginBottom="211dp"
         android:text="@string/tv_text" />
 
 </RelativeLayout>

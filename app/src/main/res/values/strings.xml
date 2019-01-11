@@ -105,9 +105,13 @@
     <string name="tv_application_id">Application ID:</string>
     <string name="tv_date">Date:</string>
     <string name="tv_text">Sample text</string>
+    <string name="tv_status">Status:</string>
+    <string name="tv_agent">Agent:</string>
+    <string name="hint_agent">Agent</string>
 
     <!--Application Manager-->
-    <string name="tv_status">Status</string>
+    <string name="hint_date">Date</string>
+    <string name="hint_status">Status</string>
     <string name="msg_retrieve_applications_success">Retrieve list of applications successful</string>
 
 

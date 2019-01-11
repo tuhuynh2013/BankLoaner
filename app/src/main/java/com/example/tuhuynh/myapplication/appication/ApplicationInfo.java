@@ -1,8 +1,9 @@
 package com.example.tuhuynh.myapplication.appication;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ApplicationInfo {
+public class ApplicationInfo implements Serializable {
 
     private int id;
     private int month;
@@ -14,7 +15,7 @@ public class ApplicationInfo {
     private Date date;
     private String status;
 
-    ApplicationInfo() {
+    public ApplicationInfo() {
 
     }
 
@@ -62,7 +63,7 @@ public class ApplicationInfo {
         return bankName;
     }
 
-    void setBankName(String bankName) {
+    public void setBankName(String bankName) {
         this.bankName = bankName;
     }
 
@@ -86,7 +87,7 @@ public class ApplicationInfo {
         return status;
     }
 
-    void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

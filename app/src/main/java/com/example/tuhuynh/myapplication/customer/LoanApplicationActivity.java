@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.appication.ApplicationHistoryActivity;
+import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
+import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
@@ -27,6 +29,7 @@ import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -133,7 +136,6 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
             startActivityForResult(intent, REQUEST_CODE);
         } else {
             new SubmitApplication().execute();
-            System.out.print("success");
         }
     }
 
@@ -157,9 +159,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
 
             // Get current date & time
             Date currentTime = Calendar.getInstance().getTime();
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-            String strDate = formatter.format(currentTime);
+            String strDate = CustomUtil.convertDateToString(currentTime, "default");
 
             // Reformat amount
             Long longAmount = CustomUtil.convertFormattedStringToLong(amount);
@@ -174,6 +174,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
             params.put("customer_id", Integer.toString(user.getId()));
             params.put("bank_id", Integer.toString(bankInfo.getId()));
             params.put("date", strDate);
+            params.put("status", ApplicationStatus.PROGRESSING);
 
             // Return the response
             return requestHandler.sendPostRequest(URLs.URL_SUBMIT_APPLICATION, params);
@@ -198,15 +199,23 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
                     finish();
                 } else if (obj.getBoolean("error") && msg.equalsIgnoreCase(getString(R.string.respond_existed_application))) {
                     // Get object from db
-                    JSONObject applicationInfo = obj.getJSONObject("application_info");
+                    JSONObject applicationJson = obj.getJSONObject("application_info");
 
                     Intent intent = new Intent(getApplicationContext(), ApplicationHistoryActivity.class);
-                    intent.putExtra("applicationID", applicationInfo.getString("application_id"));
-                    intent.putExtra("month", applicationInfo.getString("month"));
-                    intent.putExtra("amount", applicationInfo.getString("amount"));
-                    intent.putExtra("interest", applicationInfo.getString("interest"));
-                    intent.putExtra("date", applicationInfo.getString("date"));
-                    intent.putExtra("bankName", applicationInfo.getString("bank_name"));
+                    ApplicationInfo applicationInfo = new ApplicationInfo();
+                    applicationInfo.setId(Integer.parseInt(applicationJson.getString("application_id")));
+                    applicationInfo.setMonth(Integer.parseInt(applicationJson.getString("month")));
+                    applicationInfo.setAmount(Long.parseLong(applicationJson.getString("amount")));
+                    applicationInfo.setInterest(Double.parseDouble(applicationJson.getString("interest")));
+                    // Convert String date to Date
+                    Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"));
+                    applicationInfo.setDate(date);
+
+                    applicationInfo.setStatus(applicationJson.getString("status"));
+                    applicationInfo.setBankName(applicationJson.getString("bank_name"));
+                    intent.putExtra("caller", "LoanApplicationActivity");
+                    intent.putExtra("application", applicationInfo);
+
                     startActivity(intent);
                     finish();
                 }

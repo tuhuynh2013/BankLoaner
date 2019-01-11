@@ -1,7 +1,13 @@
 package com.example.tuhuynh.myapplication.util;
 
+import android.annotation.SuppressLint;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,6 +87,42 @@ public class CustomUtil {
             return null;
         }
     }
+
+    /**
+     * Convert String to Date as the format dd-MM-yyyy hh:mm:ss
+     *
+     * @param s String of date
+     * @return Date
+     */
+    public static Date convertStringToDate(String s) {
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        Date date = null;
+        try {
+            date = formatter.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    /**
+     * Convert Date to String as the format dd-MM-yyyy hh:mm:ss
+     *
+     * @param date date
+     * @return String
+     */
+    @SuppressLint("SimpleDateFormat")
+    public static String convertDateToString(Date date, String format) {
+        SimpleDateFormat formatter;
+        if (format.equalsIgnoreCase("default")) {
+            formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        } else {
+            formatter = new SimpleDateFormat(format);
+        }
+        return formatter.format(date);
+    }
+
 
 
 }
