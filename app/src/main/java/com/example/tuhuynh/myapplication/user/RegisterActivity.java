@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tuhuynh.myapplication.Agent.AgentProfile;
+import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.customer.ProfileEditorActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
@@ -64,8 +66,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * */
+     * Function uses to validate input and process register
+     */
     private void registerUser() {
         final String username = edtUsername.getText().toString().trim();
         final String name = edtName.getText().toString().trim();
@@ -95,8 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
             edtName.requestFocus();
             return;
         } else {
-            // TODO Capital first letter
-//            name = name.substring(0, 1) + name.substring(1);
+            CustomUtil.capitalFirstLetter(name);
         }
 
         if (TextUtils.isEmpty(email)) {
@@ -146,6 +147,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("name", name);
                 params.put("email", email);
                 params.put("password", password);
+                params.put("role", UserRole.CUSTOMER);
 
                 // Return the response
                 return requestHandler.sendPostRequest(URLs.URL_REGISTER, params);
@@ -175,21 +177,36 @@ public class RegisterActivity extends AppCompatActivity {
 
                         // Getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
+                        int userID = userJson.getInt("id");
+                        String userName = userJson.getString("username");
+                        String name = userJson.getString("name");
+                        String email = userJson.getString("email");
+                        String role = userJson.getString("role");
 
-                        // Creating a new user object
-                        User user = new User(
-                                userJson.getInt("id"),
-                                userJson.getString("username"),
-                                userJson.getString("name"),
-                                userJson.getString("email")
-                        );
-
-                        // Storing the user in shared preferences
-                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                        // Create object base on user role
+                        if (role.equalsIgnoreCase(UserRole.CUSTOMER)) {
+                            CustomerProfile customer = new CustomerProfile();
+                            customer.setId(userID);
+                            customer.setUsername(username);
+                            customer.setName(name);
+                            customer.setEmail(email);
+                            customer.setRole(role);
+                            // Storing the user in shared preferences
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(customer);
+                        } else if (role.equalsIgnoreCase(UserRole.AGENT)) {
+                            AgentProfile agent = new AgentProfile();
+                            agent.setId(userID);
+                            agent.setUsername(username);
+                            agent.setName(name);
+                            agent.setEmail(email);
+                            agent.setRole(role);
+                            // Storing the user in shared preferences
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(agent);
+                        }
 
                         // Starting the profile activity
-                        finish();
                         startActivity(new Intent(getApplicationContext(), ProfileEditorActivity.class));
+                        finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "Some error occurred", Toast.LENGTH_LONG).show();
                     }

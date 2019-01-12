@@ -1,8 +1,10 @@
 package com.example.tuhuynh.myapplication.appication;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,7 +40,6 @@ public class ApplicationHistoryActivity extends AppCompatActivity {
         String strInterest = Double.toString(application.getInterest());
         String strDate = CustomUtil.convertDateToString(application.getDate(), "default");
         String status = application.getStatus();
-
 
         tvApplicationID.setText(strID);
         tvBankName.setText(bankName);
@@ -78,6 +79,16 @@ public class ApplicationHistoryActivity extends AppCompatActivity {
         tvTitleAgent = findViewById(R.id.tv_title_agent);
         tvAgent = findViewById(R.id.tv_agent);
         tvMessage = findViewById(R.id.tv_message);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

@@ -1,95 +1,49 @@
 package com.example.tuhuynh.myapplication.customer;
 
-import java.io.Serializable;
+import com.example.tuhuynh.myapplication.user.User;
 
-public class CustomerProfile implements Serializable {
+public class CustomerProfile extends User {
 
-    private String surname;
-    private String identity;
-    private String gender;
-    private String phone;
-    private String address;
-    private String workplace;
-    private String designation;
+    private String employment;
+    private String company;
+    private Long salary;
+    private Long bank_account;
 
     public CustomerProfile() {
+        super();
     }
 
-    public CustomerProfile(String surname, String identity, String gender,
-                           String phone, String address, String workplace, String designation) {
-        this.surname = surname;
-        this.identity = identity;
-        this.gender = gender;
-        this.phone = phone;
-        this.address = address;
-        this.workplace = workplace;
-        this.designation = designation;
+    public String getEmployment() {
+        return employment;
     }
 
-    public String getSurname() {
-        return surname;
+    public void setEmployment(String employment) {
+        this.employment = employment;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public String getCompany() {
+        return company;
     }
 
-    public String getIdentity() {
-        return identity;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
-    public void setIdentity(String identity) {
-        this.identity = identity;
+    public Long getSalary() {
+        return salary;
     }
 
-    public String getGender() {
-        return gender;
+    public void setSalary(Long salary) {
+        this.salary = salary;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public Long getBank_account() {
+        return bank_account;
     }
 
-    public String getPhone() {
-        return phone;
+    public void setBank_account(Long bank_account) {
+        this.bank_account = bank_account;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getWorkplace() {
-        return workplace;
-    }
-
-    public void setWorkplace(String workplace) {
-        this.workplace = workplace;
-    }
-
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
-
-    boolean isEmpty() {
-        return this.surname.isEmpty() ||
-                this.identity.isEmpty() ||
-                this.gender.isEmpty() ||
-                this.phone.isEmpty() ||
-                this.address.isEmpty() ||
-                this.workplace.isEmpty() ||
-                this.designation.isEmpty();
-    }
 
 }

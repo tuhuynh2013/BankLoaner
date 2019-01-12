@@ -72,12 +72,12 @@
     <string name="title_activity_user_profile">UserProfileActivity</string>
 
     <!--Profile-->
-    <string name="name">Name*</string>
+    <string name="name">Name</string>
     <string name="surname">Surname</string>
-    <string name="identity_id">Identity ID*</string>
+    <string name="identity_id">Identity ID</string>
     <string name="gender">Gender</string>
-    <string name="phone">Phone*</string>
-    <string name="address">Address*</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
     <string name="workplace">Workplace</string>
     <string name="designation">Designation</string>
     <string name="hint_surname">Your surname</string>
