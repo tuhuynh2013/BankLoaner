@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.user;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.customer.ProfileEditorActivity;
 
-public class CustomerProfileActivity extends AppCompatActivity {
+public class UserProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         startActivity(new Intent(parent.getContext(), ProfileEditorActivity.class));
                         break;
                     case "Change password":
+                        startActivity(new Intent(parent.getContext(), ChangePasswordActivity.class));
                         break;
                     default:
                         break;

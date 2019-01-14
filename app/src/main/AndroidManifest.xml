@@ -27,11 +27,14 @@
         </activity>
         <activity android:name=".user.RegisterActivity" />
         <activity
-            android:name=".customer.CustomerProfileActivity"
+            android:name=".user.ChangePasswordActivity"
+            android:parentActivityName=".user.UserProfileActivity" />
+        <activity
+            android:name=".user.UserProfileActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
             android:name=".customer.ProfileEditorActivity"
-            android:parentActivityName=".customer.CustomerProfileActivity" />
+            android:parentActivityName=".user.UserProfileActivity" />
         <activity
             android:name=".customer.CustomerHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />

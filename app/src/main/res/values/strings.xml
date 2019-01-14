@@ -122,5 +122,12 @@
     <string name="hint_status">Status</string>
     <string name="msg_retrieve_applications_success">Retrieve list of applications successful</string>
 
+    <!--Change Password Activity-->
+    <string name="tv_old_pass">Old password</string>
+    <string name="tv_new_pass">New password</string>
+    <string name="tv_confirm_new_pass">Confirm new password</string>
+    <string name="btn_change_pass">Change password</string>
+    <string name="msg_change_pass_success">Password has changed</string>
+    <string name="msg_wrong_old_pass">Wrong password</string>
 
 </resources>

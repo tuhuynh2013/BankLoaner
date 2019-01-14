@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
+import com.example.tuhuynh.myapplication.user.UserProfileActivity;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.PagerAdapter;
@@ -137,7 +138,7 @@ public class CustomerHomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_profile:
-                startActivity(new Intent(this, CustomerProfileActivity.class));
+                startActivity(new Intent(this, UserProfileActivity.class));
                 return true;
             case R.id.nav_setting:
                 drawer.closeDrawer(GravityCompat.START);
