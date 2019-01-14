@@ -115,6 +115,7 @@
     <string name="tv_status">Status:</string>
     <string name="tv_agent">Agent:</string>
     <string name="hint_agent">Agent</string>
+    <string name="msg_submit_success">Success to submit application</string>
 
     <!--Application Manager-->
     <string name="hint_date">Date</string>

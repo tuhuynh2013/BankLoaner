@@ -149,7 +149,7 @@ public class ApplicationManagerFragment extends Fragment {
             applicationInfo.setAgentName(applicationJson.getString("full_name"));
             applicationInfo.setBankName(applicationJson.getString("bank_name"));
             applicationInfo.setShortName(applicationJson.getString("short_name"));
-            Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"));
+            Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
             applicationInfo.setDate(date);
             applicationInfo.setStatus(applicationJson.getString("status"));
             applicationList.add(applicationInfo);

@@ -102,15 +102,20 @@ public class CustomUtil {
     /**
      * Convert String to Date as the format dd-MM-yyyy hh:mm:ss
      *
-     * @param s String of date
+     * @param str String of date
      * @return Date
      */
-    public static Date convertStringToDate(String s) {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    @SuppressLint("SimpleDateFormat")
+    public static Date convertStringToDate(String str, String format) {
+        SimpleDateFormat formatter;
         Date date = null;
+        if (format.equalsIgnoreCase("default")) {
+            formatter = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        } else {
+            formatter = new SimpleDateFormat(format);
+        }
         try {
-            date = formatter.parse(s);
+            date = formatter.parse(str);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -141,13 +146,13 @@ public class CustomUtil {
      * @return String with capital of first letter
      */
     public static String capitalFirstLetter(String str) {
-        String name = "";
+        StringBuilder name = new StringBuilder();
         StringTokenizer tokenizer = new StringTokenizer(str, " ");
         while (tokenizer.hasMoreTokens()) {
             String temp = tokenizer.nextToken();
-            name += temp.substring(0, 1).toUpperCase() + temp.substring(1).toLowerCase() + " ";
+            name.append(temp.substring(0, 1).toUpperCase()).append(temp.substring(1).toLowerCase()).append(" ");
         }
-        return name;
+        return name.toString();
     }
 
 

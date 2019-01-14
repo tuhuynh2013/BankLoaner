@@ -1,6 +1,7 @@
 package com.example.tuhuynh.myapplication.customer;
 
 import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 public class CustomerProfile extends User {
 
@@ -61,5 +62,13 @@ public class CustomerProfile extends User {
         this.bankAccount = bankAccount;
     }
 
+    public boolean isMissingInfo() {
+        return !CustomUtil.hasCharacter(this.getIdentity()) &&
+                !CustomUtil.hasCharacter(this.getPhone()) &&
+                !CustomUtil.hasCharacter(this.getEmployment()) &&
+                !CustomUtil.hasCharacter(this.getCompany()) &&
+                !CustomUtil.hasCharacter(this.getSalary().toString()) &&
+                !CustomUtil.hasCharacter(this.getBankAccount());
+    }
 
 }

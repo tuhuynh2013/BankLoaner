@@ -29,8 +29,6 @@ import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -130,7 +128,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
      */
     private void submitApplication() {
         // If profile not enough information, move to ProfileEditorActivity
-        if (customerProfile.isEmpty()) {
+        if (customerProfile.isMissingInfo()) {
             Intent intent = new Intent(this, ProfileEditorActivity.class);
             intent.putExtra("requestCode", REQUEST_CODE);
             startActivityForResult(intent, REQUEST_CODE);
@@ -192,7 +190,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
                 String msg = obj.getString("message");
 
                 // If no error in response
-                if (!obj.getBoolean("error")) {
+                if (!obj.getBoolean("error") && msg.equalsIgnoreCase(getString(R.string.msg_submit_success))) {
                     Intent intent = new Intent(getApplicationContext(), CustomerHomeActivity.class);
                     intent.putExtra("caller", "SubmitApplication");
                     startActivity(intent);
@@ -208,9 +206,8 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
                     applicationInfo.setAmount(Long.parseLong(applicationJson.getString("amount")));
                     applicationInfo.setInterest(Double.parseDouble(applicationJson.getString("interest")));
                     // Convert String date to Date
-                    Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"));
+                    Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
                     applicationInfo.setDate(date);
-
                     applicationInfo.setStatus(applicationJson.getString("status"));
                     applicationInfo.setBankName(applicationJson.getString("bank_name"));
                     intent.putExtra("caller", "LoanApplicationActivity");
@@ -224,6 +221,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
                 e.printStackTrace();
             }
         }
+
     }
 
 
