@@ -196,18 +196,19 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@+id/tv_employment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/workplace"
+                        android:text="@string/tv_employment"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
                     <EditText
-                        android:id="@+id/edt_workplace"
+                        android:id="@+id/edt_employment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="@string/hint_workplace"
+                        android:hint="@string/hint_employment"
                         android:inputType="textPersonName" />
 
                 </TableRow>
@@ -217,19 +218,86 @@
                     android:layout_height="match_parent">
 
                     <TextView
+                        android:id="@+id/tv_company"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/designation"
+                        android:text="@string/tv_company"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
                     <EditText
-                        android:id="@+id/edt_designation"
+                        android:id="@+id/edt_company"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="@string/hint_designation"
+                        android:hint="@string/hint_company"
                         android:inputType="textPersonName" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_salary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="@string/tv_salary"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                    <EditText
+                        android:id="@+id/edt_salary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/hint_salary"
+                        android:inputType="number" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_bank_account"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="@string/tv_bank_account"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                    <EditText
+                        android:id="@+id/edt_bank_account"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/hint_bank_account"
+                        android:inputType="number" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tv_bank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="@string/tv_bank"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                    <EditText
+                        android:id="@+id/edt_bank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/tv_bank"
+                        android:inputType="number" />
 
                 </TableRow>
 

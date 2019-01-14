@@ -78,19 +78,26 @@
     <string name="gender">Gender</string>
     <string name="phone">Phone</string>
     <string name="address">Address</string>
-    <string name="workplace">Workplace</string>
-    <string name="designation">Designation</string>
+    <string name="tv_employment">Employment</string>
+    <string name="tv_company">Company</string>
+    <string name="tv_salary">Salary</string>
+    <string name="tv_bank_account">Bank account</string>
     <string name="hint_surname">Your surname</string>
     <string name="hint_identity_id">Your identity number</string>
     <string name="hint_phone">Your phone number</string>
     <string name="hint_address">Your address</string>
-    <string name="hint_workplace">Your workplace</string>
-    <string name="hint_designation">Your designation</string>
+    <string name="hint_employment">Your employment</string>
+    <string name="hint_company">Your company</string>
+    <string name="hint_salary">Your salary</string>
+    <string name="hint_bank_account">Your bank account</string>
     <string name="save_change">Save change</string>
+    <string name="msg_retrieve_user_info_success">Retrieve user information successful</string>
     <string name="msg_retrieve_customer_info_success">Retrieve customer information successful</string>
+    <string name="msg_update_user_successfully">Update user successfully</string>
+    <string name="msg_update_customer_successfully">Update customer successfully</string>
     <string name="msg_update_successfully">Update successfully</string>
     <string name="msg_update_not_successfully">Update NOT successfully</string>
-    <string name="msg_update_error">Update error</string>
+    <string name="tv_bank">Bank</string>
     <string name="apply">Apply</string>
 
     <!--Loan Application-->

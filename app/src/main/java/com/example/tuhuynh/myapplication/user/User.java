@@ -9,7 +9,7 @@ public class User implements Serializable {
     private String name;
     private String email;
     private String surname;
-    private String identityID;
+    private String identity;
     private String gender;
     private String phone;
     private String address;
@@ -24,6 +24,25 @@ public class User implements Serializable {
         setUsername(username);
         setName(name);
         setEmail(email);
+        setRole(role);
+    }
+
+    public User(String name, String surname, String identity, String gender, String phone, String address) {
+        setName(name);
+        setSurname(surname);
+        setIdentity(identity);
+        setGender(gender);
+        setPhone(phone);
+        setAddress(address);
+    }
+
+    public User(String name, String surname, String identity, String gender, String phone, String address, String role) {
+        setName(name);
+        setSurname(surname);
+        setIdentity(identity);
+        setGender(gender);
+        setPhone(phone);
+        setAddress(address);
         setRole(role);
     }
 
@@ -67,12 +86,12 @@ public class User implements Serializable {
         this.surname = surname;
     }
 
-    public String getIdentityID() {
-        return identityID;
+    public String getIdentity() {
+        return identity;
     }
 
-    public void setIdentityID(String identityID) {
-        this.identityID = identityID;
+    public void setIdentity(String identity) {
+        this.identity = identity;
     }
 
     public String getGender() {

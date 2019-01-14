@@ -7,10 +7,26 @@ public class CustomerProfile extends User {
     private String employment;
     private String company;
     private Long salary;
-    private Long bank_account;
+    private String bankAccount;
 
     public CustomerProfile() {
         super();
+    }
+
+    public CustomerProfile(String employment, String company, Long salary, String bankAccount) {
+        setEmployment(employment);
+        setCompany(company);
+        setSalary(salary);
+        setBankAccount(bankAccount);
+    }
+
+    public CustomerProfile(String name, String surname, String identity, String gender, String phone, String address, String role,
+                           String employment, String company, Long salary, String bankAccount) {
+        super(name, surname, identity, gender, phone, address, role);
+        setEmployment(employment);
+        setCompany(company);
+        setSalary(salary);
+        setBankAccount(bankAccount);
     }
 
     public String getEmployment() {
@@ -37,12 +53,12 @@ public class CustomerProfile extends User {
         this.salary = salary;
     }
 
-    public Long getBank_account() {
-        return bank_account;
+    public String getBankAccount() {
+        return bankAccount;
     }
 
-    public void setBank_account(Long bank_account) {
-        this.bank_account = bank_account;
+    public void setBankAccount(String bankAccount) {
+        this.bankAccount = bankAccount;
     }
 
 

@@ -65,19 +65,22 @@ public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
 
             // If no error in response
             if (!obj.getBoolean("error") && message.equalsIgnoreCase(context.getString(R.string.msg_retrieve_customer_info_success))) {
-
                 // Getting the customer info from the response
                 JSONObject customerJson = obj.getJSONObject("customerProfile");
 
+                String name = customerJson.getString("name");
                 String surname = customerJson.getString("surname");
                 String identityID = customerJson.getString("identity_id");
                 String gender = customerJson.getString("gender");
                 String phone = customerJson.getString("phone");
                 String address = customerJson.getString("address");
-                String workplace = customerJson.getString("workplace");
-                String designation = customerJson.getString("designation");
+                String role = customerJson.getString("role");
+                String employment = customerJson.getString("employment");
+                String company = customerJson.getString("company");
+                Long salary = customerJson.getLong("salary");
+                String bankAccount = customerJson.getString("bank_account");
 
-                CustomerProfile customerProfile = new CustomerProfile(surname, identityID, gender, phone, address, workplace, designation);
+                CustomerProfile customerProfile = new CustomerProfile(name, surname, identityID, gender, phone, address, role, employment, company, salary, bankAccount);
                 cb.callBack(customerProfile);
 
             } else {

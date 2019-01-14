@@ -8,10 +8,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomUtil {
+
+
+    /**
+     * Check string has meaning value or not
+     *
+     * @param str String
+     * @return true if string is meaning
+     */
+    public static boolean hasCharacter(String str) {
+        return !str.isEmpty() && !str.equalsIgnoreCase("null");
+    }
 
     /**
      * Check username is correct format
@@ -122,6 +134,21 @@ public class CustomUtil {
         return formatter.format(date);
     }
 
+    /**
+     * Capital first letter
+     *
+     * @param str String
+     * @return String with capital of first letter
+     */
+    public static String capitalFirstLetter(String str) {
+        String name = "";
+        StringTokenizer tokenizer = new StringTokenizer(str, " ");
+        while (tokenizer.hasMoreTokens()) {
+            String temp = tokenizer.nextToken();
+            name += temp.substring(0, 1).toUpperCase() + temp.substring(1).toLowerCase() + " ";
+        }
+        return name;
+    }
 
 
 }
