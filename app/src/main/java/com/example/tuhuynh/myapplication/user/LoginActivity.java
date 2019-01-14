@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.tuhuynh.myapplication.Agent.AgentHomeActivity;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
@@ -33,10 +34,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // If the user is already logged in, we will directly start the profile activity
+        // If the user is already logged in, we will start the proper activity base on user's role
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            User user = SharedPrefManager.getInstance(this).getUser();
+            if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
+                startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
+            } else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
+                startActivity(new Intent(getApplicationContext(), AgentHomeActivity.class));
+            }
             finish();
-            startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
         }
 
         // Initial element
@@ -132,8 +138,12 @@ public class LoginActivity extends AppCompatActivity {
                         // Storing the user in shared preferences
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                         // Starting the profile activity
+                        if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
+                            startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
+                        } else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
+                            startActivity(new Intent(getApplicationContext(), AgentHomeActivity.class));
+                        }
                         finish();
-                        startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
                     }
 
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();

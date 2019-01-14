@@ -1,5 +1,9 @@
 <resources>
+
+    <!--Screen title-->
     <string name="app_name">Bank Loader</string>
+    <string name="title_home">Home</string>
+
     <!--common string-->
     <string name="id">ID</string>
     <string name="username">Username</string>
@@ -129,5 +133,12 @@
     <string name="btn_change_pass">Change password</string>
     <string name="msg_change_pass_success">Password has changed</string>
     <string name="msg_wrong_old_pass">Wrong password</string>
+
+    <!--Agent Home Activity-->
+    <string name="tv_assigned_applications">Assigned applications</string>
+    <string name="tv_bank_applications">Bank applications</string>
+    <string name="tv_shared_applications">Shared applications</string>
+    <string name="tv_applications_history">Applications history</string>
+
 
 </resources>

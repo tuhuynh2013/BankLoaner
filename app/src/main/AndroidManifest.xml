@@ -27,8 +27,11 @@
         </activity>
         <activity android:name=".user.RegisterActivity" />
         <activity
-            android:name=".user.ChangePasswordActivity"
-            android:parentActivityName=".user.UserProfileActivity" />
+            android:name=".Agent.AgentHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".customer.CustomerHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".user.UserProfileActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
@@ -36,16 +39,16 @@
             android:name=".customer.ProfileEditorActivity"
             android:parentActivityName=".user.UserProfileActivity" />
         <activity
-            android:name=".customer.CustomerHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".user.ChangePasswordActivity"
+            android:parentActivityName=".user.UserProfileActivity" />
         <activity
             android:name=".bank.BankInformationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
-            android:name=".customer.LoanApplicationActivity"
+            android:name=".appication.ApplicationHistoryActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
-            android:name=".appication.ApplicationHistoryActivity"
+            android:name=".customer.LoanApplicationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
     </application>
 

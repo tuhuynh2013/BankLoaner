@@ -116,8 +116,6 @@ public class ApplicationManagerFragment extends Fragment {
                             }
                         });
 
-                    } else {
-                        Toast.makeText(view.getContext(), R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
