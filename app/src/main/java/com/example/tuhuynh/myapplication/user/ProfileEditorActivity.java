@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.user;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,15 +16,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tuhuynh.myapplication.user.LoginActivity;
-import com.example.tuhuynh.myapplication.user.User;
-import com.example.tuhuynh.myapplication.user.UserRole;
+import com.example.tuhuynh.myapplication.customer.CustomerProfile;
+import com.example.tuhuynh.myapplication.customer.CustomerProfileAsyncTask;
+import com.example.tuhuynh.myapplication.customer.CustomerProfileCallBack;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.util.CustomerProfileAsyncTask;
-import com.example.tuhuynh.myapplication.util.CustomerProfileCallBack;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import org.json.JSONException;
@@ -34,9 +32,17 @@ import java.util.HashMap;
 
 public class ProfileEditorActivity extends AppCompatActivity implements CustomerProfileCallBack {
 
-    private TextView tvUsername, tvEmail, tvEmployment, tvCompany, tvSalary, tvBankAccount, tvBank;
-    private EditText edtName, edtSurname, edtIdentity, edtPhone, edtAddress,
-            edtEmployment, edtCompany, edtSalary, edtBankAccount, edtBank;
+    private TextView tvUsername;
+    private TextView tvEmail;
+    private EditText edtName;
+    private EditText edtSurname;
+    private EditText edtIdentity;
+    private EditText edtPhone;
+    private EditText edtAddress;
+    private EditText edtEmployment;
+    private EditText edtCompany;
+    private EditText edtSalary;
+    private EditText edtBankAccount;
     private RadioGroup rdgGender;
     private RadioButton rdMale, rdFemale;
     private Button btnSave;
@@ -99,16 +105,16 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
         rdFemale = findViewById(R.id.rd_female);
         edtPhone = findViewById(R.id.edt_phone);
         edtAddress = findViewById(R.id.edt_address);
-        tvEmployment = findViewById(R.id.tv_employment);
+        TextView tvEmployment = findViewById(R.id.tv_employment);
         edtEmployment = findViewById(R.id.edt_employment);
-        tvCompany = findViewById(R.id.tv_company);
+        TextView tvCompany = findViewById(R.id.tv_company);
         edtCompany = findViewById(R.id.edt_company);
-        tvSalary = findViewById(R.id.tv_salary);
+        TextView tvSalary = findViewById(R.id.tv_salary);
         edtSalary = findViewById(R.id.edt_salary);
-        tvBankAccount = findViewById(R.id.tv_bank_account);
+        TextView tvBankAccount = findViewById(R.id.tv_bank_account);
         edtBankAccount = findViewById(R.id.edt_bank_account);
-        tvBank = findViewById(R.id.tv_bank);
-        edtBank = findViewById(R.id.edt_bank);
+        TextView tvBank = findViewById(R.id.tv_bank);
+        EditText edtBank = findViewById(R.id.edt_bank);
         btnSave = findViewById(R.id.btn_save);
 
         if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
@@ -148,15 +154,15 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
         String bankAccount = output.getBankAccount();
 
         // Section to check if values are available to display on screen
-        if (CustomUtil.hasCharacter(surname)) {
+        if (CustomUtil.hasMeaning(surname)) {
             edtSurname.setText(surname);
         }
 
-        if (CustomUtil.hasCharacter(identity)) {
+        if (CustomUtil.hasMeaning(identity)) {
             edtIdentity.setText(identity);
         }
 
-        if (CustomUtil.hasCharacter(gender)) {
+        if (CustomUtil.hasMeaning(gender)) {
             if (gender.equalsIgnoreCase(rdMale.getText().toString())) {
                 rdMale.setChecked(true);
             } else if (gender.equalsIgnoreCase(rdFemale.getText().toString())) {
@@ -166,19 +172,19 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
             }
         }
 
-        if (CustomUtil.hasCharacter(phone)) {
+        if (CustomUtil.hasMeaning(phone)) {
             edtPhone.setText(phone);
         }
 
-        if (CustomUtil.hasCharacter(address)) {
+        if (CustomUtil.hasMeaning(address)) {
             edtAddress.setText(address);
         }
 
-        if (CustomUtil.hasCharacter(employment)) {
+        if (CustomUtil.hasMeaning(employment)) {
             edtEmployment.setText(employment);
         }
 
-        if (CustomUtil.hasCharacter(company)) {
+        if (CustomUtil.hasMeaning(company)) {
             edtCompany.setText(company);
         }
 
@@ -187,7 +193,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
             edtSalary.setText(strSalary);
         }
 
-        if (CustomUtil.hasCharacter(bankAccount)) {
+        if (CustomUtil.hasMeaning(bankAccount)) {
             edtBankAccount.setText(bankAccount);
         }
 

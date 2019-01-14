@@ -1,6 +1,7 @@
 package com.example.tuhuynh.myapplication.util;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -21,8 +22,8 @@ public class CustomUtil {
      * @param str String
      * @return true if string is meaning
      */
-    public static boolean hasCharacter(String str) {
-        return !str.isEmpty() && !str.equalsIgnoreCase("null");
+    public static boolean hasMeaning(String str) {
+        return !TextUtils.isEmpty(str) && !str.equalsIgnoreCase("null");
     }
 
     /**
@@ -153,6 +154,24 @@ public class CustomUtil {
             name.append(temp.substring(0, 1).toUpperCase()).append(temp.substring(1).toLowerCase()).append(" ");
         }
         return name.toString();
+    }
+
+    /**
+     * Set full name
+     *
+     * @param firstName first name
+     * @param surname   surname
+     * @return Full name
+     */
+    public static String setFullName(String firstName, String surname) {
+        String fullName = "";
+        if (hasMeaning(firstName)) {
+            fullName = firstName;
+            if (hasMeaning(surname)) {
+                fullName += " " + surname;
+            }
+        }
+        return fullName;
     }
 
 

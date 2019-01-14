@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
         TextView tvStatus = rowView.findViewById(R.id.tv_status);
 
         // Get value for adapter
-        String shortName = applicationInfos.get(position).getShortName();
+        String shortName = applicationInfos.get(position).getBankInfo().getShortName();
         Long amount = applicationInfos.get(position).getAmount();
         Date date = applicationInfos.get(position).getDate();
         // Convert Date to String

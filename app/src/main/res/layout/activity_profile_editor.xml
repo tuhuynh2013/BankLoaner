@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".customer.ProfileEditorActivity">
+    tools:context=".user.ProfileEditorActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -34,8 +34,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="textEmailAddress"
-                        android:singleLine="true" />
+                        android:hint="@string/name"
+                        android:inputType="textPersonName"
+                        android:singleLine="true"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -56,7 +58,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/hint_surname"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -113,7 +116,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/hint_identity_id"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -166,7 +170,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/hint_phone"
-                        android:inputType="phone" />
+                        android:inputType="phone"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -187,7 +192,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/hint_address"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -209,7 +215,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/hint_employment"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -231,7 +238,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/hint_company"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -253,7 +261,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/hint_salary"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -275,7 +284,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/hint_bank_account"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 
@@ -297,7 +307,8 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:hint="@string/tv_bank"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 

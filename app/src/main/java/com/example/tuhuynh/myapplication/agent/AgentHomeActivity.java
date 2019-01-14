@@ -17,6 +17,7 @@ import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.user.UserProfileActivity;
+import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 public class AgentHomeActivity extends AppCompatActivity
@@ -47,7 +48,8 @@ public class AgentHomeActivity extends AppCompatActivity
             View headerView = navigationView.getHeaderView(0);
             User user = SharedPrefManager.getInstance(this).getUser();
             TextView tvUsername = headerView.findViewById(R.id.tv_username);
-            tvUsername.setText(user.getUsername());
+            String fullName = CustomUtil.setFullName(user.getName(), user.getSurname());
+            tvUsername.setText(fullName);
         }
 
         findViewById(R.id.lnl_assigned).setOnClickListener(new View.OnClickListener() {
@@ -92,15 +94,18 @@ public class AgentHomeActivity extends AppCompatActivity
             case R.id.nav_profile:
                 startActivity(new Intent(this, UserProfileActivity.class));
                 return true;
+
             case R.id.nav_setting:
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
+
             case R.id.nav_signout:
-                finish();
+                startActivity(new Intent(this, LoginActivity.class));
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 drawer.closeDrawer(GravityCompat.START);
-                startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 return true;
+
             default:
                 return false;
         }

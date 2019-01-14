@@ -3,6 +3,7 @@
     <!--Screen title-->
     <string name="app_name">Bank Loader</string>
     <string name="title_home">Home</string>
+    <string name="title_assigned_application">Assigned Application</string>
 
     <!--common string-->
     <string name="id">ID</string>

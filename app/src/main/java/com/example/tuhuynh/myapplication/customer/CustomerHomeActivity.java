@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
 import com.example.tuhuynh.myapplication.user.UserProfileActivity;
+import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.PagerAdapter;
@@ -105,7 +106,8 @@ public class CustomerHomeActivity extends AppCompatActivity
             View headerView = navigationView.getHeaderView(0);
             User user = SharedPrefManager.getInstance(this).getUser();
             TextView tvUsername = headerView.findViewById(R.id.tv_username);
-            tvUsername.setText(user.getUsername());
+            String fullName = CustomUtil.setFullName(user.getName(), user.getSurname());
+            tvUsername.setText(fullName);
         }
     }
 
@@ -140,17 +142,17 @@ public class CustomerHomeActivity extends AppCompatActivity
             case R.id.nav_profile:
                 startActivity(new Intent(this, UserProfileActivity.class));
                 return true;
+
             case R.id.nav_setting:
                 drawer.closeDrawer(GravityCompat.START);
                 displayToast(getString(R.string.msg_setting));
                 return true;
+
             case R.id.nav_signout:
-                // Handle the sign out action (for now display a toast).
-                finish();
+                startActivity(new Intent(this, LoginActivity.class));
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 drawer.closeDrawer(GravityCompat.START);
-                startActivity(new Intent(this, LoginActivity.class));
-                displayToast(getString(R.string.msg_signout));
+                finish();
                 return true;
             default:
                 return false;
@@ -158,11 +160,11 @@ public class CustomerHomeActivity extends AppCompatActivity
     }
 
 
-    /**
-     * Inflates the options menu.
-     * @param menu  Menu to inflate
-     * @return Returns true if menu is inflated.
-     */
+//    /**
+//     * Inflates the options menu.
+//     * @param menu  Menu to inflate
+//     * @return Returns true if menu is inflated.
+//     */
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
@@ -170,11 +172,11 @@ public class CustomerHomeActivity extends AppCompatActivity
 //        return true;
 //    }
 
-    /**
-     * Handles a click on the Settings item in the options menu.
-     * @param item  Item in options menu that was clicked.
-     * @return Returns true if the item was Settings.
-     */
+//    /**
+//     * Handles a click on the Settings item in the options menu.
+//     * @param item  Item in options menu that was clicked.
+//     * @return Returns true if the item was Settings.
+//     */
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 //        // Handle action bar item clicks here. The action bar will

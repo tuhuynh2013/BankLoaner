@@ -21,8 +21,8 @@ public class CustomerProfile extends User {
         setBankAccount(bankAccount);
     }
 
-    public CustomerProfile(String name, String surname, String identity, String gender, String phone, String address, String role,
-                           String employment, String company, Long salary, String bankAccount) {
+    CustomerProfile(String name, String surname, String identity, String gender, String phone, String address, String role,
+                    String employment, String company, Long salary, String bankAccount) {
         super(name, surname, identity, gender, phone, address, role);
         setEmployment(employment);
         setCompany(company);
@@ -63,12 +63,12 @@ public class CustomerProfile extends User {
     }
 
     public boolean isMissingInfo() {
-        return !CustomUtil.hasCharacter(this.getIdentity()) &&
-                !CustomUtil.hasCharacter(this.getPhone()) &&
-                !CustomUtil.hasCharacter(this.getEmployment()) &&
-                !CustomUtil.hasCharacter(this.getCompany()) &&
-                !CustomUtil.hasCharacter(this.getSalary().toString()) &&
-                !CustomUtil.hasCharacter(this.getBankAccount());
+        return !CustomUtil.hasMeaning(this.getIdentity()) &&
+                !CustomUtil.hasMeaning(this.getPhone()) &&
+                !CustomUtil.hasMeaning(this.getEmployment()) &&
+                !CustomUtil.hasMeaning(this.getCompany()) &&
+                !CustomUtil.hasMeaning(this.getSalary().toString()) &&
+                !CustomUtil.hasMeaning(this.getBankAccount());
     }
 
 }

@@ -1,7 +1,8 @@
 package com.example.tuhuynh.myapplication.appication;
 
+import com.example.tuhuynh.myapplication.agent.AgentProfile;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
-import com.example.tuhuynh.myapplication.user.User;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,9 +14,8 @@ public class ApplicationInfo implements Serializable {
     private Long amount;
     private double interest;
     private CustomerProfile customer;
-    private String agentName;
-    private String bankName;
-    private String shortName;
+    private AgentProfile agent;
+    private BankInfo bankInfo;
     private Date date;
     private String status;
 
@@ -63,28 +63,20 @@ public class ApplicationInfo implements Serializable {
         this.customer = customer;
     }
 
-    public String getAgentName() {
-        return agentName;
+    public AgentProfile getAgent() {
+        return agent;
     }
 
-    void setAgentName(String agentName) {
-        this.agentName = agentName;
+    void setAgent(AgentProfile agent) {
+        this.agent = agent;
     }
 
-    public String getBankName() {
-        return bankName;
+    public BankInfo getBankInfo() {
+        return bankInfo;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
-    String getShortName() {
-        return shortName;
-    }
-
-    void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setBankInfo(BankInfo bankInfo) {
+        this.bankInfo = bankInfo;
     }
 
     public Date getDate() {
@@ -95,7 +87,7 @@ public class ApplicationInfo implements Serializable {
         this.date = date;
     }
 
-    String getStatus() {
+    public String getStatus() {
         return status;
     }
 

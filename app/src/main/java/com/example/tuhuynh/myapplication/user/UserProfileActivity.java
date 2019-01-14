@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.customer.ProfileEditorActivity;
 
 public class UserProfileActivity extends AppCompatActivity {
 

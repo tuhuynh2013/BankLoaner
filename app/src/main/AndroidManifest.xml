@@ -19,40 +19,57 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
+        <!--User Activities-->
         <activity android:name=".user.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".user.RegisterActivity" />
-        <activity
-            android:name=".customer.CustomerHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".user.UserProfileActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
+
         <activity
-            android:name=".customer.ProfileEditorActivity"
+            android:name=".user.ProfileEditorActivity"
             android:parentActivityName=".user.UserProfileActivity" />
+
         <activity
             android:name=".user.ChangePasswordActivity"
             android:parentActivityName=".user.UserProfileActivity" />
-        <activity
-            android:name=".bank.BankInformationActivity"
-            android:parentActivityName=".customer.CustomerHomeActivity" />
-        <activity
-            android:name=".appication.ApplicationHistoryActivity"
-            android:parentActivityName=".customer.CustomerHomeActivity" />
-        <activity
-            android:name=".customer.LoanApplicationActivity"
-            android:parentActivityName=".customer.CustomerHomeActivity" />
+
+        <!--Agent Activities-->
         <activity
             android:name=".agent.AgentHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".agent.AssignedApplicationActivity" />
+
+        <activity
+            android:name=".agent.AssignedApplicationActivity"
+            android:parentActivityName=".agent.AgentHomeActivity" />
+
+        <!--Customer Activities-->
+        <activity
+            android:name=".customer.CustomerHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".customer.CustomerApplicationHistoryActivity"
+            android:parentActivityName=".customer.CustomerHomeActivity" />
+
+        <activity
+            android:name=".customer.LoanApplicationActivity"
+            android:parentActivityName=".customer.CustomerHomeActivity" />
+
+        <!--Bank Activities-->
+        <activity
+            android:name=".bank.BankInformationActivity"
+            android:parentActivityName=".customer.CustomerHomeActivity" />
+
     </application>
 
 </manifest>

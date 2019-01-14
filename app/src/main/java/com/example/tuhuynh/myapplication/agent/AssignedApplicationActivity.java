@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
@@ -26,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +42,7 @@ public class AssignedApplicationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assigned_application);
+        setTitle(getString(R.string.title_assigned_application));
 
         // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
@@ -46,6 +50,11 @@ public class AssignedApplicationActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         } else {
             user = SharedPrefManager.getInstance(this).getUser();
+        }
+
+        // Create Up button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         new AssignedAppAsyncTask().execute();
@@ -93,6 +102,14 @@ public class AssignedApplicationActivity extends AppCompatActivity {
                     // Getting the user from the response
                     JSONArray jsonArray = obj.getJSONArray("applications");
                     applications = extractApplications(jsonArray);
+                    // Sort by date
+                    Collections.sort(applications, new Comparator<ApplicationInfo>() {
+                        @Override
+                        public int compare(ApplicationInfo o1, ApplicationInfo o2) {
+                            return o1.getDate().compareTo(o2.getDate());
+                        }
+                    });
+                    Collections.reverse(applications);
 
                     ListView listView = findViewById(R.id.lv_assigned_applications);
                     AssignedApplicationAdapter assignedAdapter = new AssignedApplicationAdapter(getApplicationContext(), R.layout.assigned_application_adapter, applications);
@@ -122,28 +139,31 @@ public class AssignedApplicationActivity extends AppCompatActivity {
         List<ApplicationInfo> assignedList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.length(); i++) {
-            ApplicationInfo applicationInfo = new ApplicationInfo();
             JSONObject applicationJson = jsonArray.getJSONObject(i);
-            // Convert date
-            Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
+            // Get customer profile
             CustomerProfile customer = new CustomerProfile();
             customer.setId(applicationJson.getInt("customer_id"));
             customer.setName(applicationJson.getString("customer_name"));
             customer.setSurname(applicationJson.getString("customer_surname"));
+            // Get bank information
+            BankInfo bankInfo = new BankInfo();
+            bankInfo.setId(applicationJson.getInt("bank_id"));
+            bankInfo.setName(applicationJson.getString("bank_name"));
+            // Convert date
+            Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
 
+            ApplicationInfo applicationInfo = new ApplicationInfo();
             applicationInfo.setId(applicationJson.getInt("application_id"));
             applicationInfo.setMonth(applicationJson.getInt("month"));
             applicationInfo.setAmount(applicationJson.getLong("amount"));
             applicationInfo.setInterest(applicationJson.getDouble("interest"));
             applicationInfo.setCustomer(customer);
-            applicationInfo.setBankName(applicationJson.getString("bank_name"));
+            applicationInfo.setBankInfo(bankInfo);
             applicationInfo.setDate(date);
             applicationInfo.setStatus(applicationJson.getString("status"));
             assignedList.add(applicationInfo);
         }
-
         return assignedList;
-
     }
 
 

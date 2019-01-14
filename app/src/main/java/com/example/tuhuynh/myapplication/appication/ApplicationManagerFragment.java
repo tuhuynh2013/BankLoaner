@@ -6,17 +6,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.agent.AgentProfile;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
+import com.example.tuhuynh.myapplication.customer.CustomerApplicationHistoryActivity;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
@@ -109,7 +112,7 @@ public class ApplicationManagerFragment extends Fragment {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                                 ApplicationInfo applicationInfo = (ApplicationInfo) parent.getItemAtPosition(position);
-                                Intent intent = new Intent(parent.getContext(), ApplicationHistoryActivity.class);
+                                Intent intent = new Intent(parent.getContext(), CustomerApplicationHistoryActivity.class);
                                 intent.putExtra("caller", "ApplicationManagerFragment");
                                 intent.putExtra("application", applicationInfo);
                                 parent.getContext().startActivity(intent);
@@ -129,25 +132,39 @@ public class ApplicationManagerFragment extends Fragment {
     }
 
     /**
-     * Extract list of banks from JSONArray
+     * Extract list of applications from JSONArray
      *
      * @param jsonArray JSONArray
-     * @return List of banks
+     * @return List of applications
      */
     private List<ApplicationInfo> extractApplicationList(JSONArray jsonArray) throws JSONException {
         List<ApplicationInfo> applicationList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.length(); i++) {
-            ApplicationInfo applicationInfo = new ApplicationInfo();
             JSONObject applicationJson = jsonArray.getJSONObject(i);
-            applicationInfo.setId(Integer.parseInt(applicationJson.getString("id")));
-            applicationInfo.setMonth(Integer.parseInt(applicationJson.getString("month")));
-            applicationInfo.setAmount(Long.parseLong(applicationJson.getString("amount")));
-            applicationInfo.setInterest(Double.parseDouble(applicationJson.getString("interest")));
-            applicationInfo.setAgentName(applicationJson.getString("full_name"));
-            applicationInfo.setBankName(applicationJson.getString("bank_name"));
-            applicationInfo.setShortName(applicationJson.getString("short_name"));
+            // Get agent profile
+            AgentProfile agent = new AgentProfile();
+            String strAgentID = applicationJson.getString("agent_id");
+            if (!TextUtils.isEmpty(strAgentID)) {
+                agent.setId(Integer.parseInt(strAgentID));
+            }
+            agent.setName(applicationJson.getString("agent_name"));
+            agent.setSurname(applicationJson.getString("agent_surname"));
+            // Get bank information
+            BankInfo bankInfo = new BankInfo();
+            bankInfo.setId(applicationJson.getInt("bank_id"));
+            bankInfo.setName(applicationJson.getString("bank_name"));
+            bankInfo.setShortName(applicationJson.getString("short_name"));
+            // Convert date
             Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
+
+            ApplicationInfo applicationInfo = new ApplicationInfo();
+            applicationInfo.setId(applicationJson.getInt("application_id"));
+            applicationInfo.setMonth(applicationJson.getInt("month"));
+            applicationInfo.setAmount(applicationJson.getLong("amount"));
+            applicationInfo.setInterest(applicationJson.getDouble("interest"));
+            applicationInfo.setAgent(agent);
+            applicationInfo.setBankInfo(bankInfo);
             applicationInfo.setDate(date);
             applicationInfo.setStatus(applicationJson.getString("status"));
             applicationList.add(applicationInfo);

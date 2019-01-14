@@ -13,17 +13,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tuhuynh.myapplication.appication.ApplicationHistoryActivity;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
+import com.example.tuhuynh.myapplication.user.ProfileEditorActivity;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
-import com.example.tuhuynh.myapplication.util.CustomerProfileAsyncTask;
-import com.example.tuhuynh.myapplication.util.CustomerProfileCallBack;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import org.json.JSONException;
@@ -199,17 +197,22 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
                     // Get object from db
                     JSONObject applicationJson = obj.getJSONObject("application_info");
 
-                    Intent intent = new Intent(getApplicationContext(), ApplicationHistoryActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), CustomerApplicationHistoryActivity.class);
+                    // Convert String date to Date
+                    Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
+                    // Get bank information
+                    BankInfo bankInfo = new BankInfo();
+                    bankInfo.setName(applicationJson.getString("bank_name"));
+
                     ApplicationInfo applicationInfo = new ApplicationInfo();
                     applicationInfo.setId(Integer.parseInt(applicationJson.getString("application_id")));
                     applicationInfo.setMonth(Integer.parseInt(applicationJson.getString("month")));
                     applicationInfo.setAmount(Long.parseLong(applicationJson.getString("amount")));
                     applicationInfo.setInterest(Double.parseDouble(applicationJson.getString("interest")));
-                    // Convert String date to Date
-                    Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
                     applicationInfo.setDate(date);
                     applicationInfo.setStatus(applicationJson.getString("status"));
-                    applicationInfo.setBankName(applicationJson.getString("bank_name"));
+                    applicationInfo.setBankInfo(bankInfo);
+
                     intent.putExtra("caller", "LoanApplicationActivity");
                     intent.putExtra("application", applicationInfo);
 

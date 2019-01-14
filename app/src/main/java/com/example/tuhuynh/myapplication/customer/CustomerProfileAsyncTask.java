@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.util;
+package com.example.tuhuynh.myapplication.customer;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.user.User;
 
 import org.json.JSONException;

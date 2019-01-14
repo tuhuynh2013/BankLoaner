@@ -54,7 +54,7 @@ public class AssignedApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
         String strDate = CustomUtil.convertDateToString(application.getDate(), "dd-MM-yyyy");
 
         // Set value for text view
-        if (CustomUtil.hasCharacter(application.getCustomer().getSurname())) {
+        if (CustomUtil.hasMeaning(application.getCustomer().getSurname())) {
             String fullName = application.getCustomer().getName() + application.getCustomer().getSurname();
             tvCustomerName.setText(fullName);
         } else {

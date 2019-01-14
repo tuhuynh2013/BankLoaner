@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.appication;
+package com.example.tuhuynh.myapplication.customer;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
-public class ApplicationHistoryActivity extends AppCompatActivity {
+public class CustomerApplicationHistoryActivity extends AppCompatActivity {
 
     TextView tvApplicationID, tvBankName, tvMonth, tvAmount, tvInterest, tvDate, tvStatus, tvTitleAgent, tvAgent, tvMessage;
 
@@ -34,7 +35,7 @@ public class ApplicationHistoryActivity extends AppCompatActivity {
         initialElement();
 
         String strID = Integer.toString(application.getId());
-        String bankName = application.getBankName();
+        String bankName = application.getBankInfo().getName();
         String strMonth = Integer.toString(application.getMonth());
         String strAmount = CustomUtil.convertLongToFormattedString(application.getAmount());
         String strInterest = Double.toString(application.getInterest());
@@ -56,7 +57,9 @@ public class ApplicationHistoryActivity extends AppCompatActivity {
             tvAgent.setVisibility(View.INVISIBLE);
         } else if (caller.equalsIgnoreCase("ApplicationManagerFragment")) {
             initialElement();
-            String agentName = application.getAgentName();
+            tvMessage.setVisibility(View.INVISIBLE);
+
+            String agentName = CustomUtil.setFullName(application.getAgent().getName(), application.getAgent().getSurname());
             if (agentName.isEmpty()) {
                 tvTitleAgent.setVisibility(View.INVISIBLE);
                 tvAgent.setVisibility(View.INVISIBLE);
