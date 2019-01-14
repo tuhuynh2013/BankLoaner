@@ -39,11 +39,12 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
         }
 
-        etUsername = findViewById(R.id.editTextUsername);
-        etPassword = findViewById(R.id.editTextPassword);
+        // Initial element
+        etUsername = findViewById(R.id.edt_username);
+        etPassword = findViewById(R.id.edt_password);
 
         // If user presses on login, calling the method login
-        findViewById(R.id.buttonLogin).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 userLogin();
@@ -51,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // If user presses on not registered
-        findViewById(R.id.textViewRegister).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Open register screen
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         final String password = etPassword.getText().toString();
 
         // Validating inputs
-        if (CustomUtil.isCorrectUsername(username)) {
+        if (!CustomUtil.isCorrectUsername(username)) {
             etUsername.setError(getString(R.string.error_empty_username));
             etUsername.requestFocus();
             return;
@@ -118,33 +119,30 @@ public class LoginActivity extends AppCompatActivity {
 
                     // If no error in response
                     if (!obj.getBoolean("error") && !message.equalsIgnoreCase(getString(R.string.error_username_password))) {
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-
                         // Getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
-
                         // Creating a new user object
                         User user = new User(
                                 userJson.getInt("id"),
                                 userJson.getString("username"),
                                 userJson.getString("name"),
-                                userJson.getString("email")
+                                userJson.getString("email"),
+                                userJson.getString("role")
                         );
-
                         // Storing the user in shared preferences
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-
                         // Starting the profile activity
                         finish();
                         startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
-                    } else {
-                        Toast.makeText(getApplicationContext(), R.string.error_username_password, Toast.LENGTH_SHORT).show();
                     }
+
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
+
         UserLogin ul = new UserLogin();
         ul.execute();
 
