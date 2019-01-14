@@ -49,7 +49,5 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    // Todo: make start intent for result
-
 
 }

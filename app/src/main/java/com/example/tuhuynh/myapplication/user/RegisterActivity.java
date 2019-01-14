@@ -13,9 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tuhuynh.myapplication.Agent.AgentProfile;
+import com.example.tuhuynh.myapplication.agent.AgentProfile;
+import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
-import com.example.tuhuynh.myapplication.customer.ProfileEditorActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
@@ -70,7 +70,8 @@ public class RegisterActivity extends AppCompatActivity {
      */
     private void registerUser() {
         final String username = edtUsername.getText().toString().trim();
-        final String name = edtName.getText().toString().trim();
+        final String capitalName;
+        String name = edtName.getText().toString().trim();
         final String email = edtEmail.getText().toString().trim();
         final String password = edtPassword.getText().toString().trim();
         final String confirmPassword = edtConfirmPassword.getText().toString().trim();
@@ -97,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
             edtName.requestFocus();
             return;
         } else {
-            CustomUtil.capitalFirstLetter(name);
+            capitalName = CustomUtil.capitalFirstLetter(name);
         }
 
         if (TextUtils.isEmpty(email)) {
@@ -144,7 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
                 // Creating request parameters
                 HashMap<String, String> params = new HashMap<>();
                 params.put("username", username);
-                params.put("name", name);
+                params.put("name", capitalName);
                 params.put("email", email);
                 params.put("password", password);
                 params.put("role", UserRole.CUSTOMER);
@@ -203,9 +204,8 @@ public class RegisterActivity extends AppCompatActivity {
                             // Storing the user in shared preferences
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(agent);
                         }
-
                         // Starting the profile activity
-                        startActivity(new Intent(getApplicationContext(), ProfileEditorActivity.class));
+                        startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
                         finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "Some error occurred", Toast.LENGTH_LONG).show();

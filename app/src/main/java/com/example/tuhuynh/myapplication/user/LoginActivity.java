@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.tuhuynh.myapplication.Agent.AgentHomeActivity;
+import com.example.tuhuynh.myapplication.agent.AgentHomeActivity;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;

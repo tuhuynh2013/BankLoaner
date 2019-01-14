@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.Agent;
+package com.example.tuhuynh.myapplication.agent;
 
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.user.User;

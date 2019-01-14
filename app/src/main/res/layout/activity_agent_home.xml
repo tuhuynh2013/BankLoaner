@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Agent.AgentHomeActivity">
+    tools:context=".agent.AgentHomeActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -20,6 +20,7 @@
         android:weightSum="2">
 
         <LinearLayout
+            android:id="@+id/lnl_assigned"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -51,6 +52,7 @@
             android:background="@android:color/darker_gray" />
 
         <LinearLayout
+            android:id="@+id/lnl_bank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -122,6 +124,7 @@
         android:weightSum="2">
 
         <LinearLayout
+            android:id="@+id/lnl_shared"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -153,6 +156,7 @@
             android:background="@android:color/darker_gray" />
 
         <LinearLayout
+            android:id="@+id/lnl_history"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

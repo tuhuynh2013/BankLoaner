@@ -149,6 +149,7 @@ public class CustomerHomeActivity extends AppCompatActivity
                 finish();
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 drawer.closeDrawer(GravityCompat.START);
+                startActivity(new Intent(this, LoginActivity.class));
                 displayToast(getString(R.string.msg_signout));
                 return true;
             default:
@@ -197,5 +198,6 @@ public class CustomerHomeActivity extends AppCompatActivity
     public void displayToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
+
 
 }

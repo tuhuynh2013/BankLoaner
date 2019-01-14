@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.Agent;
+package com.example.tuhuynh.myapplication.agent;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -14,11 +14,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.user.UserProfileActivity;
-import com.example.tuhuynh.myapplication.user.UserRole;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 public class AgentHomeActivity extends AppCompatActivity
@@ -32,6 +30,7 @@ public class AgentHomeActivity extends AppCompatActivity
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // Initial Navigation View
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -50,6 +49,15 @@ public class AgentHomeActivity extends AppCompatActivity
             TextView tvUsername = headerView.findViewById(R.id.tv_username);
             tvUsername.setText(user.getUsername());
         }
+
+        findViewById(R.id.lnl_assigned).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AssignedApplicationActivity.class));
+            }
+        });
+
+
 
     }
 
@@ -91,6 +99,7 @@ public class AgentHomeActivity extends AppCompatActivity
                 finish();
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 drawer.closeDrawer(GravityCompat.START);
+                startActivity(new Intent(this, LoginActivity.class));
                 return true;
             default:
                 return false;

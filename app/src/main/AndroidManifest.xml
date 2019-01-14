@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.tuhuynh.myapplication">
 
     <!-- adding internet permission -->
@@ -17,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <activity android:name=".user.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,9 +28,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".user.RegisterActivity" />
-        <activity
-            android:name=".Agent.AgentHomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".customer.CustomerHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -50,6 +49,10 @@
         <activity
             android:name=".customer.LoanApplicationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
+        <activity
+            android:name=".agent.AgentHomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".agent.AssignedApplicationActivity" />
     </application>
 
 </manifest>

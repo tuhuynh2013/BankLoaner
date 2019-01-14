@@ -124,7 +124,7 @@
     <!--Application Manager-->
     <string name="hint_date">Date</string>
     <string name="hint_status">Status</string>
-    <string name="msg_retrieve_applications_success">Retrieve list of applications successful</string>
+    <string name="msg_retrieve_applications_success">Retrieved list of applications successful</string>
 
     <!--Change Password Activity-->
     <string name="tv_old_pass">Old password</string>

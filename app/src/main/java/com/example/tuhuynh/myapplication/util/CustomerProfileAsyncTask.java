@@ -50,7 +50,7 @@ public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
         params.put("id", Integer.toString(user.getId()));
         params.put("username", user.getUsername());
         // Return the response
-        return requestHandler.sendPostRequest(URLs.URL_GET_USER_PROFILE, params);
+        return requestHandler.sendPostRequest(URLs.URL_GET_CUSTOMER_PROFILE, params);
     }
 
     @Override
