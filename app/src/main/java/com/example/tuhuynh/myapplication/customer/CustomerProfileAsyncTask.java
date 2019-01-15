@@ -25,13 +25,13 @@ public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
     private Context context;
     @SuppressLint("StaticFieldLeak")
     private ProgressBar progressBar;
-    private User user;
+    private CustomerProfile customer;
 
-    public CustomerProfileAsyncTask(CustomerProfileCallBack cb, Context context, User user) {
+    public CustomerProfileAsyncTask(CustomerProfileCallBack cb, Context context, CustomerProfile customer) {
         this.cb = cb;
         this.context = context;
         progressBar = ((Activity) context).findViewById(R.id.progressBar);
-        this.user = user;
+        this.customer = customer;
     }
 
     @Override
@@ -46,8 +46,7 @@ public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
         // Creating request handler object
         RequestHandler requestHandler = new RequestHandler();
         HashMap<String, String> params = new HashMap<>();
-        params.put("id", Integer.toString(user.getId()));
-        params.put("username", user.getUsername());
+        params.put("id", Integer.toString(customer.getId()));
         // Return the response
         return requestHandler.sendPostRequest(URLs.URL_GET_CUSTOMER_PROFILE, params);
     }

@@ -141,5 +141,11 @@
     <string name="tv_shared_applications">Shared applications</string>
     <string name="tv_applications_history">Applications history</string>
 
+    <!--Agent Application Activity-->
+    <string name="customer_info">Customer Info</string>
+    <string name="tv_name">Name:</string>
+    <string name="hint_customer_name">Customer name</string>
+    <string name="tv_surname">Surname:</string>
+
 
 </resources>

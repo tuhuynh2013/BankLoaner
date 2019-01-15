@@ -47,8 +47,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
     private RadioButton rdMale, rdFemale;
     private Button btnSave;
 
-    // Getting the current user
-    User user = SharedPrefManager.getInstance(this).getUser();
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,9 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            // Getting the current user
+            user = SharedPrefManager.getInstance(this).getUser();
         }
 
         // Turn off Up navigation, when called from LoanApplication
@@ -79,7 +81,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
         initialProfileEditorScreen();
 
         // Retrieve customer profile from db
-        new CustomerProfileAsyncTask(this, this, user).execute();
+        new CustomerProfileAsyncTask(this, this, (CustomerProfile) user).execute();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +220,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
             edtName.setError(getString(R.string.error_empty_name));
             edtName.requestFocus();
             return;
-        } else if (!CustomUtil.isCorrectName(name)) {
+        } else if (CustomUtil.isIncorrectName(name)) {
             edtName.setError(getString(R.string.error_invalid_name));
             edtName.requestFocus();
             return;
@@ -231,7 +233,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
             edtSurname.setError(getString(R.string.error_empty_surname));
             edtSurname.requestFocus();
             return;
-        } else if (!CustomUtil.isCorrectName(surname)) {
+        } else if (CustomUtil.isIncorrectName(surname)) {
             edtSurname.setError(getString(R.string.error_invalid_surname));
             edtSurname.requestFocus();
             return;

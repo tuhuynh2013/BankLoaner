@@ -2,11 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.tuhuynh.myapplication">
-
     <!-- adding internet permission -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -20,56 +17,49 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-
-        <!--User Activities-->
+        <!-- User Activities -->
         <activity android:name=".user.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".user.RegisterActivity" />
-
         <activity
             android:name=".user.UserProfileActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
-
         <activity
             android:name=".user.ProfileEditorActivity"
             android:parentActivityName=".user.UserProfileActivity" />
-
         <activity
             android:name=".user.ChangePasswordActivity"
             android:parentActivityName=".user.UserProfileActivity" />
-
-        <!--Agent Activities-->
+        <!-- Agent Activities -->
         <activity
             android:name=".agent.AgentHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".agent.AssignedApplicationActivity"
             android:parentActivityName=".agent.AgentHomeActivity" />
-
-        <!--Customer Activities-->
+        <activity
+            android:name=".agent.AgentApplicationActivity"
+            android:parentActivityName=".agent.AssignedApplicationActivity" />
+        <activity android:name=".agent.BankApplicationActivity" />
+        <!-- Customer Activities -->
         <activity
             android:name=".customer.CustomerHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".customer.CustomerApplicationHistoryActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
-
         <activity
             android:name=".customer.LoanApplicationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
-
-        <!--Bank Activities-->
+        <!-- Bank Activities -->
         <activity
             android:name=".bank.BankInformationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
-
     </application>
 
 </manifest>

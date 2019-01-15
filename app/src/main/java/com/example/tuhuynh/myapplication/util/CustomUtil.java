@@ -32,10 +32,10 @@ public class CustomUtil {
      * @param username username
      * @return true if username is correct format
      */
-    public static boolean isCorrectUsername(String username) {
+    public static boolean isIncorrectUsername(String username) {
         Pattern p = Pattern.compile("[a-z][A-Za-z0-9]{5,16}");
         Matcher m = p.matcher(username);
-        return m.matches();
+        return !m.matches();
     }
 
     /**
@@ -44,10 +44,10 @@ public class CustomUtil {
      * @param name name
      * @return true if name is correct format
      */
-    public static boolean isCorrectName(String name) {
+    public static boolean isIncorrectName(String name) {
         Pattern p = Pattern.compile("[A-Za-z\\s]{2,30}");
         Matcher m = p.matcher(name);
-        return m.matches();
+        return !m.matches();
     }
 
     /**

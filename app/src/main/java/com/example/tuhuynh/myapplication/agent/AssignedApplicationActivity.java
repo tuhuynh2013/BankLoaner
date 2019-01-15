@@ -119,9 +119,9 @@ public class AssignedApplicationActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                             ApplicationInfo application = (ApplicationInfo) parent.getItemAtPosition(position);
-//                            Intent intent = new Intent(parent.getContext(), BankInformationActivity.class);
-//                            intent.putExtra("bank", bank);
-//                            parent.getContext().startActivity(intent);
+                            Intent intent = new Intent(parent.getContext(), AgentApplicationActivity.class);
+                            intent.putExtra("application", application);
+                            parent.getContext().startActivity(intent);
                         }
                     });
 

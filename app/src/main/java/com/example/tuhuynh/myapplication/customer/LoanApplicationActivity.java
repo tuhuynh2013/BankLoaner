@@ -70,7 +70,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
         tvAmount.setText(amount);
         tvInterest.setText(interest);
 
-        asyncTask = new CustomerProfileAsyncTask(this, this, user);
+        asyncTask = new CustomerProfileAsyncTask(this, this, (CustomerProfile) user);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override

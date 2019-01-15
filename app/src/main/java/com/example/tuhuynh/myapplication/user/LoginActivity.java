@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         final String password = etPassword.getText().toString();
 
         // Validating inputs
-        if (!CustomUtil.isCorrectUsername(username)) {
+        if (CustomUtil.isIncorrectUsername(username)) {
             etUsername.setError(getString(R.string.error_empty_username));
             etUsername.requestFocus();
             return;

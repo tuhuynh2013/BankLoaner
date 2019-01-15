@@ -82,7 +82,7 @@ public class RegisterActivity extends AppCompatActivity {
             edtUsername.requestFocus();
             return;
         } else {
-            if (!CustomUtil.isCorrectUsername(username)) {
+            if (CustomUtil.isIncorrectUsername(username)) {
                 edtUsername.setError(getString(R.string.error_invalid_username));
                 edtUsername.requestFocus();
                 return;
@@ -93,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
             edtName.setError(getString(R.string.error_empty_name));
             edtName.requestFocus();
             return;
-        } else if (!CustomUtil.isCorrectName(name)) {
+        } else if (CustomUtil.isIncorrectName(name)) {
             edtName.setError(getString(R.string.error_invalid_name));
             edtName.requestFocus();
             return;
