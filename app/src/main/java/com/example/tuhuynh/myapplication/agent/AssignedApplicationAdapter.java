@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
@@ -46,6 +47,7 @@ public class AssignedApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
         TextView tvAmount = rowView.findViewById(R.id.tv_amount);
         TextView tvMonth = rowView.findViewById(R.id.tv_month);
         TextView tvDate = rowView.findViewById(R.id.tv_date);
+        ImageView imgAvatar = rowView.findViewById(R.id.img_avatar);
 
         // Get value
         ApplicationInfo application = applications.get(position);
@@ -63,6 +65,7 @@ public class AssignedApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
         tvAmount.setText(strAmount);
         tvMonth.setText(strMonth);
         tvDate.setText(strDate);
+        imgAvatar.setImageResource(R.drawable.ic_user_avatar);
 
         return rowView;
 

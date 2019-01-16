@@ -53,6 +53,7 @@
     <string name="nav_profile">Profile</string>
     <string name="nav_setting">Setting</string>
     <string name="nav_signout">Sign out</string>
+    <string name="des_avatar">User avatar</string>
 
     <!--Tab-->
     <string name="title_bank_list">Bank list</string>
@@ -146,6 +147,9 @@
     <string name="tv_name">Name:</string>
     <string name="hint_customer_name">Customer name</string>
     <string name="tv_surname">Surname:</string>
-
+    <string name="des_approved">Approved</string>
+    <string name="des_rejected">Rejected</string>
+    <string name="dialog_approved">Do you want to approve for amount %1$s?</string>
+    <string name="dialog_rejected">Do you want to reject this application?</string>
 
 </resources>

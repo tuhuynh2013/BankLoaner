@@ -5,11 +5,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
@@ -37,6 +38,7 @@ public class AssignedApplicationActivity extends AppCompatActivity {
 
     User user;
     List<ApplicationInfo> applications;
+    ListView lvAssignedApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class AssignedApplicationActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        lvAssignedApplication = findViewById(R.id.lv_assigned_applications);
 
         new AssignedAppAsyncTask().execute();
 
@@ -109,13 +113,11 @@ public class AssignedApplicationActivity extends AppCompatActivity {
                             return o1.getDate().compareTo(o2.getDate());
                         }
                     });
-                    Collections.reverse(applications);
 
-                    ListView listView = findViewById(R.id.lv_assigned_applications);
                     AssignedApplicationAdapter assignedAdapter = new AssignedApplicationAdapter(getApplicationContext(), R.layout.assigned_application_adapter, applications);
-                    listView.setAdapter(assignedAdapter);
+                    lvAssignedApplication.setAdapter(assignedAdapter);
 
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    lvAssignedApplication.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                             ApplicationInfo application = (ApplicationInfo) parent.getItemAtPosition(position);
@@ -126,7 +128,12 @@ public class AssignedApplicationActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();
+                    // Create text view to show message
+                    lvAssignedApplication.setVisibility(View.INVISIBLE);
+                    TextView tvMsg = new TextView(getApplicationContext());
+                    tvMsg.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+                    tvMsg.setText(message);
+                    setContentView(tvMsg);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
