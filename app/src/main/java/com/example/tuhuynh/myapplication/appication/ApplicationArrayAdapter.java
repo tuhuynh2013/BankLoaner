@@ -64,9 +64,6 @@ public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
 
         // Set color for status
         switch (status) {
-            /*case ApplicationStatus.PROGRESSING:
-                tvStatus.setTextColor(Color.parseColor("#00CC00"));
-                break;*/
             case ApplicationStatus.VALIDATING:
                 tvStatus.setTextColor(Color.parseColor("#FFCC00"));
                 break;

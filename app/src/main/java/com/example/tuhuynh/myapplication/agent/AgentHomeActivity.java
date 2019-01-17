@@ -52,6 +52,7 @@ public class AgentHomeActivity extends AppCompatActivity
             tvUsername.setText(fullName);
         }
 
+        // Set action for assigned linear layout
         findViewById(R.id.lnl_assigned).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +60,13 @@ public class AgentHomeActivity extends AppCompatActivity
             }
         });
 
+        // Set action for bank linear layout
+        findViewById(R.id.lnl_bank).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), BankApplicationActivity.class));
+            }
+        });
 
 
     }

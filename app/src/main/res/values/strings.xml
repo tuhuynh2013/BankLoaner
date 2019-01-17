@@ -152,4 +152,7 @@
     <string name="dialog_approved">Do you want to approve for amount %1$s?</string>
     <string name="dialog_rejected">Do you want to reject this application?</string>
 
+    <!--Bank Application Activity-->
+    <string name="item_assign_to_me">Assign to me</string>
+
 </resources>

@@ -14,7 +14,8 @@ public class URLs {
     public static final String URL_GET_CUSTOMER_APPLICATIONS = ROOT_URL + "getcustomerapplications";
 
     /*Agent activities*/
-    public static final String URL_GET_ASSIGNED_APPLICATIONS = ROOT_URL + "getassignedapplications";
+    public static final String URL_GET_AGENT_APPLICATIONS = ROOT_URL + "getagentapplications";
     public static final String URL_UPDATE_APPLICATION_STATUS = ROOT_URL + "updateapplicationstatus";
+    public static final String URL_ASSIGN_AGENT = ROOT_URL + "assignagent";
 
 }

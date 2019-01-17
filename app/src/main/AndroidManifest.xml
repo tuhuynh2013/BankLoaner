@@ -45,7 +45,9 @@
         <activity
             android:name=".agent.AgentApplicationActivity"
             android:parentActivityName=".agent.AssignedApplicationActivity" />
-        <activity android:name=".agent.BankApplicationActivity" />
+        <activity
+            android:name=".agent.BankApplicationActivity"
+            android:parentActivityName=".agent.AssignedApplicationActivity" />
         <!-- Customer Activities -->
         <activity
             android:name=".customer.CustomerHomeActivity"
