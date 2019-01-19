@@ -56,7 +56,7 @@ public class AgentHomeActivity extends AppCompatActivity
         findViewById(R.id.lnl_assigned).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AssignedApplicationActivity.class));
+                startActivity(new Intent(getApplicationContext(), AssignedAppsActivity.class));
             }
         });
 
@@ -64,7 +64,7 @@ public class AgentHomeActivity extends AppCompatActivity
         findViewById(R.id.lnl_bank).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), BankApplicationActivity.class));
+                startActivity(new Intent(getApplicationContext(), BankAppsActivity.class));
             }
         });
 

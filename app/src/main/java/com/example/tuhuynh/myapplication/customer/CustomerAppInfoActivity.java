@@ -12,14 +12,14 @@ import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
-public class CustomerApplicationHistoryActivity extends AppCompatActivity {
+public class CustomerAppInfoActivity extends AppCompatActivity {
 
     TextView tvApplicationID, tvBankName, tvMonth, tvAmount, tvInterest, tvDate, tvStatus, tvTitleAgent, tvAgent, tvMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_application_history);
+        setContentView(R.layout.activity_customer_app_info);
         setTitle("Application History");
 
         // Create Up button
@@ -55,7 +55,7 @@ public class CustomerApplicationHistoryActivity extends AppCompatActivity {
             initialElement();
             tvTitleAgent.setVisibility(View.INVISIBLE);
             tvAgent.setVisibility(View.INVISIBLE);
-        } else if (caller.equalsIgnoreCase("ApplicationManagerFragment")) {
+        } else if (caller.equalsIgnoreCase("CustomerAppManagerFragment")) {
             initialElement();
             tvMessage.setVisibility(View.INVISIBLE);
 

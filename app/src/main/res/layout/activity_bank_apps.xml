@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".agent.BankApplicationActivity">
+    tools:context=".agent.BankAppsActivity">
 
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/slv_bank_application"

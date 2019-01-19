@@ -16,11 +16,11 @@ import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.util.List;
 
-public class AssignedApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
+public class AgentAppAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applications;
 
-    AssignedApplicationAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
+    AgentAppAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
         super(context, textViewResourceId, objects);
         this.applications = objects;
     }
@@ -39,7 +39,7 @@ public class AssignedApplicationAdapter extends ArrayAdapter<ApplicationInfo> {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (rowView == null) {
-            rowView = inflater.inflate(R.layout.assigned_application_adapter, null);
+            rowView = inflater.inflate(R.layout.agent_app_adapter, null);
         }
 
         // Initial elements

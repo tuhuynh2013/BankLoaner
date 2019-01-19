@@ -17,8 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
-import com.example.tuhuynh.myapplication.customer.CustomerProfileAsyncTask;
-import com.example.tuhuynh.myapplication.customer.CustomerProfileCallBack;
+import com.example.tuhuynh.myapplication.customer.GetCustomerProfileAsync;
+import com.example.tuhuynh.myapplication.customer.GetCustomerProfileCallBack;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
@@ -30,7 +30,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class ProfileEditorActivity extends AppCompatActivity implements CustomerProfileCallBack {
+public class ProfileEditorActivity extends AppCompatActivity implements GetCustomerProfileCallBack {
 
     private TextView tvUsername;
     private TextView tvEmail;
@@ -81,7 +81,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements Customer
         initialProfileEditorScreen();
 
         // Retrieve customer profile from db
-        new CustomerProfileAsyncTask(this, this, (CustomerProfile) user).execute();
+        new GetCustomerProfileAsync(this, this, (CustomerProfile) user).execute();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,7 +9,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -18,22 +17,24 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
+import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
+import com.example.tuhuynh.myapplication.appication.AssignAppToAgentAsync;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import java.util.List;
 
-public class BankApplicationActivity extends AppCompatActivity implements GetAgentApplicationCallBack {
+public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsCallBack {
 
     User user;
     SwipeMenuListView slvBankApplication;
-    AssignedApplicationAdapter assignedAdapter;
+    AgentAppAdapter assignedAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bank_application);
+        setContentView(R.layout.activity_bank_apps);
 
         // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
@@ -52,7 +53,7 @@ public class BankApplicationActivity extends AppCompatActivity implements GetAge
         slvBankApplication = findViewById(R.id.slv_bank_application);
 
         // Get assigned applications
-        new GetAgentApplicationsAsync(this, this, user.getId(), "BankApplicationActivity").execute();
+        new GetAgentAppsAsync(this, this, user.getId(), "BankAppsActivity").execute();
 
     }
 
@@ -61,19 +62,10 @@ public class BankApplicationActivity extends AppCompatActivity implements GetAge
     public void responseFromAsync(List<ApplicationInfo> applications, String msg) {
         // If applications not empty, set array adapter
         if (!applications.isEmpty()) {
-            assignedAdapter = new AssignedApplicationAdapter(this, R.layout.assigned_application_adapter, applications);
+            assignedAdapter = new AgentAppAdapter(this, R.layout.agent_app_adapter, applications);
             slvBankApplication.setAdapter(assignedAdapter);
             createSwipeMenu(applications);
 
-            slvBankApplication.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    ApplicationInfo application = (ApplicationInfo) parent.getItemAtPosition(position);
-                    Intent intent = new Intent(parent.getContext(), AgentApplicationActivity.class);
-                    intent.putExtra("application", application);
-                    parent.getContext().startActivity(intent);
-                }
-            });
         } else {
             // Create text view to show message
             slvBankApplication.setVisibility(View.INVISIBLE);
@@ -119,7 +111,7 @@ public class BankApplicationActivity extends AppCompatActivity implements GetAge
             public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        new AssignToAgentAsync(applications.get(position).getId(), user.getId()).execute();
+                        new AssignAppToAgentAsync(applications.get(position).getId(), user.getId(), ApplicationStatus.VALIDATING).execute();
                         slvBankApplication.getChildAt(position).startAnimation(createAnimation(position));
                         break;
                 }

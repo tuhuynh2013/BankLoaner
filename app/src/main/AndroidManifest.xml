@@ -40,20 +40,20 @@
             android:name=".agent.AgentHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".agent.AssignedApplicationActivity"
+            android:name=".agent.AssignedAppsActivity"
             android:parentActivityName=".agent.AgentHomeActivity" />
         <activity
-            android:name=".agent.AgentApplicationActivity"
-            android:parentActivityName=".agent.AssignedApplicationActivity" />
+            android:name=".agent.AgentAppInfoActivity"
+            android:parentActivityName=".agent.AssignedAppsActivity" />
         <activity
-            android:name=".agent.BankApplicationActivity"
-            android:parentActivityName=".agent.AssignedApplicationActivity" />
+            android:name=".agent.BankAppsActivity"
+            android:parentActivityName=".agent.AssignedAppsActivity" />
         <!-- Customer Activities -->
         <activity
             android:name=".customer.CustomerHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".customer.CustomerApplicationHistoryActivity"
+            android:name=".customer.CustomerAppInfoActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
             android:name=".customer.LoanApplicationActivity"

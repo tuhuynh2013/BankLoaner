@@ -6,7 +6,7 @@ public class InterestAmount implements Serializable {
     private int month;
     private Double interest;
 
-    InterestAmount(int month, Double interest) {
+    public InterestAmount(int month, Double interest) {
         this.setMonth(month);
         this.setInterest(interest);
     }

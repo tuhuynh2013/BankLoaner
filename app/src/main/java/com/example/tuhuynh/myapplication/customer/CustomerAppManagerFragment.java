@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.appication;
+package com.example.tuhuynh.myapplication.customer;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -16,10 +16,10 @@ import android.widget.ProgressBar;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
+import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.customer.CustomerApplicationHistoryActivity;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
@@ -35,20 +35,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class ApplicationManagerFragment extends Fragment {
+public class CustomerAppManagerFragment extends Fragment {
 
     private View view;
     private List<ApplicationInfo> applications;
 
 
-    public ApplicationManagerFragment() {
+    public CustomerAppManagerFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = getLayoutInflater().inflate(R.layout.frag_application_list, container, false);
+        view = getLayoutInflater().inflate(R.layout.frag_customer_app_manager, container, false);
         User user = SharedPrefManager.getInstance(getContext()).getUser();
         getCustomerApplication(user);
 
@@ -105,15 +105,15 @@ public class ApplicationManagerFragment extends Fragment {
                         Collections.reverse(applications);
 
                         ListView listView = view.findViewById(R.id.lv_application_list);
-                        ApplicationArrayAdapter applicationArrayAdapter = new ApplicationArrayAdapter(view.getContext(), R.layout.application_adapter, applications);
-                        listView.setAdapter(applicationArrayAdapter);
+                        CustomerAppManagerAdapter customerAppManagerAdapter = new CustomerAppManagerAdapter(view.getContext(), R.layout.customer_app_adapter, applications);
+                        listView.setAdapter(customerAppManagerAdapter);
 
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                                 ApplicationInfo applicationInfo = (ApplicationInfo) parent.getItemAtPosition(position);
-                                Intent intent = new Intent(parent.getContext(), CustomerApplicationHistoryActivity.class);
-                                intent.putExtra("caller", "ApplicationManagerFragment");
+                                Intent intent = new Intent(parent.getContext(), CustomerAppInfoActivity.class);
+                                intent.putExtra("caller", "CustomerAppManagerFragment");
                                 intent.putExtra("application", applicationInfo);
                                 parent.getContext().startActivity(intent);
                             }

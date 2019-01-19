@@ -11,23 +11,22 @@ import android.widget.Toast;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.user.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class CustomerProfileAsyncTask extends AsyncTask<Void, Void, String> {
+public class GetCustomerProfileAsync extends AsyncTask<Void, Void, String> {
 
-    private CustomerProfileCallBack cb;
+    private GetCustomerProfileCallBack cb;
     @SuppressLint("StaticFieldLeak")
     private Context context;
     @SuppressLint("StaticFieldLeak")
     private ProgressBar progressBar;
     private CustomerProfile customer;
 
-    public CustomerProfileAsyncTask(CustomerProfileCallBack cb, Context context, CustomerProfile customer) {
+    public GetCustomerProfileAsync(GetCustomerProfileCallBack cb, Context context, CustomerProfile customer) {
         this.cb = cb;
         this.context = context;
         progressBar = ((Activity) context).findViewById(R.id.progressBar);

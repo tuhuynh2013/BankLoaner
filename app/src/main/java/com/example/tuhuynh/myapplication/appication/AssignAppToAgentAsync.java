@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.agent;
+package com.example.tuhuynh.myapplication.appication;
 
 import android.os.AsyncTask;
 
@@ -10,16 +10,16 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class AssignToAgentAsync extends AsyncTask<Void, Void, String> {
+public class AssignAppToAgentAsync extends AsyncTask<Void, Void, String> {
 
     private int applicationID;
     private int agentID;
+    private String status;
 
-    AssignToAgentAsync(int applicationID, int agentID) {
-
-
+    public AssignAppToAgentAsync(int applicationID, int agentID, String status) {
         this.applicationID = applicationID;
         this.agentID = agentID;
+        this.status = status;
     }
 
     @Override
@@ -34,6 +34,7 @@ public class AssignToAgentAsync extends AsyncTask<Void, Void, String> {
         HashMap<String, String> params = new HashMap<>();
         params.put("application_id", Integer.toString(applicationID));
         params.put("agent_id", Integer.toString(agentID));
+        params.put("status", status);
 
         return requestHandler.sendPostRequest(URLs.URL_ASSIGN_AGENT, params);
     }

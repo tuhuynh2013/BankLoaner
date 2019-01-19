@@ -26,9 +26,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class GetAgentApplicationsAsync extends AsyncTask<Void, Void, String> {
+public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
 
-    private GetAgentApplicationCallBack response;
+    private GetAgentAppsCallBack response;
     @SuppressLint("StaticFieldLeak")
     private Context context;
     @SuppressLint("StaticFieldLeak")
@@ -36,7 +36,7 @@ public class GetAgentApplicationsAsync extends AsyncTask<Void, Void, String> {
     private int agentID;
     private String caller;
 
-    GetAgentApplicationsAsync(GetAgentApplicationCallBack response, Context context, int agentID, String caller) {
+    GetAgentAppsAsync(GetAgentAppsCallBack response, Context context, int agentID, String caller) {
         this.response = response;
         this.context = context;
         progressBar = ((Activity) context).findViewById(R.id.progressBar);

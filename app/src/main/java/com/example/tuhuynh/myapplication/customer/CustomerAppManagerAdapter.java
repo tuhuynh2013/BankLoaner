@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.appication;
+package com.example.tuhuynh.myapplication.customer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,16 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
+import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.util.Date;
 import java.util.List;
 
-public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
+public class CustomerAppManagerAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applicationInfos;
 
-    ApplicationArrayAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
+    CustomerAppManagerAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
         super(context, textViewResourceId, objects);
         this.applicationInfos = objects;
     }
@@ -39,7 +41,7 @@ public class ApplicationArrayAdapter extends ArrayAdapter<ApplicationInfo> {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (rowView == null) {
-            rowView = inflater.inflate(R.layout.application_adapter, null);
+            rowView = inflater.inflate(R.layout.customer_app_adapter, null);
         }
 
         // Initial element of view

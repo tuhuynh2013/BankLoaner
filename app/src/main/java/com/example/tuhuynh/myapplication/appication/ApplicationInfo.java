@@ -67,7 +67,7 @@ public class ApplicationInfo implements Serializable {
         return agent;
     }
 
-    void setAgent(AgentProfile agent) {
+    public void setAgent(AgentProfile agent) {
         this.agent = agent;
     }
 

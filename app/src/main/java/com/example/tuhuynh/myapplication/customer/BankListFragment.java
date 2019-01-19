@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.bank;
+package com.example.tuhuynh.myapplication.customer;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,6 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
+import com.example.tuhuynh.myapplication.bank.BankInformationActivity;
+import com.example.tuhuynh.myapplication.bank.InterestAmount;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 
@@ -88,8 +91,8 @@ public class BankListFragment extends Fragment {
                         banks = extractBanklist(jsonArray);
 
                         ListView listView = view.findViewById(R.id.lv_bank_list);
-                        BankArrayAdapter bankArrayAdapter = new BankArrayAdapter(view.getContext(), R.layout.bank_adapter, banks);
-                        listView.setAdapter(bankArrayAdapter);
+                        BankListAdapter bankListAdapter = new BankListAdapter(view.getContext(), R.layout.bank_list_adapter, banks);
+                        listView.setAdapter(bankListAdapter);
 
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override

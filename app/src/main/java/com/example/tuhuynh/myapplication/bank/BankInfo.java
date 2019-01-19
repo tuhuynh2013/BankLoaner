@@ -14,7 +14,7 @@ public class BankInfo implements Serializable {
 
     }
 
-    BankInfo(int id, String name, String shortName, List<InterestAmount> interestAmounts) {
+    public BankInfo(int id, String name, String shortName, List<InterestAmount> interestAmounts) {
         this.id = id;
         this.name = name;
         this.shortName = shortName;
@@ -45,11 +45,11 @@ public class BankInfo implements Serializable {
         this.shortName = shortName;
     }
 
-    List<InterestAmount> getInterestAmounts() {
+    public List<InterestAmount> getInterestAmounts() {
         return interestAmounts;
     }
 
-    void setInterestAmounts(InterestAmount interest) {
+    public void setInterestAmounts(InterestAmount interest) {
         this.interestAmounts.add(interest);
     }
 

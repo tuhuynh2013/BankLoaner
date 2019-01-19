@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.bank;
+package com.example.tuhuynh.myapplication.customer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,15 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
+import com.example.tuhuynh.myapplication.bank.InterestAmount;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class BankArrayAdapter extends ArrayAdapter<BankInfo> {
+public class BankListAdapter extends ArrayAdapter<BankInfo> {
 
     private List<BankInfo> banks;
 
-    BankArrayAdapter(Context context, int textViewResourceId, List<BankInfo> objects) {
+    BankListAdapter(Context context, int textViewResourceId, List<BankInfo> objects) {
         super(context, textViewResourceId, objects);
         this.banks = objects;
     }
@@ -38,7 +40,7 @@ public class BankArrayAdapter extends ArrayAdapter<BankInfo> {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (rowView == null) {
-            rowView = inflater.inflate(R.layout.bank_adapter, null);
+            rowView = inflater.inflate(R.layout.bank_list_adapter, null);
         }
 
         ImageView imgBankIcon = rowView.findViewById(R.id.imgBankIcon);

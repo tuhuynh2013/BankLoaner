@@ -31,7 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-public class LoanApplicationActivity extends AppCompatActivity implements CustomerProfileCallBack {
+public class LoanApplicationActivity extends AppCompatActivity implements GetCustomerProfileCallBack {
 
     private static final int REQUEST_CODE = 0x9345;
     TextView tvBankName, tvMonth, tvInterest, tvAmount;
@@ -43,7 +43,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
     BankInfo bankInfo;
     String month, amount, interest;
     CustomerProfile customerProfile;
-    CustomerProfileAsyncTask asyncTask;
+    GetCustomerProfileAsync asyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
         tvAmount.setText(amount);
         tvInterest.setText(interest);
 
-        asyncTask = new CustomerProfileAsyncTask(this, this, (CustomerProfile) user);
+        asyncTask = new GetCustomerProfileAsync(this, this, (CustomerProfile) user);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +197,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements Custom
                     // Get object from db
                     JSONObject applicationJson = obj.getJSONObject("application_info");
 
-                    Intent intent = new Intent(getApplicationContext(), CustomerApplicationHistoryActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), CustomerAppInfoActivity.class);
                     // Convert String date to Date
                     Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
                     // Get bank information

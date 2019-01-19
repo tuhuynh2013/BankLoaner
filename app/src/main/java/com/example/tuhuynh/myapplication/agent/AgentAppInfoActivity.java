@@ -6,7 +6,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -15,11 +14,11 @@ import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
 import com.example.tuhuynh.myapplication.appication.UpdateStatusAsync;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
-import com.example.tuhuynh.myapplication.customer.CustomerProfileAsyncTask;
-import com.example.tuhuynh.myapplication.customer.CustomerProfileCallBack;
+import com.example.tuhuynh.myapplication.customer.GetCustomerProfileAsync;
+import com.example.tuhuynh.myapplication.customer.GetCustomerProfileCallBack;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
-public class AgentApplicationActivity extends AppCompatActivity implements CustomerProfileCallBack {
+public class AgentAppInfoActivity extends AppCompatActivity implements GetCustomerProfileCallBack {
 
     TextView tvApplicationID, tvMonth, tvAmount, tvInterest, tvDate, tvStatus;
     TextView tvCustomerName, tvSurname, tvCompany, tvEmployment, tvSalary,
@@ -31,7 +30,7 @@ public class AgentApplicationActivity extends AppCompatActivity implements Custo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agent_appication);
+        setContentView(R.layout.activity_agent_app_info);
 
         // Create Up button
         if (getSupportActionBar() != null) {
@@ -49,7 +48,7 @@ public class AgentApplicationActivity extends AppCompatActivity implements Custo
         setApplicationInfo();
 
         // Retrieve customer profile from db
-        new CustomerProfileAsyncTask(this, this, application.getCustomer()).execute();
+        new GetCustomerProfileAsync(this, this, application.getCustomer()).execute();
 
         // Set action for approved button
         btnApprove.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +152,7 @@ public class AgentApplicationActivity extends AppCompatActivity implements Custo
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 new UpdateStatusAsync(getApplicationContext(), application).execute();
-                startActivity(new Intent(getApplicationContext(), AssignedApplicationActivity.class));
+                startActivity(new Intent(getApplicationContext(), AssignedAppsActivity.class));
                 finish();
             }
         });
