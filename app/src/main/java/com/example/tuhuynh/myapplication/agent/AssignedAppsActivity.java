@@ -17,7 +17,7 @@ import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import java.util.List;
 
-public class AssignedApplicationActivity extends AppCompatActivity implements GetAgentApplicationCallBack {
+public class AssignedAppsActivity extends AppCompatActivity implements GetAgentAppsCallBack {
 
     User user;
     ListView lvAssignedApplication;
@@ -25,7 +25,7 @@ public class AssignedApplicationActivity extends AppCompatActivity implements Ge
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assigned_application);
+        setContentView(R.layout.activity_assigned_apps);
         setTitle(getString(R.string.title_assigned_application));
 
         // If the user is not logged in, starting the login activity
@@ -45,7 +45,7 @@ public class AssignedApplicationActivity extends AppCompatActivity implements Ge
         lvAssignedApplication = findViewById(R.id.lv_assigned_applications);
 
         // Get assigned applications
-        new GetAgentApplicationsAsync(this, this, user.getId(), "AssignedApplicationActivity").execute();
+        new GetAgentAppsAsync(this, this, user.getId(), "AssignedAppsActivity").execute();
 
     }
 
@@ -53,14 +53,14 @@ public class AssignedApplicationActivity extends AppCompatActivity implements Ge
     public void responseFromAsync(List<ApplicationInfo> applications, String msg) {
         // If applications not empty, set array adapter
         if (!applications.isEmpty()) {
-            AssignedApplicationAdapter assignedAdapter = new AssignedApplicationAdapter(this, R.layout.assigned_application_adapter, applications);
+            AgentAppAdapter assignedAdapter = new AgentAppAdapter(this, R.layout.agent_app_adapter, applications);
             lvAssignedApplication.setAdapter(assignedAdapter);
 
             lvAssignedApplication.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                     ApplicationInfo application = (ApplicationInfo) parent.getItemAtPosition(position);
-                    Intent intent = new Intent(parent.getContext(), AgentApplicationActivity.class);
+                    Intent intent = new Intent(parent.getContext(), AgentAppInfoActivity.class);
                     intent.putExtra("application", application);
                     parent.getContext().startActivity(intent);
                 }
