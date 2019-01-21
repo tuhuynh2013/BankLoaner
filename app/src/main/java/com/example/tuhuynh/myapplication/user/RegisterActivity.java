@@ -29,7 +29,7 @@ import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText edtName, edtUsername, edtEmail, edtPassword, edtConfirmPassword;
+    EditText edtName, edtUsername, edtEmail, edtIdentity, edtPassword, edtConfirmPassword;
     TextView tvLogin;
     Button btnRegister;
 
@@ -41,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
         edtUsername = findViewById(R.id.edt_username);
         edtName = findViewById(R.id.edt_name);
         edtEmail = findViewById(R.id.edt_email);
+        edtIdentity = findViewById(R.id.edt_identity);
         edtPassword = findViewById(R.id.edt_password);
         edtConfirmPassword = findViewById(R.id.edt_confirm_password);
         btnRegister = findViewById(R.id.btn_register);
@@ -73,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String capitalName;
         String name = edtName.getText().toString().trim();
         final String email = edtEmail.getText().toString().trim();
+        final String identity = edtIdentity.getText().toString().trim();
         final String password = edtPassword.getText().toString().trim();
         final String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
@@ -113,6 +115,17 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        // Check identity number
+        if (TextUtils.isEmpty(identity)) {
+            edtIdentity.setError(getString(R.string.error_empty_identity));
+            edtIdentity.requestFocus();
+            return;
+        } else if (!CustomUtil.isCorrectIdentity(identity)) {
+            edtIdentity.setError(getString(R.string.error_invalid_identity));
+            edtIdentity.requestFocus();
+            return;
+        }
+
         if (TextUtils.isEmpty(password)) {
             edtPassword.setError(getString(R.string.error_empty_password));
             edtPassword.requestFocus();
@@ -147,6 +160,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("username", username);
                 params.put("name", capitalName);
                 params.put("email", email);
+                params.put("identity", identity);
                 params.put("password", password);
                 params.put("role", UserRole.CUSTOMER);
 
@@ -171,11 +185,10 @@ public class RegisterActivity extends AppCompatActivity {
                 try {
                     // Converting response to json object
                     JSONObject obj = new JSONObject(s);
+                    String message = obj.getString("message");
 
                     // If no error in response
                     if (!obj.getBoolean("error")) {
-                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_LONG).show();
-
                         // Getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
                         int userID = userJson.getInt("id");
@@ -207,9 +220,9 @@ public class RegisterActivity extends AppCompatActivity {
                         // Starting the profile activity
                         startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
                         finish();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Some error occurred", Toast.LENGTH_LONG).show();
                     }
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

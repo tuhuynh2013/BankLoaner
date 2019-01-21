@@ -27,10 +27,9 @@ public class User implements Serializable {
         setRole(role);
     }
 
-    public User(String name, String surname, String identity, String gender, String phone, String address) {
+    public User(String name, String surname, String gender, String phone, String address) {
         setName(name);
         setSurname(surname);
-        setIdentity(identity);
         setGender(gender);
         setPhone(phone);
         setAddress(address);

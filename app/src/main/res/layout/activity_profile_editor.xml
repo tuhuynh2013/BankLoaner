@@ -111,14 +111,12 @@
                         android:text="@string/identity_id"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-                    <EditText
-                        android:id="@+id/edt_identity"
+                    <TextView
+                        android:id="@+id/tv_identity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_identity_id"
-                        android:inputType="number"
-                        tools:ignore="Autofill" />
+                        android:padding="10dp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
                 </TableRow>
 

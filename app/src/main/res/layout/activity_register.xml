@@ -19,7 +19,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/username"
-            android:inputType="text" />
+            android:inputType="text"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/edt_name"
@@ -28,7 +29,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/name"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/edt_email"
@@ -37,7 +39,18 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/edt_identity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:hint="@string/identity_id"
+            android:inputType="textEmailAddress"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/edt_password"
@@ -47,7 +60,8 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="@string/password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/edt_confirm_password"
@@ -57,7 +71,8 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
             android:hint="@string/confirm_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            tools:ignore="Autofill" />
 
         <Button
             android:id="@+id/btn_register"

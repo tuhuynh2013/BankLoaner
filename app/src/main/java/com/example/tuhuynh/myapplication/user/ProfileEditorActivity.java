@@ -41,9 +41,9 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
 
     private TextView tvUsername;
     private TextView tvEmail;
+    private TextView tvIdentity;
     private EditText edtName;
     private EditText edtSurname;
-    private EditText edtIdentity;
     private EditText edtPhone;
     private EditText edtAddress;
     private EditText edtEmployment;
@@ -110,7 +110,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         edtSurname = findViewById(R.id.edt_surname);
         tvUsername = findViewById(R.id.tv_username);
         tvEmail = findViewById(R.id.tv_email);
-        edtIdentity = findViewById(R.id.edt_identity);
+        tvIdentity = findViewById(R.id.tv_identity);
         rdgGender = findViewById(R.id.rdg_gender);
         rdMale = findViewById(R.id.rd_male);
         rdFemale = findViewById(R.id.rd_female);
@@ -174,7 +174,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         }
 
         if (CustomUtil.hasMeaning(identity)) {
-            edtIdentity.setText(identity);
+            tvIdentity.setText(identity);
         }
 
         if (CustomUtil.hasMeaning(gender)) {
@@ -242,7 +242,6 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
     private void updateUserProfile() {
         String name = edtName.getText().toString().trim();
         String surname = edtSurname.getText().toString().trim();
-        String identity = edtIdentity.getText().toString().trim();
         // Get checked value of gender
         RadioButton rd = findViewById(rdgGender.getCheckedRadioButtonId());
         String gender = rd.getText().toString();
@@ -275,17 +274,6 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
             surname = CustomUtil.capitalFirstLetter(surname);
         }
 
-        // Check identity number
-        if (TextUtils.isEmpty(identity)) {
-            edtIdentity.setError(getString(R.string.error_empty_identity));
-            edtIdentity.requestFocus();
-            return;
-        } else if (!CustomUtil.isCorrectIdentity(identity)) {
-            edtIdentity.setError(getString(R.string.error_invalid_identity));
-            edtIdentity.requestFocus();
-            return;
-        }
-
         // Check phone number
         if (TextUtils.isEmpty(phone)) {
             edtPhone.setError(getString(R.string.error_empty_phone));
@@ -305,7 +293,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         }
 
         // Execute update user profile
-        User updateUser = new User(name, surname, identity, gender, phone, address);
+        User updateUser = new User(name, surname, gender, phone, address);
         new UpdateUserProfile(updateUser).execute();
 
         if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
@@ -373,7 +361,6 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
             params.put("name", updateUser.getName());
             params.put("username", user.getUsername());
             params.put("surname", updateUser.getSurname());
-            params.put("identity", updateUser.getIdentity());
             params.put("gender", updateUser.getGender());
             params.put("phone", updateUser.getPhone());
             params.put("address", updateUser.getAddress());
