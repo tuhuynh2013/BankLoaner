@@ -13,6 +13,7 @@ import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
+import com.example.tuhuynh.myapplication.user.UserRole;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import org.json.JSONArray;
@@ -104,6 +105,7 @@ public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
             customer.setId(applicationJson.getInt("customer_id"));
             customer.setName(applicationJson.getString("customer_name"));
             customer.setSurname(applicationJson.getString("customer_surname"));
+            customer.setRole(UserRole.CUSTOMER);
             // Get bank information
             BankInfo bankInfo = new BankInfo();
             bankInfo.setId(applicationJson.getInt("bank_id"));

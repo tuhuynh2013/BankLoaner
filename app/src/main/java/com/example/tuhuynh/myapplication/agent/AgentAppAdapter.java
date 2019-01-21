@@ -19,10 +19,12 @@ import java.util.List;
 public class AgentAppAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applications;
+    String caller;
 
-    AgentAppAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
+    AgentAppAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects, String caller) {
         super(context, textViewResourceId, objects);
         this.applications = objects;
+        this.caller = caller;
     }
 
     @Override
@@ -47,6 +49,7 @@ public class AgentAppAdapter extends ArrayAdapter<ApplicationInfo> {
         TextView tvAmount = rowView.findViewById(R.id.tv_amount);
         TextView tvMonth = rowView.findViewById(R.id.tv_month);
         TextView tvDate = rowView.findViewById(R.id.tv_date);
+        TextView tvStatus = rowView.findViewById(R.id.tv_status);
         ImageView imgAvatar = rowView.findViewById(R.id.img_avatar);
 
         // Get value
@@ -67,8 +70,14 @@ public class AgentAppAdapter extends ArrayAdapter<ApplicationInfo> {
         tvDate.setText(strDate);
         imgAvatar.setImageResource(R.drawable.ic_user_avatar);
 
-        return rowView;
+        // If caller is AgentAppHistory
+        if (caller.equalsIgnoreCase("AgentAppHistory")) {
+            tvStatus.setText(application.getStatus());
+        } else {
+            tvStatus.setVisibility(View.GONE);
+        }
 
+        return rowView;
     }
 
 

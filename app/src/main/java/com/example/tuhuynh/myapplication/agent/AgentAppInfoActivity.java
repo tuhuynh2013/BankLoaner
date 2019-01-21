@@ -40,7 +40,7 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
         // Initial element
         initialElement();
 
-        // Get info from Assigned Application Activity
+        // Get info from Assigned Application Activity or AgentAppHistory
         Intent intent = this.getIntent();
         application = (ApplicationInfo) intent.getSerializableExtra("application");
 
@@ -50,24 +50,30 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
         // Retrieve customer profile from db
         new GetUserProfileAsync(this, this, application.getCustomer()).execute();
 
-        // Set action for approved button
-        btnApprove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String strAmount = CustomUtil.convertLongToFormattedString(application.getAmount());
-                application.setStatus(ApplicationStatus.APPROVED);
-                showAlertDialog(getString(R.string.des_approved), getString(R.string.dialog_approved, strAmount));
-            }
-        });
+        String caller = intent.getStringExtra("caller");
+        if (caller.equalsIgnoreCase("AgentAppHistory")) {
+            btnApprove.setVisibility(View.GONE);
+            btnRejected.setVisibility(View.GONE);
+        } else {
+            // Set action for approved button
+            btnApprove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String strAmount = CustomUtil.convertLongToFormattedString(application.getAmount());
+                    application.setStatus(ApplicationStatus.APPROVED);
+                    showAlertDialog(getString(R.string.des_approved), getString(R.string.dialog_approved, strAmount));
+                }
+            });
 
-        // Set action for rejected button
-        btnRejected.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                application.setStatus(ApplicationStatus.REJECTED);
-                showAlertDialog(getString(R.string.des_rejected), getString(R.string.dialog_rejected));
-            }
-        });
+            // Set action for rejected button
+            btnRejected.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    application.setStatus(ApplicationStatus.REJECTED);
+                    showAlertDialog(getString(R.string.des_rejected), getString(R.string.dialog_rejected));
+                }
+            });
+        }
 
     }
 

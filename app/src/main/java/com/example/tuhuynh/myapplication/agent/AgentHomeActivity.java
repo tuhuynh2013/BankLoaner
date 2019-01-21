@@ -68,6 +68,13 @@ public class AgentHomeActivity extends AppCompatActivity
             }
         });
 
+        // Set action for application history linear layout
+        findViewById(R.id.lnl_history).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AgentAppHistory.class));
+            }
+        });
 
     }
 

@@ -17,17 +17,16 @@ import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import java.util.List;
 
-public class AssignedAppsActivity extends AppCompatActivity implements GetAgentAppsCallBack {
+public class AgentAppHistory extends AppCompatActivity implements GetAgentAppsCallBack {
 
     User user;
-    ListView lvAssignedApplication;
-    private final String caller = "AssignedAppsActivity";
+    ListView lvAppHistory;
+    private final String caller = "AgentAppHistory";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assigned_apps);
-        setTitle(getString(R.string.title_assigned_application));
+        setContentView(R.layout.activity_agent_app_history);
 
         // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
@@ -43,11 +42,10 @@ public class AssignedAppsActivity extends AppCompatActivity implements GetAgentA
         }
 
         // Initial listview element
-        lvAssignedApplication = findViewById(R.id.lv_assigned_applications);
+        lvAppHistory = findViewById(R.id.lv_app_history);
 
         // Get assigned applications
         new GetAgentAppsAsync(this, this, user.getId(), caller).execute();
-
     }
 
     @Override
@@ -55,9 +53,9 @@ public class AssignedAppsActivity extends AppCompatActivity implements GetAgentA
         // If applications not empty, set array adapter
         if (!applications.isEmpty()) {
             AgentAppAdapter assignedAdapter = new AgentAppAdapter(this, R.layout.agent_app_adapter, applications, caller);
-            lvAssignedApplication.setAdapter(assignedAdapter);
+            lvAppHistory.setAdapter(assignedAdapter);
 
-            lvAssignedApplication.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            lvAppHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                     ApplicationInfo application = (ApplicationInfo) parent.getItemAtPosition(position);
@@ -69,13 +67,12 @@ public class AssignedAppsActivity extends AppCompatActivity implements GetAgentA
             });
         } else {
             // Create text view to show message
-            lvAssignedApplication.setVisibility(View.INVISIBLE);
+            lvAppHistory.setVisibility(View.INVISIBLE);
             TextView tvMsg = new TextView(this);
             tvMsg.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             tvMsg.setText(msg);
             setContentView(tvMsg);
         }
-
     }
 
 

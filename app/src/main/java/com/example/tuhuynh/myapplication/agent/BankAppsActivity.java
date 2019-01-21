@@ -30,6 +30,7 @@ public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsC
     User user;
     SwipeMenuListView slvBankApplication;
     AgentAppAdapter assignedAdapter;
+    private final String caller = "BankAppsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsC
         slvBankApplication = findViewById(R.id.slv_bank_application);
 
         // Get assigned applications
-        new GetAgentAppsAsync(this, this, user.getId(), "BankAppsActivity").execute();
+        new GetAgentAppsAsync(this, this, user.getId(), caller).execute();
 
     }
 
@@ -62,7 +63,7 @@ public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsC
     public void responseFromAsync(List<ApplicationInfo> applications, String msg) {
         // If applications not empty, set array adapter
         if (!applications.isEmpty()) {
-            assignedAdapter = new AgentAppAdapter(this, R.layout.agent_app_adapter, applications);
+            assignedAdapter = new AgentAppAdapter(this, R.layout.agent_app_adapter, applications, caller);
             slvBankApplication.setAdapter(assignedAdapter);
             createSwipeMenu(applications);
 

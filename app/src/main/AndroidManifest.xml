@@ -48,6 +48,9 @@
         <activity
             android:name=".agent.BankAppsActivity"
             android:parentActivityName=".agent.AssignedAppsActivity" />
+        <activity
+            android:name=".agent.AgentAppHistory"
+            android:parentActivityName=".agent.AssignedAppsActivity" />
         <!-- Customer Activities -->
         <activity
             android:name=".customer.CustomerHomeActivity"
