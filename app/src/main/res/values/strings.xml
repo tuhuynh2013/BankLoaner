@@ -101,8 +101,10 @@
     <string name="msg_retrieve_agent_info_success">Retrieve agent information successful</string>
     <string name="msg_update_user_successfully">Update user successfully</string>
     <string name="msg_update_customer_successfully">Update customer successfully</string>
+    <string name="msg_update_agent_successfully">Update agent successfully</string>
     <string name="msg_update_successfully">Update successfully</string>
     <string name="msg_update_not_successfully">Update NOT successfully</string>
+    <string name="hint_select_bank">Select your bank</string>
     <string name="tv_bank">Bank</string>
     <string name="apply">Apply</string>
 

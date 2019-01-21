@@ -16,7 +16,8 @@
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -303,8 +304,15 @@
 
                     <Spinner
                         android:id="@+id/spin_bank_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:maxLines="100"
+                        android:prompt="@string/hint_select_bank"
+                        android:scrollHorizontally="false"
+                        android:spinnerMode="dialog"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
                 </TableRow>
 

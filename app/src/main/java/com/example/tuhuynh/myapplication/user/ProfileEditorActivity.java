@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,8 @@ import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
+import com.example.tuhuynh.myapplication.bank.GetBankAsync;
+import com.example.tuhuynh.myapplication.bank.GetBankCallBack;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
@@ -27,7 +30,6 @@ import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ProfileEditorActivity extends AppCompatActivity implements GetUserProfileCallBack {
+public class ProfileEditorActivity extends AppCompatActivity implements GetUserProfileCallBack, GetBankCallBack {
 
     private TextView tvUsername;
     private TextView tvEmail;
@@ -55,6 +57,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
 
     User user;
     List<BankInfo> banks;
+    List<String> bankNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +76,16 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         // Turn off Up navigation, when called from LoanApplication
         final Intent intent = this.getIntent();
         String caller = intent.getStringExtra("caller");
-        if (caller.equalsIgnoreCase("LoanApplication")) {
-            // Create Up button
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            }
-        } else {
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (caller != null) {
+            if (caller.equalsIgnoreCase("LoanApplication")) {
+                // Create Up button
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
+            } else {
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
             }
         }
 
@@ -124,28 +129,21 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         btnSave = findViewById(R.id.btn_save);
 
         if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
-            tvBank.setVisibility(View.INVISIBLE);
-            spinBankName.setVisibility(View.INVISIBLE);
+            tvBank.setVisibility(View.GONE);
+            spinBankName.setVisibility(View.GONE);
         } else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
-            tvEmployment.setVisibility(View.INVISIBLE);
-            edtEmployment.setVisibility(View.INVISIBLE);
-            tvCompany.setVisibility(View.INVISIBLE);
-            edtCompany.setVisibility(View.INVISIBLE);
-            tvSalary.setVisibility(View.INVISIBLE);
-            edtSalary.setVisibility(View.INVISIBLE);
-            tvBankAccount.setVisibility(View.INVISIBLE);
-            edtBankAccount.setVisibility(View.INVISIBLE);
+            tvEmployment.setVisibility(View.GONE);
+            edtEmployment.setVisibility(View.GONE);
+            tvCompany.setVisibility(View.GONE);
+            edtCompany.setVisibility(View.GONE);
+            tvSalary.setVisibility(View.GONE);
+            edtSalary.setVisibility(View.GONE);
+            tvBankAccount.setVisibility(View.GONE);
+            edtBankAccount.setVisibility(View.GONE);
 
             // Get bank info from db
-            getBanks();
-            List<String> bankNames = new ArrayList<>();
-            for (BankInfo bankInfo : banks) {
-                bankNames.add(bankInfo.getName());
-            }
-            // Initial spinner
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, bankNames);
-            adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-            spinBankName.setAdapter(adapter);
+            new GetBankAsync(this, this).execute();
+
         }
         // Retrieve user profile from db
         new GetUserProfileAsync(this, this, user).execute();
@@ -318,6 +316,32 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
 
     }
 
+    /**
+     * Get list of banks
+     */
+    @Override
+    public void responseFromAsync(List<BankInfo> banks) {
+        this.banks = banks;
+        for (BankInfo bankInfo : banks) {
+            bankNames.add(bankInfo.getName());
+        }
+        // Initial spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, bankNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spinBankName.setAdapter(adapter);
+        spinBankName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
 
     /**
      * Request update user profile to db
@@ -475,11 +499,11 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
                 String message = obj.getString("message");
                 // If no error in response
                 if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_update_customer_successfully))) {
-                    Toast.makeText(getApplicationContext(), R.string.msg_update_successfully, Toast.LENGTH_LONG).show();
-                    returnIntent(Activity.RESULT_OK, getString(R.string.msg_update_successfully));
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    returnIntent(Activity.RESULT_OK, message);
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.msg_update_not_successfully, Toast.LENGTH_LONG).show();
-                    returnIntent(Activity.RESULT_CANCELED, getString(R.string.msg_update_not_successfully));
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    returnIntent(Activity.RESULT_CANCELED, message);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -492,7 +516,6 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
      * Execute update customer profile function
      */
     private void updateAgentProfile() {
-
         // Get bank info from user selected
         BankInfo bank = new BankInfo();
         for (BankInfo bankInfo : banks) {
@@ -533,7 +556,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
             params.put("user_id", Integer.toString(user.getId()));
             params.put("bank_id", Integer.toString(updateAgent.getWorkBank().getId()));
             // Return the response
-            return requestHandler.sendPostRequest(URLs.URL_UPDATE_CUSTOMER_PROFILE, params);
+            return requestHandler.sendPostRequest(URLs.URL_UPDATE_AGENT_PROFILE, params);
         }
 
         @Override
@@ -546,99 +569,18 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
                 JSONObject obj = new JSONObject(s);
                 String message = obj.getString("message");
                 // If no error in response
-                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_update_customer_successfully))) {
-                    Toast.makeText(getApplicationContext(), R.string.msg_update_successfully, Toast.LENGTH_LONG).show();
-                    returnIntent(Activity.RESULT_OK, getString(R.string.msg_update_successfully));
+                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_update_agent_successfully))) {
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    returnIntent(Activity.RESULT_OK, message);
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.msg_update_not_successfully, Toast.LENGTH_LONG).show();
-                    returnIntent(Activity.RESULT_CANCELED, getString(R.string.msg_update_not_successfully));
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                    returnIntent(Activity.RESULT_CANCELED, message);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
-
-    /**
-     * Uses to get list of banks from database
-     */
-    private void getBanks() {
-
-        @SuppressLint("StaticFieldLeak")
-        class BankList extends AsyncTask<Void, Void, String> {
-
-            private ProgressBar progressBar;
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressBar = findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                // Creating request handler object
-                RequestHandler requestHandler = new RequestHandler();
-                HashMap<String, String> params = new HashMap<>();
-                params.put("getbanks", "true");
-                // Return the response
-                return requestHandler.sendPostRequest(URLs.URL_GET_SIMPLE_BANKS, params);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                progressBar.setVisibility(View.GONE);
-
-                try {
-                    // Converting response to json object
-                    JSONObject obj = new JSONObject(s);
-                    String message = obj.getString("message");
-
-                    // If no error in response
-                    if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_retrieve_banklist_success))) {
-
-                        // Getting the user from the response
-                        JSONArray jsonArray = obj.getJSONArray("banks");
-                        banks = extractBanklist(jsonArray);
-
-                    } else {
-                        Toast.makeText(getApplicationContext(), R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-        BankList banklist = new BankList();
-        banklist.execute();
-    }
-
-    /**
-     * Extract list of banks from JSONArray
-     *
-     * @param jsonArray JSONArray
-     * @return List of banks
-     */
-    private List<BankInfo> extractBanklist(JSONArray jsonArray) throws JSONException {
-        List<BankInfo> bankList = new ArrayList<>();
-        BankInfo bankInfo;
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject bankJson = jsonArray.getJSONObject(i);
-            int id = bankJson.getInt("id");
-            String bankName = bankJson.getString("name");
-            String shortName = bankJson.getString("short_name");
-            //Create BankInfo and add to bankList
-            bankInfo = new BankInfo(id, bankName, shortName);
-            bankList.add(bankInfo);
-        }
-        return bankList;
-    }
-
-
 
     /**
      * Return intent to previous activity with message
