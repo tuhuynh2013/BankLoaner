@@ -14,6 +14,12 @@ public class BankInfo implements Serializable {
 
     }
 
+    public BankInfo(int id, String name, String shortName) {
+        this.id = id;
+        this.name = name;
+        this.shortName = shortName;
+    }
+
     public BankInfo(int id, String name, String shortName, List<InterestAmount> interestAmounts) {
         this.id = id;
         this.name = name;

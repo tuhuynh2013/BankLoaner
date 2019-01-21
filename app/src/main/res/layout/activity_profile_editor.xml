@@ -301,14 +301,10 @@
                         android:text="@string/tv_bank"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-                    <EditText
-                        android:id="@+id/edt_bank"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/tv_bank"
-                        android:inputType="number"
-                        tools:ignore="Autofill" />
+                    <Spinner
+                        android:id="@+id/spin_bank_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
                 </TableRow>
 

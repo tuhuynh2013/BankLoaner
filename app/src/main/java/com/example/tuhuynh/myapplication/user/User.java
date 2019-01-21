@@ -36,7 +36,8 @@ public class User implements Serializable {
         setAddress(address);
     }
 
-    public User(String name, String surname, String identity, String gender, String phone, String address, String role) {
+    public User(int id, String name, String surname, String identity, String gender, String phone, String address, String role) {
+        setId(id);
         setName(name);
         setSurname(surname);
         setIdentity(identity);

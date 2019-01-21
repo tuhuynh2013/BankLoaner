@@ -97,8 +97,8 @@
     <string name="hint_salary">Your salary</string>
     <string name="hint_bank_account">Your bank account</string>
     <string name="save_change">Save change</string>
-    <string name="msg_retrieve_user_info_success">Retrieve user information successful</string>
     <string name="msg_retrieve_customer_info_success">Retrieve customer information successful</string>
+    <string name="msg_retrieve_agent_info_success">Retrieve agent information successful</string>
     <string name="msg_update_user_successfully">Update user successfully</string>
     <string name="msg_update_customer_successfully">Update customer successfully</string>
     <string name="msg_update_successfully">Update successfully</string>

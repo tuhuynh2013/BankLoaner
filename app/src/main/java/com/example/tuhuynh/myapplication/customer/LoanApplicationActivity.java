@@ -19,6 +19,8 @@ import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
+import com.example.tuhuynh.myapplication.user.GetUserProfileAsync;
+import com.example.tuhuynh.myapplication.user.GetUserProfileCallBack;
 import com.example.tuhuynh.myapplication.user.ProfileEditorActivity;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
@@ -31,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-public class LoanApplicationActivity extends AppCompatActivity implements GetCustomerProfileCallBack {
+public class LoanApplicationActivity extends AppCompatActivity implements GetUserProfileCallBack {
 
     private static final int REQUEST_CODE = 0x9345;
     TextView tvBankName, tvMonth, tvInterest, tvAmount;
@@ -43,7 +45,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetCus
     BankInfo bankInfo;
     String month, amount, interest;
     CustomerProfile customerProfile;
-    GetCustomerProfileAsync asyncTask;
+    GetUserProfileAsync asyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetCus
         tvAmount.setText(amount);
         tvInterest.setText(interest);
 
-        asyncTask = new GetCustomerProfileAsync(this, this, (CustomerProfile) user);
+        asyncTask = new GetUserProfileAsync(this, this, user);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,9 +93,9 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetCus
     }
 
     @Override
-    public void callBack(CustomerProfile output) {
+    public void responseFromAsync(Object object) {
         customerProfile = new CustomerProfile();
-        customerProfile = output;
+        customerProfile = (CustomerProfile) object;
         submitApplication();
     }
 
@@ -128,7 +130,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetCus
         // If profile not enough information, move to ProfileEditorActivity
         if (customerProfile.isMissingInfo()) {
             Intent intent = new Intent(this, ProfileEditorActivity.class);
-            intent.putExtra("requestCode", REQUEST_CODE);
+            intent.putExtra("caller", "LoanApplication");
             startActivityForResult(intent, REQUEST_CODE);
         } else {
             new SubmitApplication().execute();

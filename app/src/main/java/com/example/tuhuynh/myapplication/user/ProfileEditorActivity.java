@@ -8,29 +8,34 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tuhuynh.myapplication.agent.AgentProfile;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
-import com.example.tuhuynh.myapplication.customer.GetCustomerProfileAsync;
-import com.example.tuhuynh.myapplication.customer.GetCustomerProfileCallBack;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class ProfileEditorActivity extends AppCompatActivity implements GetCustomerProfileCallBack {
+public class ProfileEditorActivity extends AppCompatActivity implements GetUserProfileCallBack {
 
     private TextView tvUsername;
     private TextView tvEmail;
@@ -45,9 +50,11 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
     private EditText edtBankAccount;
     private RadioGroup rdgGender;
     private RadioButton rdMale, rdFemale;
+    private Spinner spinBankName;
     private Button btnSave;
 
     User user;
+    List<BankInfo> banks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +72,8 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
 
         // Turn off Up navigation, when called from LoanApplication
         final Intent intent = this.getIntent();
-        int requestCode = intent.getIntExtra("requestCode", 0);
-        if (requestCode == 0x9345) {
+        String caller = intent.getStringExtra("caller");
+        if (caller.equalsIgnoreCase("LoanApplication")) {
             // Create Up button
             if (getSupportActionBar() != null) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -79,9 +86,6 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
 
         // Initial for profile editor screen
         initialProfileEditorScreen();
-
-        // Retrieve customer profile from db
-        new GetCustomerProfileAsync(this, this, (CustomerProfile) user).execute();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,12 +120,12 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
         TextView tvBankAccount = findViewById(R.id.tv_bank_account);
         edtBankAccount = findViewById(R.id.edt_bank_account);
         TextView tvBank = findViewById(R.id.tv_bank);
-        EditText edtBank = findViewById(R.id.edt_bank);
+        spinBankName = findViewById(R.id.spin_bank_name);
         btnSave = findViewById(R.id.btn_save);
 
         if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
             tvBank.setVisibility(View.INVISIBLE);
-            edtBank.setVisibility(View.INVISIBLE);
+            spinBankName.setVisibility(View.INVISIBLE);
         } else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
             tvEmployment.setVisibility(View.INVISIBLE);
             edtEmployment.setVisibility(View.INVISIBLE);
@@ -131,8 +135,20 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
             edtSalary.setVisibility(View.INVISIBLE);
             tvBankAccount.setVisibility(View.INVISIBLE);
             edtBankAccount.setVisibility(View.INVISIBLE);
-        }
 
+            // Get bank info from db
+            getBanks();
+            List<String> bankNames = new ArrayList<>();
+            for (BankInfo bankInfo : banks) {
+                bankNames.add(bankInfo.getName());
+            }
+            // Initial spinner
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, bankNames);
+            adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+            spinBankName.setAdapter(adapter);
+        }
+        // Retrieve user profile from db
+        new GetUserProfileAsync(this, this, user).execute();
     }
 
     /**
@@ -140,22 +156,21 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
      * and set content for profile editor screen
      */
     @Override
-    public void callBack(CustomerProfile output) {
+    public void responseFromAsync(Object object) {
         // Setting the values to the textviews
-        edtName.setText(output.getName());
-        String surname = output.getSurname();
-        tvUsername.setText(user.getUsername());
-        tvEmail.setText(user.getEmail());
-        String identity = output.getIdentity();
-        String gender = output.getGender();
-        String phone = output.getPhone();
-        String address = output.getAddress();
-        String employment = output.getEmployment();
-        String company = output.getCompany();
-        Long salary = output.getSalary();
-        String bankAccount = output.getBankAccount();
+        User userProfile = (User) object;
+
+        String surname = userProfile.getSurname();
+        String identity = userProfile.getIdentity();
+        String gender = userProfile.getGender();
+        String phone = userProfile.getPhone();
+        String address = userProfile.getAddress();
 
         // Section to check if values are available to display on screen
+        edtName.setText(userProfile.getName());
+        tvUsername.setText(user.getUsername());
+        tvEmail.setText(user.getEmail());
+
         if (CustomUtil.hasMeaning(surname)) {
             edtSurname.setText(surname);
         }
@@ -182,25 +197,46 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
             edtAddress.setText(address);
         }
 
-        if (CustomUtil.hasMeaning(employment)) {
-            edtEmployment.setText(employment);
-        }
+        // Customer section
+        if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
+            CustomerProfile customer = (CustomerProfile) object;
+            String employment = customer.getEmployment();
+            String company = customer.getCompany();
+            Long salary = customer.getSalary();
+            String bankAccount = customer.getBankAccount();
 
-        if (CustomUtil.hasMeaning(company)) {
-            edtCompany.setText(company);
-        }
+            if (CustomUtil.hasMeaning(employment)) {
+                edtEmployment.setText(employment);
+            }
 
-        if (salary != null) {
-            String strSalary = Long.toString(salary);
-            edtSalary.setText(strSalary);
-        }
+            if (CustomUtil.hasMeaning(company)) {
+                edtCompany.setText(company);
+            }
 
-        if (CustomUtil.hasMeaning(bankAccount)) {
-            edtBankAccount.setText(bankAccount);
+            if (salary != null) {
+                String strSalary = Long.toString(salary);
+                edtSalary.setText(strSalary);
+            }
+
+            if (CustomUtil.hasMeaning(bankAccount)) {
+                edtBankAccount.setText(bankAccount);
+            }
+        }
+        // Agent section
+        else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
+            AgentProfile agent = (AgentProfile) object;
+            String bankName = agent.getWorkBank().getName();
+            // Set value for spinner
+            if (CustomUtil.hasMeaning(bankName)) {
+                for (int i = 0; i < spinBankName.getAdapter().getCount(); i++) {
+                    if (spinBankName.getAdapter().getItem(i).toString().contains(bankName)) {
+                        spinBankName.setSelection(i);
+                    }
+                }
+            }
         }
 
     }
-
 
     /**
      * Validate in put value and execute update user profile function
@@ -277,10 +313,11 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
         if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
             updateCustomerProfile();
         } else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
-            // Todo: update agent profile
+            updateAgentProfile();
         }
 
     }
+
 
     /**
      * Request update user profile to db
@@ -347,7 +384,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
     }
 
     /**
-     * Validate in put value and execute update customer profile function
+     * Validate input value and execute update customer profile function
      */
     private void updateCustomerProfile() {
 
@@ -419,7 +456,6 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
             RequestHandler requestHandler = new RequestHandler();
             HashMap<String, String> params = new HashMap<>();
             params.put("id", Integer.toString(user.getId()));
-            params.put("username", user.getUsername());
             params.put("employment", updateCustomer.getEmployment());
             params.put("company", updateCustomer.getCompany());
             params.put("salary", Long.toString(updateCustomer.getSalary()));
@@ -451,6 +487,158 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetCusto
         }
 
     }
+
+    /**
+     * Execute update customer profile function
+     */
+    private void updateAgentProfile() {
+
+        // Get bank info from user selected
+        BankInfo bank = new BankInfo();
+        for (BankInfo bankInfo : banks) {
+            if (bankInfo.getName().equalsIgnoreCase(spinBankName.getSelectedItem().toString())) {
+                bank = bankInfo;
+                break;
+            }
+        }
+        new UpdateAgentProfile(new AgentProfile(bank)).execute();
+    }
+
+    /**
+     * Request update agent profile to db
+     */
+    @SuppressLint("StaticFieldLeak")
+    class UpdateAgentProfile extends AsyncTask<Void, Void, String> {
+
+        AgentProfile updateAgent;
+
+        private UpdateAgentProfile(AgentProfile agentProfile) {
+            this.updateAgent = agentProfile;
+        }
+
+        private ProgressBar progressBar;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar = findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            // Creating request handler object
+            RequestHandler requestHandler = new RequestHandler();
+            HashMap<String, String> params = new HashMap<>();
+            params.put("user_id", Integer.toString(user.getId()));
+            params.put("bank_id", Integer.toString(updateAgent.getWorkBank().getId()));
+            // Return the response
+            return requestHandler.sendPostRequest(URLs.URL_UPDATE_CUSTOMER_PROFILE, params);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressBar.setVisibility(View.GONE);
+
+            try {
+                // Converting response to json object
+                JSONObject obj = new JSONObject(s);
+                String message = obj.getString("message");
+                // If no error in response
+                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_update_customer_successfully))) {
+                    Toast.makeText(getApplicationContext(), R.string.msg_update_successfully, Toast.LENGTH_LONG).show();
+                    returnIntent(Activity.RESULT_OK, getString(R.string.msg_update_successfully));
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.msg_update_not_successfully, Toast.LENGTH_LONG).show();
+                    returnIntent(Activity.RESULT_CANCELED, getString(R.string.msg_update_not_successfully));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Uses to get list of banks from database
+     */
+    private void getBanks() {
+
+        @SuppressLint("StaticFieldLeak")
+        class BankList extends AsyncTask<Void, Void, String> {
+
+            private ProgressBar progressBar;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressBar = findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                // Creating request handler object
+                RequestHandler requestHandler = new RequestHandler();
+                HashMap<String, String> params = new HashMap<>();
+                params.put("getbanks", "true");
+                // Return the response
+                return requestHandler.sendPostRequest(URLs.URL_GET_SIMPLE_BANKS, params);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                progressBar.setVisibility(View.GONE);
+
+                try {
+                    // Converting response to json object
+                    JSONObject obj = new JSONObject(s);
+                    String message = obj.getString("message");
+
+                    // If no error in response
+                    if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_retrieve_banklist_success))) {
+
+                        // Getting the user from the response
+                        JSONArray jsonArray = obj.getJSONArray("banks");
+                        banks = extractBanklist(jsonArray);
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        BankList banklist = new BankList();
+        banklist.execute();
+    }
+
+    /**
+     * Extract list of banks from JSONArray
+     *
+     * @param jsonArray JSONArray
+     * @return List of banks
+     */
+    private List<BankInfo> extractBanklist(JSONArray jsonArray) throws JSONException {
+        List<BankInfo> bankList = new ArrayList<>();
+        BankInfo bankInfo;
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject bankJson = jsonArray.getJSONObject(i);
+            int id = bankJson.getInt("id");
+            String bankName = bankJson.getString("name");
+            String shortName = bankJson.getString("short_name");
+            //Create BankInfo and add to bankList
+            bankInfo = new BankInfo(id, bankName, shortName);
+            bankList.add(bankInfo);
+        }
+        return bankList;
+    }
+
+
 
     /**
      * Return intent to previous activity with message

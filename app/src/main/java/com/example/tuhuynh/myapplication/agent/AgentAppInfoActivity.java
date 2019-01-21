@@ -14,11 +14,11 @@ import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
 import com.example.tuhuynh.myapplication.appication.UpdateStatusAsync;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
-import com.example.tuhuynh.myapplication.customer.GetCustomerProfileAsync;
-import com.example.tuhuynh.myapplication.customer.GetCustomerProfileCallBack;
+import com.example.tuhuynh.myapplication.user.GetUserProfileAsync;
+import com.example.tuhuynh.myapplication.user.GetUserProfileCallBack;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
-public class AgentAppInfoActivity extends AppCompatActivity implements GetCustomerProfileCallBack {
+public class AgentAppInfoActivity extends AppCompatActivity implements GetUserProfileCallBack {
 
     TextView tvApplicationID, tvMonth, tvAmount, tvInterest, tvDate, tvStatus;
     TextView tvCustomerName, tvSurname, tvCompany, tvEmployment, tvSalary,
@@ -48,7 +48,7 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetCustom
         setApplicationInfo();
 
         // Retrieve customer profile from db
-        new GetCustomerProfileAsync(this, this, application.getCustomer()).execute();
+        new GetUserProfileAsync(this, this, application.getCustomer()).execute();
 
         // Set action for approved button
         btnApprove.setOnClickListener(new View.OnClickListener() {
@@ -123,18 +123,19 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetCustom
      * and set value for customer info section
      */
     @Override
-    public void callBack(CustomerProfile output) {
-        String strSalary = CustomUtil.convertLongToFormattedString(output.getSalary());
+    public void responseFromAsync(Object object) {
+        CustomerProfile customer = (CustomerProfile) object;
+        String strSalary = CustomUtil.convertLongToFormattedString(customer.getSalary());
 
-        tvCustomerName.setText(output.getName());
-        tvSurname.setText(output.getSurname());
-        tvCompany.setText(output.getCompany());
-        tvEmployment.setText(output.getEmployment());
+        tvCustomerName.setText(customer.getName());
+        tvSurname.setText(customer.getSurname());
+        tvCompany.setText(customer.getCompany());
+        tvEmployment.setText(customer.getEmployment());
         tvSalary.setText(strSalary);
-        tvGender.setText(output.getGender());
-        tvPhone.setText(output.getPhone());
-        tvAddress.setText(output.getAddress());
-        tvIdentity.setText(output.getIdentity());
+        tvGender.setText(customer.getGender());
+        tvPhone.setText(customer.getPhone());
+        tvAddress.setText(customer.getAddress());
+        tvIdentity.setText(customer.getIdentity());
     }
 
     /**

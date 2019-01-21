@@ -21,9 +21,9 @@ public class CustomerProfile extends User {
         setBankAccount(bankAccount);
     }
 
-    CustomerProfile(String name, String surname, String identity, String gender, String phone, String address, String role,
-                    String employment, String company, Long salary, String bankAccount) {
-        super(name, surname, identity, gender, phone, address, role);
+    public CustomerProfile(int id, String name, String surname, String identity, String gender, String phone, String address, String role,
+                           String employment, String company, Long salary, String bankAccount) {
+        super(id, name, surname, identity, gender, phone, address, role);
         setEmployment(employment);
         setCompany(company);
         setSalary(salary);
