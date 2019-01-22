@@ -27,7 +27,7 @@ public class AssignedAppsActivity extends AppCompatActivity implements GetAgentA
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assigned_apps);
-        setTitle(getString(R.string.title_assigned_application));
+        setTitle(getString(R.string.title_assigned_applications));
 
         // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {

@@ -81,7 +81,7 @@ public class BankInformationActivity extends AppCompatActivity {
                 Long amount = CustomUtil.convertFormattedStringToLong(edtAmount.getText().toString());
                 Double interest = Double.parseDouble(tvInterest.getText().toString());
 
-                if (isVaildAmount(amount)) {
+                if (isValidAmount(amount)) {
                     generateInterestTable(month, amount, interest);
                 }
             }
@@ -96,7 +96,7 @@ public class BankInformationActivity extends AppCompatActivity {
                 int month = Integer.parseInt(rd.getText().toString());
                 Long amount = CustomUtil.convertFormattedStringToLong(edtAmount.getText().toString());
 
-                if (isVaildAmount(amount)) {
+                if (isValidAmount(amount)) {
                     Intent intent = new Intent(getApplicationContext(), LoanApplicationActivity.class);
                     intent.putExtra("bank", bankInfo);
                     intent.putExtra("month", Integer.toString(month));
@@ -115,10 +115,10 @@ public class BankInformationActivity extends AppCompatActivity {
      * @param amount amount
      * @return true if amount is valid
      */
-    private boolean isVaildAmount(Long amount) {
+    private boolean isValidAmount(Long amount) {
         if (amount != null) {
             if (amount > 100000000) {
-                if (amount < Long.parseLong("100000000000")) {
+                if (amount < Long.parseLong("10000000000")) {
                     return true;
                 } else {
                     edtAmount.setError(getString(R.string.error_exceed_amount));

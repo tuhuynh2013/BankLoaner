@@ -37,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setTitle(getString(R.string.title_register));
 
         edtUsername = findViewById(R.id.edt_username);
         edtName = findViewById(R.id.edt_name);

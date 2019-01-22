@@ -63,11 +63,11 @@ public class CustomerProfile extends User {
     }
 
     public boolean isMissingInfo() {
-        return !CustomUtil.hasMeaning(this.getIdentity()) &&
-                !CustomUtil.hasMeaning(this.getPhone()) &&
-                !CustomUtil.hasMeaning(this.getEmployment()) &&
-                !CustomUtil.hasMeaning(this.getCompany()) &&
-                !CustomUtil.hasMeaning(this.getSalary().toString()) &&
+        return !CustomUtil.hasMeaning(this.getIdentity()) ||
+                !CustomUtil.hasMeaning(this.getPhone()) ||
+                !CustomUtil.hasMeaning(this.getEmployment()) ||
+                !CustomUtil.hasMeaning(this.getCompany()) ||
+                !CustomUtil.hasMeaning(this.getSalary().toString()) ||
                 !CustomUtil.hasMeaning(this.getBankAccount());
     }
 

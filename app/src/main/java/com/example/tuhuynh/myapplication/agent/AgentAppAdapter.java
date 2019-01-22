@@ -2,6 +2,7 @@ package com.example.tuhuynh.myapplication.agent;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
+import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.util.List;
@@ -72,7 +74,25 @@ public class AgentAppAdapter extends ArrayAdapter<ApplicationInfo> {
 
         // If caller is AgentAppHistory
         if (caller.equalsIgnoreCase("AgentAppHistory")) {
-            tvStatus.setText(application.getStatus());
+            String status = application.getStatus();
+            tvStatus.setText(status);
+            // Set color for status
+            switch (status) {
+                case ApplicationStatus.VALIDATING:
+                    tvStatus.setTextColor(Color.parseColor("#FFCC00"));
+                    break;
+                case ApplicationStatus.APPROVED:
+                    tvStatus.setTextColor(Color.parseColor("#009900"));
+                    break;
+                case ApplicationStatus.REJECTED:
+                    tvStatus.setTextColor(Color.parseColor("#CC0000"));
+                    break;
+                case ApplicationStatus.DEBIT:
+                    tvStatus.setTextColor(Color.parseColor("#0033FF"));
+                    break;
+                default:
+                    break;
+            }
         } else {
             tvStatus.setVisibility(View.GONE);
         }

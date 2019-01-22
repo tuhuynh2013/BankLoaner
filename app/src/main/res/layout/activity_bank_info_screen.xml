@@ -14,7 +14,9 @@
 
     <TableLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp">
 
         <TableRow
             android:layout_width="match_parent"
@@ -36,7 +38,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,18 +67,18 @@
 
             <EditText
                 android:id="@+id/edtAmount"
-                android:layout_width="wrap_content"
+                android:layout_width="202dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/debit_amount"
                 android:inputType="number"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:ignore="Autofill" />
 
             <Button
                 android:id="@+id/btnCalculate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="@string/calculate" />
 
         </TableRow>

@@ -1,9 +1,12 @@
 <resources>
 
     <!--Screen title-->
-    <string name="app_name">Bank Loader</string>
+    <string name="app_name">Bank Loaner</string>
     <string name="title_home">Home</string>
-    <string name="title_assigned_application">Assigned Application</string>
+    <string name="title_register">Register</string>
+    <string name="title_assigned_applications">Assigned Applications</string>
+    <string name="title_bank_applications">Bank Applications</string>
+    <string name="title_application_history">Application History</string>
 
     <!--common string-->
     <string name="id">ID</string>
@@ -32,7 +35,7 @@
     <string name="error_invalid_email">Please enter a valid email</string>
     <string name="error_empty_amount">Amount is empty</string>
     <string name="error_atleast_amount">Amount must greater than 100,000,000</string>
-    <string name="error_exceed_amount">Amount must less than 100,000,000,000</string>
+    <string name="error_exceed_amount">Amount must less than 10,000,000,000</string>
     <string name="error_empty_surname">Please enter your surname</string>
     <string name="error_invalid_surname">Surname is invalid</string>
     <string name="error_empty_identity">Please enter your identity number</string>

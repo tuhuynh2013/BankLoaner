@@ -36,6 +36,7 @@ public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank_apps);
+        setTitle(getString(R.string.title_bank_applications));
 
         // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {

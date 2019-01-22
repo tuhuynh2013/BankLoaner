@@ -27,6 +27,7 @@ public class AgentAppHistory extends AppCompatActivity implements GetAgentAppsCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_app_history);
+        setTitle(getString(R.string.title_application_history));
 
         // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {

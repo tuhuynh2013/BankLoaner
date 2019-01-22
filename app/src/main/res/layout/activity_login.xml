@@ -49,7 +49,8 @@
             android:layout_marginBottom="8dp"
             android:text="@string/tv_sign_up"
             android:textAlignment="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/black" />
 
     </LinearLayout>
 
