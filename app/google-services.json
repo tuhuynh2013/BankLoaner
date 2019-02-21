@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "946395224241",
+    "firebase_url": "https://bankloaner-88805.firebaseio.com",
+    "project_id": "bankloaner-88805",
+    "storage_bucket": "bankloaner-88805.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946395224241:android:510eb4cd1bd449a4",
+        "android_client_info": {
+          "package_name": "com.example.tuhuynh.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946395224241-p2hej75up3acamir5j2ft98hao7o8rrc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tuhuynh.myapplication",
+            "certificate_hash": "0fe21034996b7bd48938bae0be04ff84f4ab6b3a"
+          }
+        },
+        {
+          "client_id": "946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-L90GsJhn-rEy74NrHxAjdP7mQiyM9Kw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

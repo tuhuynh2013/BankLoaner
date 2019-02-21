@@ -205,6 +205,7 @@ public class RegisterActivity extends AppCompatActivity {
                             customer.setName(name);
                             customer.setEmail(email);
                             customer.setRole(role);
+                            customer.setAccountType(AccountType.DEFAULT);
                             // Storing the user in shared preferences
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(customer);
                         } else if (role.equalsIgnoreCase(UserRole.AGENT)) {
@@ -214,6 +215,7 @@ public class RegisterActivity extends AppCompatActivity {
                             agent.setName(name);
                             agent.setEmail(email);
                             agent.setRole(role);
+                            agent.setAccountType(AccountType.DEFAULT);
                             // Storing the user in shared preferences
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(agent);
                         }

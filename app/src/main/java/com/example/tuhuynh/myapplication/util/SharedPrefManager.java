@@ -16,6 +16,7 @@ public class SharedPrefManager {
     private static final String KEY_NAME = "keyname";
     private static final String KEY_EMAIL = "keyemail";
     private static final String KEY_ROLE = "keyrole";
+    private static final String KEY_ACCOUNTTYPE = "keytype";
 
     @SuppressLint("StaticFieldLeak")
     private static SharedPrefManager mInstance;
@@ -42,6 +43,9 @@ public class SharedPrefManager {
         editor.putString(KEY_NAME, user.getName());
         editor.putString(KEY_EMAIL, user.getEmail());
         editor.putString(KEY_ROLE, user.getRole());
+        if (!CustomUtil.isNullorEmpty(user.getAccountType())) {
+            editor.putString(KEY_ACCOUNTTYPE, user.getAccountType());
+        }
         editor.apply();
     }
 
@@ -59,7 +63,8 @@ public class SharedPrefManager {
                 sharedPreferences.getString(KEY_USERNAME, null),
                 sharedPreferences.getString(KEY_NAME, null),
                 sharedPreferences.getString(KEY_EMAIL, null),
-                sharedPreferences.getString(KEY_ROLE, null)
+                sharedPreferences.getString(KEY_ROLE, null),
+                sharedPreferences.getString(KEY_ACCOUNTTYPE, null)
         );
     }
 

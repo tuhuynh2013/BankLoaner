@@ -20,7 +20,7 @@ public class CustomerAppInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_app_info);
-        setTitle("Application History");
+        setTitle(getString(R.string.title_application_history));
 
         // Create Up button
         if (getSupportActionBar() != null) {

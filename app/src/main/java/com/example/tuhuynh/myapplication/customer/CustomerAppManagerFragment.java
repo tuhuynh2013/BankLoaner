@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
@@ -40,6 +42,7 @@ public class CustomerAppManagerFragment extends Fragment {
 
     private View view;
     private List<ApplicationInfo> applications;
+    ListView lvAppHistory;
 
 
     public CustomerAppManagerFragment() {
@@ -52,6 +55,8 @@ public class CustomerAppManagerFragment extends Fragment {
         view = getLayoutInflater().inflate(R.layout.frag_customer_app_manager, container, false);
         User user = SharedPrefManager.getInstance(getContext()).getUser();
         getCustomerApplication(user);
+
+        lvAppHistory = view.findViewById(R.id.lv_application_list);
 
         return view;
     }
@@ -88,10 +93,10 @@ public class CustomerAppManagerFragment extends Fragment {
                 try {
                     // Converting response to json object
                     JSONObject obj = new JSONObject(s);
-                    String message = obj.getString("message");
+                    String msg = obj.getString("message");
 
                     // If no error in response
-                    if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_retrieve_applications_success))) {
+                    if (!obj.getBoolean("error") && msg.equalsIgnoreCase(getString(R.string.msg_retrieve_applications_success))) {
 
                         // Getting the user from the response
                         JSONArray jsonArray = obj.getJSONArray("applications");
@@ -105,11 +110,10 @@ public class CustomerAppManagerFragment extends Fragment {
                         });
                         Collections.reverse(applications);
 
-                        ListView listView = view.findViewById(R.id.lv_application_list);
                         CustomerAppManagerAdapter customerAppManagerAdapter = new CustomerAppManagerAdapter(view.getContext(), R.layout.customer_app_adapter, applications);
-                        listView.setAdapter(customerAppManagerAdapter);
+                        lvAppHistory.setAdapter(customerAppManagerAdapter);
 
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        lvAppHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                                 ApplicationInfo applicationInfo = (ApplicationInfo) parent.getItemAtPosition(position);
@@ -119,7 +123,12 @@ public class CustomerAppManagerFragment extends Fragment {
                                 parent.getContext().startActivity(intent);
                             }
                         });
-
+                    } else {
+                        // Create text view to show message
+                        lvAppHistory.setVisibility(View.GONE);
+                        TextView tvMsg = view.findViewById(R.id.tv_msg);
+                        tvMsg.setText(msg);
+                        tvMsg.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

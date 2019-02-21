@@ -65,6 +65,7 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_editor);
+        setTitle(getString(R.string.title_update_profile));
 
         // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
@@ -253,10 +254,6 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         // Check name
         if (TextUtils.isEmpty(name)) {
             edtName.setError(getString(R.string.error_empty_name));
-            edtName.requestFocus();
-            return;
-        } else if (CustomUtil.isIncorrectName(name)) {
-            edtName.setError(getString(R.string.error_invalid_name));
             edtName.requestFocus();
             return;
         } else {

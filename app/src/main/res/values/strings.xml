@@ -3,6 +3,10 @@
     <!--Screen title-->
     <string name="app_name">Bank Loaner</string>
     <string name="title_home">Home</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_update_profile">Update Profile</string>
+    <string name="title_app_info">Application Information</string>
+    <string name="title_change_pass">Change Password</string>
     <string name="title_register">Register</string>
     <string name="title_assigned_applications">Assigned Applications</string>
     <string name="title_bank_applications">Bank Applications</string>

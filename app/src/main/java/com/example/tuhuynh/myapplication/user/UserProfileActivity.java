@@ -16,6 +16,7 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        setTitle(getString(R.string.title_profile));
 
         // Create Up button
         if (getSupportActionBar() != null) {

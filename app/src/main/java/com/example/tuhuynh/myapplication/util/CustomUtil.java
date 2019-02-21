@@ -174,5 +174,8 @@ public class CustomUtil {
         return fullName;
     }
 
+    public static boolean isNullorEmpty(String text) {
+        return text == null || text.isEmpty();
+    }
 
 }

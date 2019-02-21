@@ -51,6 +51,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loan_application);
+        setTitle(getString(R.string.title_app_info));
 
         // Create Up button
         if (getSupportActionBar() != null) {

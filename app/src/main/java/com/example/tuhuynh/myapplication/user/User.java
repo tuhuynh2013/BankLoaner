@@ -14,6 +14,7 @@ public class User implements Serializable {
     private String phone;
     private String address;
     private String role;
+    private String accountType;
 
     protected User() {
 
@@ -25,6 +26,15 @@ public class User implements Serializable {
         setName(name);
         setEmail(email);
         setRole(role);
+    }
+
+    public User(int id, String username, String name, String email, String role, String accountType) {
+        setId(id);
+        setUsername(username);
+        setName(name);
+        setEmail(email);
+        setRole(role);
+        setAccountType(accountType);
     }
 
     public User(String name, String surname, String gender, String phone, String address) {
@@ -127,5 +137,12 @@ public class User implements Serializable {
     }
 
 
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
 }
 

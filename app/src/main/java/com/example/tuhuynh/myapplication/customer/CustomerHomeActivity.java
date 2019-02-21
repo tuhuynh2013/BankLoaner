@@ -1,6 +1,7 @@
 package com.example.tuhuynh.myapplication.customer;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,21 +14,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.user.AccountType;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
 import com.example.tuhuynh.myapplication.user.UserProfileActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.PagerAdapter;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
 public class CustomerHomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private User user;
+    FirebaseUser firebaseUser;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
 
     /**
      * Creates the content view and toolbar, sets up the drawer layout and the
@@ -39,13 +55,30 @@ public class CustomerHomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_config);
+        setTitle(getString(R.string.title_home));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        mAuth = FirebaseAuth.getInstance();
 
         // If the user is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            user = SharedPrefManager.getInstance(this).getUser();
+            // Check if user is signed in (non-null) and update UI accordingly.
+            if (user.getAccountType().equals(AccountType.GOOGLE)) {
+                firebaseUser = mAuth.getCurrentUser();
+            }
         }
 
         // Create an instance of the tab layout from the view.
@@ -104,11 +137,19 @@ public class CustomerHomeActivity extends AppCompatActivity
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
             View headerView = navigationView.getHeaderView(0);
-            User user = SharedPrefManager.getInstance(this).getUser();
             TextView tvUsername = headerView.findViewById(R.id.tv_username);
             String fullName = CustomUtil.setFullName(user.getName(), user.getSurname());
             tvUsername.setText(fullName);
+            ImageView imgProfile = headerView.findViewById(R.id.img_profile);
+            if (firebaseUser != null) {
+                Uri profilePicUrl = firebaseUser.getPhotoUrl();
+                if (profilePicUrl != null) {
+                    Glide.with(this).load(profilePicUrl)
+                            .into(imgProfile);
+                }
+            }
         }
+
     }
 
     /**
@@ -149,6 +190,9 @@ public class CustomerHomeActivity extends AppCompatActivity
                 return true;
 
             case R.id.nav_signout:
+                mAuth.signOut();
+                // Google sign out
+                mGoogleSignInClient.signOut();
                 startActivity(new Intent(this, LoginActivity.class));
                 SharedPrefManager.getInstance(getApplicationContext()).logout();
                 drawer.closeDrawer(GravityCompat.START);
@@ -195,6 +239,7 @@ public class CustomerHomeActivity extends AppCompatActivity
 
     /**
      * Displays a toast message.
+     *
      * @param message Message to display in toast
      */
     public void displayToast(String message) {
