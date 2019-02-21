@@ -20,9 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
+import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
-import com.example.tuhuynh.myapplication.bank.GetBankAsync;
-import com.example.tuhuynh.myapplication.bank.GetBankCallBack;
+import com.example.tuhuynh.myapplication.asynctask.GetBankAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetBankCallBack;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;

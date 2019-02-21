@@ -193,7 +193,6 @@ public class RegisterActivity extends AppCompatActivity {
                         // Getting the user from the response
                         JSONObject userJson = obj.getJSONObject("user");
                         int userID = userJson.getInt("id");
-                        String userName = userJson.getString("username");
                         String name = userJson.getString("name");
                         String email = userJson.getString("email");
                         String role = userJson.getString("role");

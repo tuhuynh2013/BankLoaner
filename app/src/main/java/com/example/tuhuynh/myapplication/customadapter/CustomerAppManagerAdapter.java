@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.customadapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -23,7 +23,7 @@ public class CustomerAppManagerAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applicationInfos;
 
-    CustomerAppManagerAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
+    public CustomerAppManagerAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects) {
         super(context, textViewResourceId, objects);
         this.applicationInfos = objects;
     }

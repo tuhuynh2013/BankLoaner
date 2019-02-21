@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.agent;
+package com.example.tuhuynh.myapplication.asynctask;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
+public class GetSharingAppsAsync extends AsyncTask<Void, Void, String> {
 
     private GetAgentAppsCallBack response;
     @SuppressLint("StaticFieldLeak")
@@ -35,14 +35,13 @@ public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
     @SuppressLint("StaticFieldLeak")
     private ProgressBar progressBar;
     private int agentID;
-    private String caller;
 
-    GetAgentAppsAsync(GetAgentAppsCallBack response, Context context, int agentID, String caller) {
+
+    public GetSharingAppsAsync(GetAgentAppsCallBack response, Context context, int agentID) {
         this.response = response;
         this.context = context;
         progressBar = ((Activity) context).findViewById(R.id.progressBar);
         this.agentID = agentID;
-        this.caller = caller;
     }
 
     @Override
@@ -57,9 +56,8 @@ public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
         RequestHandler requestHandler = new RequestHandler();
         HashMap<String, String> params = new HashMap<>();
         params.put("agent_id", Integer.toString(agentID));
-        params.put("caller", caller);
 
-        return requestHandler.sendPostRequest(URLs.URL_GET_AGENT_APPLICATIONS, params);
+        return requestHandler.sendPostRequest(URLs.URL_GET_SHARING_APPLICATIONS, params);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
             String message = obj.getString("message");
 
             // If no error in response
-            if (!obj.getBoolean("error") && message.equalsIgnoreCase(context.getString(R.string.msg_retrieve_applications_success))) {
+            if (!obj.getBoolean("error") && message.equalsIgnoreCase(context.getString(R.string.msg_retrieve_sharing_apps_success))) {
 
                 // Getting the user from the response
                 JSONArray jsonArray = obj.getJSONArray("applications");
@@ -103,29 +101,21 @@ public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
             // Get customer profile
             CustomerProfile customer = new CustomerProfile();
             customer.setId(applicationJson.getInt("customer_id"));
-            customer.setName(applicationJson.getString("customer_name"));
-            customer.setSurname(applicationJson.getString("customer_surname"));
-            customer.setRole(UserRole.CUSTOMER);
-            // Get bank information
-            BankInfo bankInfo = new BankInfo();
-            bankInfo.setId(applicationJson.getInt("bank_id"));
-            bankInfo.setName(applicationJson.getString("bank_name"));
-            // Convert date
-            Date date = CustomUtil.convertStringToDate(applicationJson.getString("date"), "default");
+            customer.setPhone(applicationJson.getString("customer_phone"));
+            customer.setSalary(applicationJson.getLong("customer_salary"));
 
             ApplicationInfo applicationInfo = new ApplicationInfo();
+            // Convert date
+            Date date = CustomUtil.convertStringToDate(applicationJson.getString("sharing_date"), "default");
             applicationInfo.setId(applicationJson.getInt("application_id"));
             applicationInfo.setMonth(applicationJson.getInt("month"));
             applicationInfo.setAmount(applicationJson.getLong("amount"));
             applicationInfo.setInterest(applicationJson.getDouble("interest"));
-            applicationInfo.setCustomer(customer);
-            applicationInfo.setBankInfo(bankInfo);
             applicationInfo.setDate(date);
-            applicationInfo.setStatus(applicationJson.getString("status"));
+            applicationInfo.setCustomer(customer);
             assignedList.add(applicationInfo);
         }
         return assignedList;
     }
-
 
 }

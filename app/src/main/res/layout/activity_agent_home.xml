@@ -124,7 +124,7 @@
         android:weightSum="2">
 
         <LinearLayout
-            android:id="@+id/lnl_shared"
+            android:id="@+id/lnl_sharing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

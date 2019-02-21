@@ -7,6 +7,7 @@
     <string name="title_assigned_applications">Assigned Applications</string>
     <string name="title_bank_applications">Bank Applications</string>
     <string name="title_application_history">Application History</string>
+    <string name="title_sharing_history">Sharing Applications</string>
 
     <!--common string-->
     <string name="id">ID</string>
@@ -159,5 +160,10 @@
 
     <!--Bank Application Activity-->
     <string name="item_assign_to_me">Assign to me</string>
+
+    <!--Sharing Application Activity-->
+    <string name="salary">Salary:</string>
+    <string name="tv_phone">Phone:</string>
+    <string name="msg_retrieve_sharing_apps_success">Retrieved list of sharing applications successful</string>
 
 </resources>

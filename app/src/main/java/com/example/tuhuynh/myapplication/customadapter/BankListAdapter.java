@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.customer;
+package com.example.tuhuynh.myapplication.customadapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,7 +21,7 @@ public class BankListAdapter extends ArrayAdapter<BankInfo> {
 
     private List<BankInfo> banks;
 
-    BankListAdapter(Context context, int textViewResourceId, List<BankInfo> objects) {
+    public BankListAdapter(Context context, int textViewResourceId, List<BankInfo> objects) {
         super(context, textViewResourceId, objects);
         this.banks = objects;
     }

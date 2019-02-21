@@ -20,6 +20,7 @@ import com.example.tuhuynh.myapplication.bank.BankInformationActivity;
 import com.example.tuhuynh.myapplication.bank.InterestAmount;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
+import com.example.tuhuynh.myapplication.customadapter.BankListAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;

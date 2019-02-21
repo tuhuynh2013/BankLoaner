@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.bank;
+package com.example.tuhuynh.myapplication.asynctask;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 

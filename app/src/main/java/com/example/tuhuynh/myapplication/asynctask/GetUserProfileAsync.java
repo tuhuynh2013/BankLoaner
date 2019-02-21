@@ -1,9 +1,8 @@
-package com.example.tuhuynh.myapplication.user;
+package com.example.tuhuynh.myapplication.asynctask;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -15,6 +14,7 @@ import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
+import com.example.tuhuynh.myapplication.user.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;

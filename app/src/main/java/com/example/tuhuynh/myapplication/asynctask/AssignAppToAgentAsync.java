@@ -1,9 +1,6 @@
-package com.example.tuhuynh.myapplication.appication;
+package com.example.tuhuynh.myapplication.asynctask;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
@@ -13,15 +10,16 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class UpdateStatusAsync extends AsyncTask<Void, Void, String> {
+public class AssignAppToAgentAsync extends AsyncTask<Void, Void, String> {
 
-    @SuppressLint("StaticFieldLeak")
-    private Context context;
-    private ApplicationInfo application;
+    private int applicationID;
+    private int agentID;
+    private String status;
 
-    public UpdateStatusAsync(Context context, ApplicationInfo application) {
-        this.context = context;
-        this.application = application;
+    public AssignAppToAgentAsync(int applicationID, int agentID, String status) {
+        this.applicationID = applicationID;
+        this.agentID = agentID;
+        this.status = status;
     }
 
     @Override
@@ -34,10 +32,11 @@ public class UpdateStatusAsync extends AsyncTask<Void, Void, String> {
         // Creating request handler object
         RequestHandler requestHandler = new RequestHandler();
         HashMap<String, String> params = new HashMap<>();
-        params.put("application_id", Integer.toString(application.getId()));
-        params.put("status", application.getStatus());
-        // Return the response
-        return requestHandler.sendPostRequest(URLs.URL_UPDATE_APPLICATION_STATUS, params);
+        params.put("application_id", Integer.toString(applicationID));
+        params.put("agent_id", Integer.toString(agentID));
+        params.put("status", status);
+
+        return requestHandler.sendPostRequest(URLs.URL_ASSIGN_AGENT, params);
     }
 
     @Override
@@ -48,8 +47,6 @@ public class UpdateStatusAsync extends AsyncTask<Void, Void, String> {
             // Converting response to json object
             JSONObject obj = new JSONObject(s);
             String message = obj.getString("message");
-
-            Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_LONG).show();
 
         } catch (JSONException e) {
             e.printStackTrace();

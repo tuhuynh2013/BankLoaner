@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.agent;
+package com.example.tuhuynh.myapplication.customadapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,9 +21,9 @@ import java.util.List;
 public class AgentAppAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applications;
-    String caller;
+    private String caller;
 
-    AgentAppAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects, String caller) {
+    public AgentAppAdapter(Context context, int textViewResourceId, List<ApplicationInfo> objects, String caller) {
         super(context, textViewResourceId, objects);
         this.applications = objects;
         this.caller = caller;

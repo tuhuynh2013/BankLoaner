@@ -1,4 +1,6 @@
-package com.example.tuhuynh.myapplication.bank;
+package com.example.tuhuynh.myapplication.asynctask;
+
+import com.example.tuhuynh.myapplication.bank.BankInfo;
 
 import java.util.List;
 
