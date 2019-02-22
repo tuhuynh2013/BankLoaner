@@ -168,6 +168,9 @@
     <!--Sharing Application Activity-->
     <string name="salary">Salary:</string>
     <string name="tv_phone">Phone:</string>
+    <string name="btn_close">Close</string>
+    <string name="tv_title">Title</string>
+    <string name="tv_content">Content</string>
     <string name="msg_retrieve_sharing_apps_success">Retrieved list of sharing applications successful</string>
 
 </resources>
