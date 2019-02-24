@@ -10,13 +10,14 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+
 public class AssignAppToAgentAsync extends AsyncTask<Void, Void, String> {
 
     private int applicationID;
-    private int agentID;
+    private String agentID;
     private String status;
 
-    public AssignAppToAgentAsync(int applicationID, int agentID, String status) {
+    public AssignAppToAgentAsync(int applicationID, String agentID, String status) {
         this.applicationID = applicationID;
         this.agentID = agentID;
         this.status = status;
@@ -33,7 +34,7 @@ public class AssignAppToAgentAsync extends AsyncTask<Void, Void, String> {
         RequestHandler requestHandler = new RequestHandler();
         HashMap<String, String> params = new HashMap<>();
         params.put("application_id", Integer.toString(applicationID));
-        params.put("agent_id", Integer.toString(agentID));
+        params.put("agent_id", agentID);
         params.put("status", status);
 
         return requestHandler.sendPostRequest(URLs.URL_ASSIGN_AGENT, params);

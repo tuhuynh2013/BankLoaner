@@ -13,14 +13,14 @@
         android:padding="10dp">
 
         <EditText
-            android:id="@+id/edt_username"
+            android:id="@+id/edt_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:hint="@string/username"
+            android:hint="@string/email"
             android:inputType="text"
-            tools:ignore="Autofill" />
+            tools:ignore="Autofill,TextFields" />
 
         <EditText
             android:id="@+id/edt_password"
@@ -34,7 +34,7 @@
             tools:ignore="Autofill" />
 
         <Button
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_sign_in"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -53,7 +53,7 @@
             android:textColor="@android:color/black" />
 
         <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
+            android:id="@+id/btn_google_sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -12,6 +12,7 @@ import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
+
 public class CustomerAppInfoActivity extends AppCompatActivity {
 
     TextView tvApplicationID, tvBankName, tvMonth, tvAmount, tvInterest, tvDate, tvStatus, tvTitleAgent, tvAgent, tvMessage;

@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <!-- User Activities -->
+        <!-- UserProfile Activities -->
         <activity android:name=".user.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
             android:name=".user.UserProfileActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
-            android:name=".user.ProfileEditorActivity"
+            android:name=".user.UserProfileEditorActivity"
             android:parentActivityName=".user.UserProfileActivity" />
         <activity
             android:name=".user.ChangePasswordActivity"

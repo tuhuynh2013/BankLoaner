@@ -1,11 +1,11 @@
 package com.example.tuhuynh.myapplication.connecthandler;
 
+
 public class URLs {
 
     private static final String ROOT_URL = "http://10.0.2.2/loginphp/Api.php?apicall=";
-    public static final String URL_REGISTER = ROOT_URL + "signup";
-    public static final String URL_GOOGLEREGISTER = ROOT_URL + "googlesignup";
-    public static final String URL_LOGIN = ROOT_URL + "login";
+    public static final String URL_REGISTER = ROOT_URL + "register";
+    public static final String URL_GOOGLE_REGISTER = ROOT_URL + "googlesignup";
     public static final String URL_GET_BANKS = ROOT_URL + "getbanks";
     public static final String URL_GET_SIMPLE_BANKS = ROOT_URL + "getsimplebanks";
     public static final String URL_GET_USER_PROFILE = ROOT_URL + "getuserprofile";

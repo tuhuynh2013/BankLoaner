@@ -1,9 +1,7 @@
 package com.example.tuhuynh.myapplication.user;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,15 +9,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.agent.AgentHomeActivity;
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
-import com.example.tuhuynh.myapplication.connecthandler.URLs;
+import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
+import com.example.tuhuynh.myapplication.asynctask.GoogleRegisterAsync;
+import com.example.tuhuynh.myapplication.asynctask.GoogleRegisterCallBack;
 import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
-import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -36,19 +33,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
+import java.util.Objects;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements GetUserProfileCallBack, GoogleRegisterCallBack {
 
-    EditText etUsername, etPassword;
+    EditText edtEmail, etdPassword;
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private UserProfile userProfile;
     private ProgressDialog pDialog;
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -57,19 +53,44 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initial element
-        etUsername = findViewById(R.id.edt_username);
-        etPassword = findViewById(R.id.edt_password);
+        mAuth = FirebaseAuth.getInstance();
+        pDialog = new ProgressDialog(this);
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
 
-        // If user presses on login, calling the method login
-        findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        SignInButton signInButton = findViewById(R.id.btn_google_sign_in);
+        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                userLogin();
+            public void onClick(View v) {
+                googleSignIn();
             }
         });
 
-        // If user presses on not registered
+        // If the userProfile is already logged in, we will start the proper activity base on userProfile's role
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            SharedPrefManager.getInstance(this).logout();
+            mAuth.signOut();
+            // Google sign out
+            mGoogleSignInClient.signOut();
+        }
+
+        // Initial element
+        edtEmail = findViewById(R.id.edt_email);
+        etdPassword = findViewById(R.id.edt_password);
+
+        // If userProfile presses on login, calling the method login
+        findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                defaulSignIn();
+            }
+        });
+
+        // If userProfile presses on not registered
         findViewById(R.id.tv_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,56 +100,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        pDialog = new ProgressDialog(LoginActivity.this);
-
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
-
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
-
-        // If the user is already logged in, we will start the proper activity base on user's role
-        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            SharedPrefManager.getInstance(this).logout();
-            mAuth.signOut();
-            // Google sign out
-            mGoogleSignInClient.signOut();
-        }
-
-    }
-
-    /**
-     * Display Progress bar while Logging in
-     */
-
-    private void displayProgressDialog() {
-        pDialog.setMessage("Logging In.. Please wait...");
-        pDialog.setIndeterminate(false);
-        pDialog.setCancelable(false);
-        pDialog.show();
-
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        googleLogin(currentUser);
+        // Check if userProfile is signed in (non-null) and update UI accordingly.
+        user = mAuth.getCurrentUser();
+        googleLogin();
+    }
+
+    private void googleSignIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     @Override
@@ -141,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                assert account != null;
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -150,216 +135,117 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acc) {
         displayProgressDialog();
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acc.getId());
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        AuthCredential credential = GoogleAuthProvider.getCredential(acc.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, update UI with the signed-in userProfile's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            googleLogin(user);
+                            user = mAuth.getCurrentUser();
+                            userProfile = new UserProfile();
+                            userProfile.setId(user.getUid());
+                            userProfile.setName(user.getDisplayName());
+                            userProfile.setEmail(user.getEmail());
+                            userProfile.setAccountType(AccountType.GOOGLE);
+                            userProfile.setRole(UserRole.CUSTOMER);
+                            googleLogin();
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If sign in fails, display a message to the userProfile.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Login Failed: ", Toast.LENGTH_SHORT).show();
+                            CustomUtil.displayToast(getApplicationContext(), "Login Failed: ");
                         }
-
-                        hideProgressDialog();
+                        pDialog.dismiss();
                     }
 
                 });
     }
 
-    private void googleLogin(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            final String email = user.getEmail();
-            final String name = user.getDisplayName();
-            // If it passes all the validations
-            @SuppressLint("StaticFieldLeak")
-            class RegisterUser extends AsyncTask<Void, Void, String> {
-
-                private ProgressBar progressBar;
-
-                @Override
-                protected String doInBackground(Void... voids) {
-                    // Creating request handler object
-                    RequestHandler requestHandler = new RequestHandler();
-
-                    // Creating request parameters
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("name", name);
-                    params.put("email", email);
-                    params.put("role", UserRole.CUSTOMER);
-
-                    // Return the response
-                    return requestHandler.sendPostRequest(URLs.URL_GOOGLEREGISTER, params);
-                }
-
-                @Override
-                protected void onPreExecute() {
-                    super.onPreExecute();
-                    // Displaying the progress bar while user registers on the server
-                    progressBar = findViewById(R.id.progressBar);
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                protected void onPostExecute(String s) {
-                    super.onPostExecute(s);
-                    // Hiding the progressbar after completion
-                    progressBar.setVisibility(View.GONE);
-
-                    try {
-                        // Converting response to json object
-                        JSONObject obj = new JSONObject(s);
-                        String message = obj.getString("message");
-
-                        // If no error in response
-                        if (!obj.getBoolean("error")) {
-                            // Getting the user from the response
-                            JSONObject userJson = obj.getJSONObject("user");
-                            int userID = userJson.getInt("id");
-                            String name = userJson.getString("name");
-                            String email = userJson.getString("email");
-                            String role = userJson.getString("role");
-
-                            // Create object base on user role
-                            if (role.equalsIgnoreCase(UserRole.CUSTOMER)) {
-                                CustomerProfile customer = new CustomerProfile();
-                                customer.setId(userID);
-                                customer.setUsername(email);
-                                customer.setName(name);
-                                customer.setEmail(email);
-                                customer.setRole(role);
-                                customer.setAccountType(AccountType.GOOGLE);
-                                // Storing the user in shared preferences
-                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(customer);
-                            }
-                            // Starting the profile activity
-                            startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
-                            finish();
-                        }
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            // Executing the async task
-            RegisterUser ru = new RegisterUser();
-            ru.execute();
-        }
-    }
-
-    private void hideProgressDialog() {
+    private void googleLogin() {
         pDialog.dismiss();
+        new GoogleRegisterAsync(this, this, userProfile).execute();
     }
 
-    private void userLogin() {
+    @Override
+    public void responseFromGoogleRegisterCallBack(String msg) {
+        if (msg.equalsIgnoreCase(getString(R.string.db_login_success)) ||
+                msg.equalsIgnoreCase(getString(R.string.db_first_time_google_acc))) {
+            setUserSession(userProfile);
+            CustomUtil.displayToast(getApplicationContext(), msg);
+        }
+        CustomUtil.displayToast(getApplicationContext(), msg);
+    }
+
+    private void defaulSignIn() {
         // First getting the values
-        final String username = etUsername.getText().toString();
-        final String password = etPassword.getText().toString();
+        final String email = edtEmail.getText().toString();
+        final String password = etdPassword.getText().toString();
 
         // Validating inputs
-        if (CustomUtil.isIncorrectUsername(username)) {
-            etUsername.setError(getString(R.string.error_invalid_username));
-            etUsername.requestFocus();
+        if (CustomUtil.isIncorrectUsername(email)) {
+            edtEmail.setError(getString(R.string.error_invalid_email));
+            edtEmail.requestFocus();
             return;
-        } else if (TextUtils.isEmpty(username)) {
-            etUsername.setError(getString(R.string.error_empty_username));
-            etUsername.requestFocus();
+        } else if (TextUtils.isEmpty(email)) {
+            edtEmail.setError(getString(R.string.error_empty_email));
+            edtEmail.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            etPassword.setError(getString(R.string.error_empty_password));
-            etPassword.requestFocus();
+            etdPassword.setError(getString(R.string.error_empty_password));
+            etdPassword.requestFocus();
             return;
         }
 
-        // If everything is fine
-        @SuppressLint("StaticFieldLeak")
-        class UserLogin extends AsyncTask<Void, Void, String> {
-
-            private ProgressBar progressBar;
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressBar = findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                // Creating request handler object
-                RequestHandler requestHandler = new RequestHandler();
-
-                // Creating request parameters
-                HashMap<String, String> params = new HashMap<>();
-                params.put("username", username);
-                params.put("password", password);
-
-                //returning the response
-                return requestHandler.sendPostRequest(URLs.URL_LOGIN, params);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                progressBar.setVisibility(View.GONE);
-
-                try {
-                    // Converting response to json object
-                    JSONObject obj = new JSONObject(s);
-                    String message = obj.getString("message");
-
-                    // If no error in response
-                    if (!obj.getBoolean("error") && !message.equalsIgnoreCase(getString(R.string.error_username_password))) {
-                        // Getting the user from the response
-                        JSONObject userJson = obj.getJSONObject("user");
-                        // Creating a new user object
-                        User user = new User(
-                                userJson.getInt("id"),
-                                userJson.getString("username"),
-                                userJson.getString("name"),
-                                userJson.getString("email"),
-                                userJson.getString("role")
-                        );
-                        user.setAccountType(AccountType.DEFAULT);
-                        // Storing the user in shared preferences
-                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-
-                        navigateBaseOnRole(user.getRole());
-                    } else {
-                        etPassword.getText().clear();
-                        etPassword.setError(message);
-                        etPassword.requestFocus();
-                        return;
+        // Display progress dialog
+        displayProgressDialog();
+        // Logging in with email and password
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        pDialog.dismiss();
+                        // If the task is successful
+                        if (task.isSuccessful()) {
+                            user = mAuth.getCurrentUser();
+                            assert user != null;
+                            userProfile = new UserProfile();
+                            userProfile.setId(user.getUid());
+                            userProfile.setAccountType(AccountType.DEFAULT);
+                            setUserSession(userProfile);
+                            CustomUtil.displayToast(getApplicationContext(), getString(R.string.db_login_success));
+                        } else {
+                            etdPassword.getText().clear();
+                            etdPassword.setError(Objects.requireNonNull(task.getException()).getMessage());
+                            etdPassword.requestFocus();
+                        }
                     }
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        UserLogin ul = new UserLogin();
-        ul.execute();
+                });
     }
 
+    private void setUserSession(UserProfile userProfile) {
+        new GetUserProfileAsync(this, getApplicationContext(), userProfile).execute();
+    }
+
+    @Override
+    public void responseFromGetUserProfile(Object object) {
+        UserProfile userProfile = (UserProfile) object;
+        // Storing the userProfile in shared preferences
+        SharedPrefManager.getInstance(getApplicationContext()).userLogin(userProfile);
+        // Start the profile activity
+        finish();
+        navigateBaseOnRole(userProfile.getRole());
+    }
+
+    /**
+     * Navigate user to proper screen base on their role
+     */
     private void navigateBaseOnRole(String userRole) {
         if (userRole.equalsIgnoreCase(UserRole.CUSTOMER)) {
             startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
@@ -368,5 +254,16 @@ public class LoginActivity extends AppCompatActivity {
         }
         finish();
     }
+
+    /**
+     * Display Progress bar while Logging in
+     */
+    private void displayProgressDialog() {
+        pDialog.setMessage(getString(R.string.msg_login));
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        pDialog.show();
+    }
+
 
 }

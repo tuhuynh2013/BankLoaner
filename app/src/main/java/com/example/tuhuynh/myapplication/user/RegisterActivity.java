@@ -1,37 +1,40 @@
 package com.example.tuhuynh.myapplication.user;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tuhuynh.myapplication.agent.AgentProfile;
-import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
-import com.example.tuhuynh.myapplication.customer.CustomerProfile;
+import com.example.tuhuynh.myapplication.asynctask.RegisterUserAsync;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
-import com.example.tuhuynh.myapplication.connecthandler.URLs;
-import com.example.tuhuynh.myapplication.util.SharedPrefManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Objects;
 
-import java.util.HashMap;
 
+@SuppressLint("Registered")
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText edtName, edtUsername, edtEmail, edtIdentity, edtPassword, edtConfirmPassword;
+    EditText edtName, edtEmail, edtPassword, edtConfirmPassword;
     TextView tvLogin;
     Button btnRegister;
+    private ProgressDialog progressDialog;
+
+    // Defining firebase auth object
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +42,21 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         setTitle(getString(R.string.title_register));
 
-        edtUsername = findViewById(R.id.edt_username);
         edtName = findViewById(R.id.edt_name);
         edtEmail = findViewById(R.id.edt_email);
-        edtIdentity = findViewById(R.id.edt_identity);
         edtPassword = findViewById(R.id.edt_password);
         edtConfirmPassword = findViewById(R.id.edt_confirm_password);
         btnRegister = findViewById(R.id.btn_register);
         tvLogin = findViewById(R.id.tv_login);
 
+        // Initializing firebase auth object
+        mAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // If user pressed on button register, we will register the user to server
+                // If userProfile pressed on button register, we will register the userProfile to server
                 registerUser();
             }
         });
@@ -59,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // If user pressed on login, we will open the login screen
+                // If userProfile pressed on login, we will open the login screen
                 finish();
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             }
@@ -71,26 +76,12 @@ public class RegisterActivity extends AppCompatActivity {
      * Function uses to validate input and process register
      */
     private void registerUser() {
-        final String username = edtUsername.getText().toString().trim();
+
         final String capitalName;
         String name = edtName.getText().toString().trim();
         final String email = edtEmail.getText().toString().trim();
-        final String identity = edtIdentity.getText().toString().trim();
         final String password = edtPassword.getText().toString().trim();
         final String confirmPassword = edtConfirmPassword.getText().toString().trim();
-
-        // First we will do the validations
-        if (TextUtils.isEmpty(username)) {
-            edtUsername.setError(getString(R.string.error_empty_username));
-            edtUsername.requestFocus();
-            return;
-        } else {
-            if (CustomUtil.isIncorrectUsername(username)) {
-                edtUsername.setError(getString(R.string.error_invalid_username));
-                edtUsername.requestFocus();
-                return;
-            }
-        }
 
         if (TextUtils.isEmpty(name)) {
             edtName.setError(getString(R.string.error_empty_name));
@@ -116,17 +107,6 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // Check identity number
-        if (TextUtils.isEmpty(identity)) {
-            edtIdentity.setError(getString(R.string.error_empty_identity));
-            edtIdentity.requestFocus();
-            return;
-        } else if (!CustomUtil.isCorrectIdentity(identity)) {
-            edtIdentity.setError(getString(R.string.error_invalid_identity));
-            edtIdentity.requestFocus();
-            return;
-        }
-
         if (TextUtils.isEmpty(password)) {
             edtPassword.setError(getString(R.string.error_empty_password));
             edtPassword.requestFocus();
@@ -145,97 +125,34 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // If it passes all the validations
-        @SuppressLint("StaticFieldLeak")
-        class RegisterUser extends AsyncTask<Void, Void, String> {
+        // If the email and password are not empty, displaying a progress dialog
+        progressDialog.setMessage("Registering Please Wait...");
+        progressDialog.show();
 
-            private ProgressBar progressBar;
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                // Creating request handler object
-                RequestHandler requestHandler = new RequestHandler();
-
-                // Creating request parameters
-                HashMap<String, String> params = new HashMap<>();
-                params.put("username", username);
-                params.put("name", capitalName);
-                params.put("email", email);
-                params.put("identity", identity);
-                params.put("password", password);
-                params.put("role", UserRole.CUSTOMER);
-
-                // Return the response
-                return requestHandler.sendPostRequest(URLs.URL_REGISTER, params);
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                // Displaying the progress bar while user registers on the server
-                progressBar = findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                // Hiding the progressbar after completion
-                progressBar.setVisibility(View.GONE);
-
-                try {
-                    // Converting response to json object
-                    JSONObject obj = new JSONObject(s);
-                    String message = obj.getString("message");
-
-                    // If no error in response
-                    if (!obj.getBoolean("error")) {
-                        // Getting the user from the response
-                        JSONObject userJson = obj.getJSONObject("user");
-                        int userID = userJson.getInt("id");
-                        String name = userJson.getString("name");
-                        String email = userJson.getString("email");
-                        String role = userJson.getString("role");
-
-                        // Create object base on user role
-                        if (role.equalsIgnoreCase(UserRole.CUSTOMER)) {
-                            CustomerProfile customer = new CustomerProfile();
-                            customer.setId(userID);
-                            customer.setUsername(username);
-                            customer.setName(name);
-                            customer.setEmail(email);
-                            customer.setRole(role);
-                            customer.setAccountType(AccountType.DEFAULT);
-                            // Storing the user in shared preferences
-                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(customer);
-                        } else if (role.equalsIgnoreCase(UserRole.AGENT)) {
-                            AgentProfile agent = new AgentProfile();
-                            agent.setId(userID);
-                            agent.setUsername(username);
-                            agent.setName(name);
-                            agent.setEmail(email);
-                            agent.setRole(role);
-                            agent.setAccountType(AccountType.DEFAULT);
-                            // Storing the user in shared preferences
-                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(agent);
+        // Creating a new userProfile
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        //checking if success
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            assert user != null;
+                            UserProfile userProfile = new UserProfile();
+                            userProfile.setId(user.getUid());
+                            userProfile.setName(capitalName);
+                            userProfile.setEmail(email);
+                            userProfile.setRole(UserRole.CUSTOMER);
+                            new RegisterUserAsync(getApplicationContext(), userProfile).execute();
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), UserProfileEditorActivity.class));
+                        } else {
+                            //display some message here
+                            Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                         }
-                        // Starting the profile activity
-                        startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
-                        finish();
+                        progressDialog.dismiss();
                     }
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
-        // Executing the async task
-        RegisterUser ru = new RegisterUser();
-        ru.execute();
-
+                });
     }
 
 

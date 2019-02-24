@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.example.tuhuynh.myapplication.customer.BankListFragment;
 import com.example.tuhuynh.myapplication.customer.CustomerAppManagerFragment;
 
+
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
     private int mNumOfTabs;

@@ -2,13 +2,13 @@ package com.example.tuhuynh.myapplication.user;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
 
-    private int id;
-    private String username;
+public class UserProfile implements Serializable {
+
+    private String id;
     private String name;
-    private String email;
     private String surname;
+    private String email;
     private String identity;
     private String gender;
     private String phone;
@@ -16,36 +16,12 @@ public class User implements Serializable {
     private String role;
     private String accountType;
 
-    protected User() {
+    protected UserProfile() {
 
     }
 
-    public User(int id, String username, String name, String email, String role) {
-        setId(id);
-        setUsername(username);
-        setName(name);
-        setEmail(email);
-        setRole(role);
-    }
-
-    public User(int id, String username, String name, String email, String role, String accountType) {
-        setId(id);
-        setUsername(username);
-        setName(name);
-        setEmail(email);
-        setRole(role);
-        setAccountType(accountType);
-    }
-
-    public User(String name, String surname, String gender, String phone, String address) {
-        setName(name);
-        setSurname(surname);
-        setGender(gender);
-        setPhone(phone);
-        setAddress(address);
-    }
-
-    public User(int id, String name, String surname, String identity, String gender, String phone, String address, String role) {
+    // Uses for update user profile
+    public UserProfile(String id, String name, String surname, String identity, String gender, String phone, String address) {
         setId(id);
         setName(name);
         setSurname(surname);
@@ -53,23 +29,41 @@ public class User implements Serializable {
         setGender(gender);
         setPhone(phone);
         setAddress(address);
+    }
+
+    // Uses for AgentProfile and CustomerProfile
+    public UserProfile(String id, String name, String surname, String email, String identity, String gender, String phone, String address, String role) {
+        setId(id);
+        setName(name);
+        setSurname(surname);
+        setEmail(email);
+        setIdentity(identity);
+        setGender(gender);
+        setPhone(phone);
+        setAddress(address);
         setRole(role);
     }
 
-    public int getId() {
+    // Uses for SharedPrefManager
+    public UserProfile(String id, String name, String surname, String email, String identity, String gender, String phone, String address, String role, String accountType) {
+        setId(id);
+        setName(name);
+        setSurname(surname);
+        setEmail(email);
+        setIdentity(identity);
+        setGender(gender);
+        setPhone(phone);
+        setAddress(address);
+        setRole(role);
+        setAccountType(accountType);
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getName() {
@@ -135,7 +129,6 @@ public class User implements Serializable {
     public void setRole(String role) {
         this.role = role;
     }
-
 
     public String getAccountType() {
         return accountType;

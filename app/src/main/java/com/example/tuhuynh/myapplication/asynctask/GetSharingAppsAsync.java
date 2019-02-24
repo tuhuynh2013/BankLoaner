@@ -9,11 +9,9 @@ import android.widget.ProgressBar;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
-import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
-import com.example.tuhuynh.myapplication.user.UserRole;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import org.json.JSONArray;
@@ -27,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class GetSharingAppsAsync extends AsyncTask<Void, Void, String> {
 
     private GetAgentAppsCallBack response;
@@ -34,10 +33,10 @@ public class GetSharingAppsAsync extends AsyncTask<Void, Void, String> {
     private Context context;
     @SuppressLint("StaticFieldLeak")
     private ProgressBar progressBar;
-    private int agentID;
+    private String agentID;
 
 
-    public GetSharingAppsAsync(GetAgentAppsCallBack response, Context context, int agentID) {
+    public GetSharingAppsAsync(GetAgentAppsCallBack response, Context context, String agentID) {
         this.response = response;
         this.context = context;
         progressBar = ((Activity) context).findViewById(R.id.progressBar);
@@ -55,7 +54,7 @@ public class GetSharingAppsAsync extends AsyncTask<Void, Void, String> {
         // Creating request handler object
         RequestHandler requestHandler = new RequestHandler();
         HashMap<String, String> params = new HashMap<>();
-        params.put("agent_id", Integer.toString(agentID));
+        params.put("agent_id", agentID);
 
         return requestHandler.sendPostRequest(URLs.URL_GET_SHARING_APPLICATIONS, params);
     }
@@ -100,7 +99,7 @@ public class GetSharingAppsAsync extends AsyncTask<Void, Void, String> {
             JSONObject applicationJson = jsonArray.getJSONObject(i);
             // Get customer profile
             CustomerProfile customer = new CustomerProfile();
-            customer.setId(applicationJson.getInt("customer_id"));
+            customer.setId(applicationJson.getString("customer_id"));
             customer.setPhone(applicationJson.getString("customer_phone"));
             customer.setSalary(applicationJson.getLong("customer_salary"));
 

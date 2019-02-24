@@ -21,15 +21,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GetBankAsync extends AsyncTask<Void, Void, String> {
 
-    private GetBankCallBack response;
+public class GetBanksAsync extends AsyncTask<Void, Void, String> {
+
+    private GetBanksCallBack response;
     @SuppressLint("StaticFieldLeak")
     private Context context;
     @SuppressLint("StaticFieldLeak")
     private ProgressBar progressBar;
 
-    public GetBankAsync(GetBankCallBack response, Context context) {
+    public GetBanksAsync(GetBanksCallBack response, Context context) {
         this.response = response;
         this.context = context;
         progressBar = ((Activity) context).findViewById(R.id.progressBar);
@@ -67,7 +68,7 @@ public class GetBankAsync extends AsyncTask<Void, Void, String> {
                 // Getting the user from the response
                 JSONArray jsonArray = obj.getJSONArray("banks");
                 List<BankInfo> banks = extractBanklist(jsonArray);
-                response.responseFromAsync(banks);
+                response.responseFromGetBanks(banks);
 
             } else {
                 Toast.makeText(context, R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();

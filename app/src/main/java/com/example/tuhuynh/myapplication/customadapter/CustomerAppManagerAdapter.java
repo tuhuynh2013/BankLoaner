@@ -19,6 +19,7 @@ import com.example.tuhuynh.myapplication.util.CustomUtil;
 import java.util.Date;
 import java.util.List;
 
+
 public class CustomerAppManagerAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applicationInfos;

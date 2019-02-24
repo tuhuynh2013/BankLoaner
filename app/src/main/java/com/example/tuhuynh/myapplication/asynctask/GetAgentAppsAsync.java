@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
 
     private GetAgentAppsCallBack response;
@@ -34,10 +35,10 @@ public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
     private Context context;
     @SuppressLint("StaticFieldLeak")
     private ProgressBar progressBar;
-    private int agentID;
+    private String agentID;
     private String caller;
 
-    public GetAgentAppsAsync(GetAgentAppsCallBack response, Context context, int agentID, String caller) {
+    public GetAgentAppsAsync(GetAgentAppsCallBack response, Context context, String agentID, String caller) {
         this.response = response;
         this.context = context;
         progressBar = ((Activity) context).findViewById(R.id.progressBar);
@@ -56,7 +57,7 @@ public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
         // Creating request handler object
         RequestHandler requestHandler = new RequestHandler();
         HashMap<String, String> params = new HashMap<>();
-        params.put("agent_id", Integer.toString(agentID));
+        params.put("agent_id", agentID);
         params.put("caller", caller);
 
         return requestHandler.sendPostRequest(URLs.URL_GET_AGENT_APPLICATIONS, params);
@@ -102,7 +103,7 @@ public class GetAgentAppsAsync extends AsyncTask<Void, Void, String> {
             JSONObject applicationJson = jsonArray.getJSONObject(i);
             // Get customer profile
             CustomerProfile customer = new CustomerProfile();
-            customer.setId(applicationJson.getInt("customer_id"));
+            customer.setId(applicationJson.getString("customer_id"));
             customer.setName(applicationJson.getString("customer_name"));
             customer.setSurname(applicationJson.getString("customer_surname"));
             customer.setRole(UserRole.CUSTOMER);

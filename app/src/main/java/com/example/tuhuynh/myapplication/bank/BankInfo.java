@@ -3,6 +3,7 @@ package com.example.tuhuynh.myapplication.bank;
 import java.io.Serializable;
 import java.util.List;
 
+
 public class BankInfo implements Serializable {
     /*TODO add description*/
     private int id;

@@ -24,11 +24,20 @@
     <string name="sign_out">Sign out</string>
     <string name="tv_sign_up">"Don't have an account?\nRegister Here</string>
     <string name="tv_login">Already Registered?\nLog in Here</string>
-
     <string name="male">Male</string>
     <string name="female">Female</string>
 
-    <!--error messages-->
+    <!--Login Activity-->
+    <string name="msg_login">Logging In.. Please wait…</string>
+
+    <!--Database success messages-->
+    <string name="db_success_retrieved_customer_profile">Retrieve customer profile successful</string>
+    <string name="db_success_retrieved_agent_profile">Retrieve agent profile successful</string>
+    <string name="db_login_success">Login successful</string>
+    <string name="db_first_time_google_acc">First time login with Google account</string>
+
+    <!--Database error messages-->
+    <string name="error_retrieve_fail">Fail to retrieve data</string>
     <string name="error_username_password">Invalid username or password</string>
     <string name="error_empty_username">Please enter your username</string>
     <string name="error_invalid_username">Username is invalid</string>
@@ -74,7 +83,7 @@
     <string name="debit_amount">Debit amount</string>
     <string name="calculate">Calculate</string>
     <string name="msg_retrieve_banklist_success">Retrieve list of banks successful</string>
-    <string name="error_retrieve_fail">Fail to retrieve data</string>
+
 
     <!--Bank Info-->
     <string name="month">Month</string>
@@ -105,9 +114,7 @@
     <string name="hint_salary">Your salary</string>
     <string name="hint_bank_account">Your bank account</string>
     <string name="save_change">Save change</string>
-    <string name="msg_retrieve_customer_info_success">Retrieve customer information successful</string>
-    <string name="msg_retrieve_agent_info_success">Retrieve agent information successful</string>
-    <string name="msg_update_user_successfully">Update user successfully</string>
+    <string name="msg_update_user_successfully">Update userProfile successfully</string>
     <string name="msg_update_customer_successfully">Update customer successfully</string>
     <string name="msg_update_agent_successfully">Update agent successfully</string>
     <string name="msg_update_successfully">Update successfully</string>
@@ -132,6 +139,7 @@
     <string name="tv_agent">Agent:</string>
     <string name="hint_agent">Agent</string>
     <string name="msg_submit_success">Success to submit application</string>
+    <string name="dialog_title_term">Term</string>
 
     <!--Application Manager-->
     <string name="hint_date">Date</string>

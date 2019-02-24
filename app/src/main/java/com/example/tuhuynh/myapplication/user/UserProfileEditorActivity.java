@@ -1,9 +1,7 @@
 package com.example.tuhuynh.myapplication.user;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -12,52 +10,44 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
+import com.example.tuhuynh.myapplication.asynctask.UpdateAgentProfileAsync;
+import com.example.tuhuynh.myapplication.asynctask.UpdateAgentProfileCallBack;
+import com.example.tuhuynh.myapplication.asynctask.UpdateCustomerProfileAsync;
+import com.example.tuhuynh.myapplication.asynctask.UpdateCustomerProfileCallBack;
+import com.example.tuhuynh.myapplication.asynctask.UpdateUserProfileAsync;
+import com.example.tuhuynh.myapplication.asynctask.UpdateUserProfileCallBack;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
-import com.example.tuhuynh.myapplication.asynctask.GetBankAsync;
-import com.example.tuhuynh.myapplication.asynctask.GetBankCallBack;
+import com.example.tuhuynh.myapplication.asynctask.GetBanksAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetBanksCallBack;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
-import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class ProfileEditorActivity extends AppCompatActivity implements GetUserProfileCallBack, GetBankCallBack {
 
-    private TextView tvUsername;
+public class UserProfileEditorActivity extends AppCompatActivity implements GetUserProfileCallBack, GetBanksCallBack,
+        UpdateUserProfileCallBack, UpdateCustomerProfileCallBack, UpdateAgentProfileCallBack {
+
     private TextView tvEmail;
-    private TextView tvIdentity;
-    private EditText edtName;
-    private EditText edtSurname;
-    private EditText edtPhone;
-    private EditText edtAddress;
-    private EditText edtEmployment;
-    private EditText edtCompany;
-    private EditText edtSalary;
-    private EditText edtBankAccount;
+    private EditText edtName, edtSurname, edtIdentity, edtPhone, edtAddress, edtEmployment,
+            edtCompany, edtSalary, edtBankAccount;
     private RadioGroup rdgGender;
     private RadioButton rdMale, rdFemale;
     private Spinner spinBankName;
     private Button btnSave;
 
-    User user;
+    UserProfile userProfile;
     List<BankInfo> banks;
     List<String> bankNames = new ArrayList<>();
 
@@ -67,13 +57,13 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         setContentView(R.layout.activity_profile_editor);
         setTitle(getString(R.string.title_update_profile));
 
-        // If the user is not logged in, starting the login activity
+        // If the userProfile is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            // Getting the current user
-            user = SharedPrefManager.getInstance(this).getUser();
+            // Getting the current userProfile
+            userProfile = SharedPrefManager.getInstance(this).getUser();
         }
 
         // Turn off Up navigation, when called from LoanApplication
@@ -111,9 +101,8 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         // Initial element
         edtName = findViewById(R.id.edt_name);
         edtSurname = findViewById(R.id.edt_surname);
-        tvUsername = findViewById(R.id.tv_username);
+        edtIdentity = findViewById(R.id.edt_identity);
         tvEmail = findViewById(R.id.tv_email);
-        tvIdentity = findViewById(R.id.tv_identity);
         rdgGender = findViewById(R.id.rdg_gender);
         rdMale = findViewById(R.id.rd_male);
         rdFemale = findViewById(R.id.rd_female);
@@ -131,10 +120,10 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         spinBankName = findViewById(R.id.spin_bank_name);
         btnSave = findViewById(R.id.btn_save);
 
-        if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
+        if (userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
             tvBank.setVisibility(View.GONE);
             spinBankName.setVisibility(View.GONE);
-        } else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
+        } else if (userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
             tvEmployment.setVisibility(View.GONE);
             edtEmployment.setVisibility(View.GONE);
             tvCompany.setVisibility(View.GONE);
@@ -145,21 +134,21 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
             edtBankAccount.setVisibility(View.GONE);
 
             // Get bank info from db
-            new GetBankAsync(this, this).execute();
+            new GetBanksAsync(this, this).execute();
 
         }
-        // Retrieve user profile from db
-        new GetUserProfileAsync(this, this, user).execute();
+        // Retrieve userProfile profile from db
+        new GetUserProfileAsync(this, this, userProfile).execute();
     }
 
     /**
-     * Uses to get user profile from db
+     * Uses to get userProfile profile from db
      * and set content for profile editor screen
      */
     @Override
-    public void responseFromAsync(Object object) {
+    public void responseFromGetUserProfile(Object object) {
         // Setting the values to the textviews
-        User userProfile = (User) object;
+        UserProfile userProfile = (UserProfile) object;
 
         String surname = userProfile.getSurname();
         String identity = userProfile.getIdentity();
@@ -169,18 +158,17 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
 
         // Section to check if values are available to display on screen
         edtName.setText(userProfile.getName());
-        tvUsername.setText(user.getUsername());
-        tvEmail.setText(user.getEmail());
+        tvEmail.setText(this.userProfile.getEmail());
 
-        if (CustomUtil.hasMeaning(surname)) {
+        if (!TextUtils.isEmpty(surname)) {
             edtSurname.setText(surname);
         }
 
-        if (CustomUtil.hasMeaning(identity)) {
-            tvIdentity.setText(identity);
+        if (!TextUtils.isEmpty(identity)) {
+            edtIdentity.setText(identity);
         }
 
-        if (CustomUtil.hasMeaning(gender)) {
+        if (!TextUtils.isEmpty(gender)) {
             if (gender.equalsIgnoreCase(rdMale.getText().toString())) {
                 rdMale.setChecked(true);
             } else if (gender.equalsIgnoreCase(rdFemale.getText().toString())) {
@@ -190,27 +178,27 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
             }
         }
 
-        if (CustomUtil.hasMeaning(phone)) {
+        if (!TextUtils.isEmpty(phone)) {
             edtPhone.setText(phone);
         }
 
-        if (CustomUtil.hasMeaning(address)) {
+        if (!TextUtils.isEmpty(address)) {
             edtAddress.setText(address);
         }
 
         // Customer section
-        if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
+        if (this.userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
             CustomerProfile customer = (CustomerProfile) object;
             String employment = customer.getEmployment();
             String company = customer.getCompany();
             Long salary = customer.getSalary();
             String bankAccount = customer.getBankAccount();
 
-            if (CustomUtil.hasMeaning(employment)) {
+            if (!TextUtils.isEmpty(employment)) {
                 edtEmployment.setText(employment);
             }
 
-            if (CustomUtil.hasMeaning(company)) {
+            if (!TextUtils.isEmpty(company)) {
                 edtCompany.setText(company);
             }
 
@@ -219,16 +207,16 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
                 edtSalary.setText(strSalary);
             }
 
-            if (CustomUtil.hasMeaning(bankAccount)) {
+            if (!TextUtils.isEmpty(bankAccount)) {
                 edtBankAccount.setText(bankAccount);
             }
         }
         // Agent section
-        else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
+        else if (this.userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
             AgentProfile agent = (AgentProfile) object;
             String bankName = agent.getWorkBank().getName();
             // Set value for spinner
-            if (CustomUtil.hasMeaning(bankName)) {
+            if (!TextUtils.isEmpty(bankName)) {
                 for (int i = 0; i < spinBankName.getAdapter().getCount(); i++) {
                     if (spinBankName.getAdapter().getItem(i).toString().contains(bankName)) {
                         spinBankName.setSelection(i);
@@ -240,11 +228,12 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
     }
 
     /**
-     * Validate in put value and execute update user profile function
+     * Validate in put value and execute update userProfile profile function
      */
     private void updateUserProfile() {
         String name = edtName.getText().toString().trim();
         String surname = edtSurname.getText().toString().trim();
+        String identity = edtIdentity.getText().toString().trim();
         // Get checked value of gender
         RadioButton rd = findViewById(rdgGender.getCheckedRadioButtonId());
         String gender = rd.getText().toString();
@@ -254,6 +243,10 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         // Check name
         if (TextUtils.isEmpty(name)) {
             edtName.setError(getString(R.string.error_empty_name));
+            edtName.requestFocus();
+            return;
+        } else if (CustomUtil.isIncorrectName(name)) {
+            edtName.setError(getString(R.string.error_invalid_name));
             edtName.requestFocus();
             return;
         } else {
@@ -271,6 +264,17 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
             return;
         } else {
             surname = CustomUtil.capitalFirstLetter(surname);
+        }
+
+        // Check identity
+        if (TextUtils.isEmpty(identity)) {
+            edtIdentity.setError(getString(R.string.error_empty_identity));
+            edtIdentity.requestFocus();
+            return;
+        } else if (CustomUtil.isCorrectIdentity(identity)) {
+            edtIdentity.setError(getString(R.string.error_invalid_identity));
+            edtIdentity.requestFocus();
+            return;
         }
 
         // Check phone number
@@ -291,106 +295,24 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
             return;
         }
 
-        // Execute update user profile
-        User updateUser = new User(name, surname, gender, phone, address);
-        new UpdateUserProfile(updateUser).execute();
-
-        if (user.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
-            updateCustomerProfile();
-        } else if (user.getRole().equalsIgnoreCase(UserRole.AGENT)) {
-            updateAgentProfile();
-        }
+        // Execute update userProfile profile
+        UserProfile updateUserProfile = new UserProfile(userProfile.getId(), name, surname, identity, gender, phone, address);
+        new UpdateUserProfileAsync(this, this, updateUserProfile).execute();
 
     }
 
-    /**
-     * Get list of banks
-     */
     @Override
-    public void responseFromAsync(List<BankInfo> banks) {
-        this.banks = banks;
-        for (BankInfo bankInfo : banks) {
-            bankNames.add(bankInfo.getName());
-        }
-        // Initial spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, bankNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        spinBankName.setAdapter(adapter);
-        spinBankName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
+    public void responseFromUpdateUserProfile(String msg) {
+        // If update UserProfile success, execute update CustomerProfile or AgentProfile
+        if (msg.equalsIgnoreCase(getString(R.string.msg_update_user_successfully))) {
+            if (userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
+                updateCustomerProfile();
+            } else if (userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
+                updateAgentProfile();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-
-    /**
-     * Request update user profile to db
-     */
-    @SuppressLint("StaticFieldLeak")
-    class UpdateUserProfile extends AsyncTask<Void, Void, String> {
-
-        User updateUser;
-
-        private UpdateUserProfile(User updateUser) {
-            this.updateUser = updateUser;
+        } else {
+            CustomUtil.displayToast(getApplicationContext(), msg);
         }
-
-        private ProgressBar progressBar;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar = findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            // Creating request handler object
-            RequestHandler requestHandler = new RequestHandler();
-            HashMap<String, String> params = new HashMap<>();
-            params.put("id", Integer.toString(user.getId()));
-            params.put("name", updateUser.getName());
-            params.put("username", user.getUsername());
-            params.put("surname", updateUser.getSurname());
-            params.put("gender", updateUser.getGender());
-            params.put("phone", updateUser.getPhone());
-            params.put("address", updateUser.getAddress());
-            // Return the response
-            return requestHandler.sendPostRequest(URLs.URL_UPDATE_USER_PROFILE, params);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            progressBar.setVisibility(View.GONE);
-
-            try {
-                // Converting response to json object
-                JSONObject obj = new JSONObject(s);
-                String message = obj.getString("message");
-                // If no error in response
-                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_update_user_successfully))) {
-                    Toast.makeText(getApplicationContext(), R.string.msg_update_successfully, Toast.LENGTH_LONG).show();
-                    // ToDo
-                    returnIntent(Activity.RESULT_OK, getString(R.string.msg_update_successfully));
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.msg_update_not_successfully, Toast.LENGTH_LONG).show();
-                    // Todo
-                    returnIntent(Activity.RESULT_CANCELED, getString(R.string.msg_update_not_successfully));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 
     /**
@@ -435,74 +357,26 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
         }
 
         CustomerProfile customerProfile = new CustomerProfile(employment, company, salary, bankAccount);
-        new UpdateCustomerProfile(customerProfile).execute();
+        new UpdateCustomerProfileAsync(this, this, customerProfile).execute();
 
     }
 
-    /**
-     * Request update customer profile to db
-     */
-    @SuppressLint("StaticFieldLeak")
-    class UpdateCustomerProfile extends AsyncTask<Void, Void, String> {
-
-        CustomerProfile updateCustomer;
-
-        private UpdateCustomerProfile(CustomerProfile customerProfile) {
-            this.updateCustomer = customerProfile;
+    @Override
+    public void responseFromUpdateCustomerProfile(String msg) {
+        // If update CustomerProfile success, return intent result
+        if (msg.equalsIgnoreCase(getString(R.string.msg_update_customer_successfully))) {
+            returnIntent(Activity.RESULT_OK, msg);
+        } else {
+            returnIntent(Activity.RESULT_CANCELED, msg);
         }
-
-        private ProgressBar progressBar;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar = findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            // Creating request handler object
-            RequestHandler requestHandler = new RequestHandler();
-            HashMap<String, String> params = new HashMap<>();
-            params.put("id", Integer.toString(user.getId()));
-            params.put("employment", updateCustomer.getEmployment());
-            params.put("company", updateCustomer.getCompany());
-            params.put("salary", Long.toString(updateCustomer.getSalary()));
-            params.put("bank_account", updateCustomer.getBankAccount());
-            // Return the response
-            return requestHandler.sendPostRequest(URLs.URL_UPDATE_CUSTOMER_PROFILE, params);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            progressBar.setVisibility(View.GONE);
-
-            try {
-                // Converting response to json object
-                JSONObject obj = new JSONObject(s);
-                String message = obj.getString("message");
-                // If no error in response
-                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_update_customer_successfully))) {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                    returnIntent(Activity.RESULT_OK, message);
-                } else {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                    returnIntent(Activity.RESULT_CANCELED, message);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
+        CustomUtil.displayToast(getApplicationContext(), msg);
     }
 
     /**
      * Execute update customer profile function
      */
     private void updateAgentProfile() {
-        // Get bank info from user selected
+        // Get bank info from userProfile selected
         BankInfo bank = new BankInfo();
         for (BankInfo bankInfo : banks) {
             if (bankInfo.getName().equalsIgnoreCase(spinBankName.getSelectedItem().toString())) {
@@ -510,62 +384,44 @@ public class ProfileEditorActivity extends AppCompatActivity implements GetUserP
                 break;
             }
         }
-        new UpdateAgentProfile(new AgentProfile(bank)).execute();
+        new UpdateAgentProfileAsync(this, this, new AgentProfile(bank)).execute();
+    }
+
+    @Override
+    public void responseFromUpdateAgentProfile(String msg) {
+        // If update Agent success, return intent result
+        if (msg.equalsIgnoreCase(getString(R.string.msg_update_agent_successfully))) {
+            returnIntent(Activity.RESULT_OK, msg);
+        } else {
+            returnIntent(Activity.RESULT_CANCELED, msg);
+        }
+        CustomUtil.displayToast(getApplicationContext(), msg);
     }
 
     /**
-     * Request update agent profile to db
+     * Get list of banks
      */
-    @SuppressLint("StaticFieldLeak")
-    class UpdateAgentProfile extends AsyncTask<Void, Void, String> {
-
-        AgentProfile updateAgent;
-
-        private UpdateAgentProfile(AgentProfile agentProfile) {
-            this.updateAgent = agentProfile;
+    @Override
+    public void responseFromGetBanks(List<BankInfo> banks) {
+        this.banks = banks;
+        for (BankInfo bankInfo : banks) {
+            bankNames.add(bankInfo.getName());
         }
+        // Initial spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, bankNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spinBankName.setAdapter(adapter);
+        spinBankName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        private ProgressBar progressBar;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar = findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            // Creating request handler object
-            RequestHandler requestHandler = new RequestHandler();
-            HashMap<String, String> params = new HashMap<>();
-            params.put("user_id", Integer.toString(user.getId()));
-            params.put("bank_id", Integer.toString(updateAgent.getWorkBank().getId()));
-            // Return the response
-            return requestHandler.sendPostRequest(URLs.URL_UPDATE_AGENT_PROFILE, params);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            progressBar.setVisibility(View.GONE);
-
-            try {
-                // Converting response to json object
-                JSONObject obj = new JSONObject(s);
-                String message = obj.getString("message");
-                // If no error in response
-                if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_update_agent_successfully))) {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                    returnIntent(Activity.RESULT_OK, message);
-                } else {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                    returnIntent(Activity.RESULT_CANCELED, message);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     /**

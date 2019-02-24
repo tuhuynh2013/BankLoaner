@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user.ProfileEditorActivity">
+    tools:context=".user.UserProfileEditorActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -70,24 +70,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/username"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                    <TextView
-                        android:id="@+id/tv_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                </TableRow>
-
-                <TableRow>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/email"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
@@ -111,12 +93,14 @@
                         android:text="@string/identity_id"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-                    <TextView
-                        android:id="@+id/tv_identity"
+                    <EditText
+                        android:id="@+id/edt_identity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                        android:ems="10"
+                        android:hint="@string/hint_identity_id"
+                        android:inputType="number"
+                        tools:ignore="Autofill" />
 
                 </TableRow>
 

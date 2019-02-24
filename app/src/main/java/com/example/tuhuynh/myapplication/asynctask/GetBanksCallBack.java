@@ -4,6 +4,7 @@ import com.example.tuhuynh.myapplication.bank.BankInfo;
 
 import java.util.List;
 
-public interface GetBankCallBack {
-    void responseFromAsync(List<BankInfo> banks);
+
+public interface GetBanksCallBack {
+    void responseFromGetBanks(List<BankInfo> banks);
 }

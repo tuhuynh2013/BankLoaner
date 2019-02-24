@@ -2,6 +2,7 @@ package com.example.tuhuynh.myapplication.bank;
 
 import java.io.Serializable;
 
+
 public class InterestAmount implements Serializable {
     private int month;
     private Double interest;

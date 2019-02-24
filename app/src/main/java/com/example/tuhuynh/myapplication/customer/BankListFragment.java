@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 public class BankListFragment extends Fragment {
 
     private View view;
@@ -87,7 +88,7 @@ public class BankListFragment extends Fragment {
                     // If no error in response
                     if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_retrieve_banklist_success))) {
 
-                        // Getting the user from the response
+                        // Getting the userProfile from the response
                         JSONArray jsonArray = obj.getJSONArray("banks");
                         banks = extractBanklist(jsonArray);
 

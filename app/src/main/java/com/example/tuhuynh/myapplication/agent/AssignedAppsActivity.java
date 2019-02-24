@@ -15,14 +15,15 @@ import com.example.tuhuynh.myapplication.asynctask.GetAgentAppsAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetAgentAppsCallBack;
 import com.example.tuhuynh.myapplication.customadapter.AgentAppAdapter;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
-import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import java.util.List;
 
+
 public class AssignedAppsActivity extends AppCompatActivity implements GetAgentAppsCallBack {
 
-    User user;
+    UserProfile userProfile;
     ListView lvAssignedApplications;
     private final String caller = "AssignedAppsActivity";
 
@@ -32,12 +33,12 @@ public class AssignedAppsActivity extends AppCompatActivity implements GetAgentA
         setContentView(R.layout.activity_assigned_apps);
         setTitle(getString(R.string.title_assigned_applications));
 
-        // If the user is not logged in, starting the login activity
+        // If the userProfile is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            user = SharedPrefManager.getInstance(this).getUser();
+            userProfile = SharedPrefManager.getInstance(this).getUser();
         }
 
         // Create Up button
@@ -49,7 +50,7 @@ public class AssignedAppsActivity extends AppCompatActivity implements GetAgentA
         lvAssignedApplications = findViewById(R.id.lv_assigned_applications);
 
         // Get assigned applications
-        new GetAgentAppsAsync(this, this, user.getId(), caller).execute();
+        new GetAgentAppsAsync(this, this, userProfile.getId(), caller).execute();
 
     }
 

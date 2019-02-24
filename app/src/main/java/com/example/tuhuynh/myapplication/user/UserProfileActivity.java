@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.example.tuhuynh.myapplication.R;
 
+
 public class UserProfileActivity extends AppCompatActivity {
 
     @Override
@@ -36,7 +37,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 switch (itemValue) {
                     case "Profile":
-                        startActivity(new Intent(parent.getContext(), ProfileEditorActivity.class));
+                        startActivity(new Intent(parent.getContext(), UserProfileEditorActivity.class));
                         break;
                     case "Change password":
                         startActivity(new Intent(parent.getContext(), ChangePasswordActivity.class));

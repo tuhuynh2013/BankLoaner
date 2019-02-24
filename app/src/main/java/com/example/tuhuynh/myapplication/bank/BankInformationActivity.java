@@ -23,6 +23,7 @@ import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.text.DecimalFormat;
 
+
 public class BankInformationActivity extends AppCompatActivity {
 
     private EditText edtAmount;
@@ -79,7 +80,7 @@ public class BankInformationActivity extends AppCompatActivity {
                 rd = findViewById(rdgMonth.getCheckedRadioButtonId());
                 int month = Integer.parseInt(rd.getText().toString());
                 Long amount = CustomUtil.convertFormattedStringToLong(edtAmount.getText().toString());
-                Double interest = Double.parseDouble(tvInterest.getText().toString());
+                double interest = Double.parseDouble(tvInterest.getText().toString());
 
                 if (isValidAmount(amount)) {
                     generateInterestTable(month, amount, interest);
@@ -328,7 +329,7 @@ public class BankInformationActivity extends AppCompatActivity {
                 try {
                     String originalString = s.toString();
 
-                    Long longval;
+                    long longval;
                     if (originalString.contains(",")) {
                         originalString = originalString.replaceAll(",", "");
                     }

@@ -1,5 +1,6 @@
 package com.example.tuhuynh.myapplication.appication;
 
+
 public class ApplicationStatus {
 
     final public static String PROGRESSING = "Progressing";

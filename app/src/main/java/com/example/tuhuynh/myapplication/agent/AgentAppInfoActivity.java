@@ -18,6 +18,7 @@ import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
+
 public class AgentAppInfoActivity extends AppCompatActivity implements GetUserProfileCallBack {
 
     TextView tvApplicationID, tvMonth, tvAmount, tvInterest, tvDate, tvStatus;
@@ -129,7 +130,7 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
      * and set value for customer info section
      */
     @Override
-    public void responseFromAsync(Object object) {
+    public void responseFromGetUserProfile(Object object) {
         CustomerProfile customer = (CustomerProfile) object;
         String strSalary = CustomUtil.convertLongToFormattedString(customer.getSalary());
 

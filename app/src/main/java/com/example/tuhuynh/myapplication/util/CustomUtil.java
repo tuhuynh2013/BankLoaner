@@ -1,7 +1,9 @@
 package com.example.tuhuynh.myapplication.util;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -13,8 +15,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CustomUtil {
 
+public class CustomUtil {
 
     /**
      * Check string has meaning value or not
@@ -174,8 +176,13 @@ public class CustomUtil {
         return fullName;
     }
 
-    public static boolean isNullorEmpty(String text) {
-        return text == null || text.isEmpty();
+    /**
+     * Displays a toast message.
+     *
+     * @param message Message to display in toast
+     */
+    public static void displayToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
 }

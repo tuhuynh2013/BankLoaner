@@ -18,6 +18,7 @@ import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.util.List;
 
+
 public class AgentAppAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applications;

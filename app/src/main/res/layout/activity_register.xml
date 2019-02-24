@@ -13,16 +13,6 @@
         android:padding="10dp">
 
         <EditText
-            android:id="@+id/edt_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/username"
-            android:inputType="text"
-            tools:ignore="Autofill" />
-
-        <EditText
             android:id="@+id/edt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,16 +29,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            tools:ignore="Autofill" />
-
-        <EditText
-            android:id="@+id/edt_identity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/identity_id"
             android:inputType="textEmailAddress"
             tools:ignore="Autofill" />
 

@@ -22,11 +22,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+
 public class ChangePasswordActivity extends AppCompatActivity {
 
     TextView tvUsername;
     EditText edtOldPass, edtNewPass, edtConfirmPass;
-    User user = SharedPrefManager.getInstance(this).getUser();
+    UserProfile userProfile = SharedPrefManager.getInstance(this).getUser();
     String oldPass, newPass;
 
     @Override
@@ -35,7 +36,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_change_password);
         setTitle(getString(R.string.title_change_pass));
 
-        // If the user is not logged in, starting the login activity
+        // If the userProfile is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
@@ -52,7 +53,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         edtNewPass = findViewById(R.id.edt_new_pass);
         edtConfirmPass = findViewById(R.id.edt_confirm_new_password);
 
-        tvUsername.setText(user.getUsername());
+        tvUsername.setText(userProfile.getUsername());
 
         findViewById(R.id.btn_change_pass).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,8 +116,8 @@ public class ChangePasswordActivity extends AppCompatActivity {
             RequestHandler requestHandler = new RequestHandler();
             // Creating request parameters
             HashMap<String, String> params = new HashMap<>();
-            params.put("id", Integer.toString(user.getId()));
-            params.put("username", user.getUsername());
+            params.put("id", Integer.toString(userProfile.getId()));
+            params.put("username", userProfile.getUsername());
             params.put("old_pass", oldPass);
             params.put("new_pass", newPass);
             // Return the response
@@ -126,7 +127,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Displaying the progress bar while user registers on the server
+            // Displaying the progress bar while userProfile registers on the server
             progressBar = findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
         }

@@ -17,6 +17,7 @@ import com.example.tuhuynh.myapplication.bank.InterestAmount;
 import java.text.DecimalFormat;
 import java.util.List;
 
+
 public class BankListAdapter extends ArrayAdapter<BankInfo> {
 
     private List<BankInfo> banks;

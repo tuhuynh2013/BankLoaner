@@ -23,14 +23,15 @@ import com.example.tuhuynh.myapplication.asynctask.GetAgentAppsAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetAgentAppsCallBack;
 import com.example.tuhuynh.myapplication.customadapter.AgentAppAdapter;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
-import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import java.util.List;
 
+
 public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsCallBack {
 
-    User user;
+    UserProfile userProfile;
     SwipeMenuListView slvBankApplication;
     AgentAppAdapter assignedAdapter;
     private final String caller = "BankAppsActivity";
@@ -41,12 +42,12 @@ public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsC
         setContentView(R.layout.activity_bank_apps);
         setTitle(getString(R.string.title_bank_applications));
 
-        // If the user is not logged in, starting the login activity
+        // If the userProfile is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            user = SharedPrefManager.getInstance(this).getUser();
+            userProfile = SharedPrefManager.getInstance(this).getUser();
         }
 
         // Create Up button
@@ -58,7 +59,7 @@ public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsC
         slvBankApplication = findViewById(R.id.slv_bank_application);
 
         // Get assigned applications
-        new GetAgentAppsAsync(this, this, user.getId(), caller).execute();
+        new GetAgentAppsAsync(this, this, userProfile.getId(), caller).execute();
 
     }
 
@@ -116,7 +117,7 @@ public class BankAppsActivity extends AppCompatActivity implements GetAgentAppsC
             public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        new AssignAppToAgentAsync(applications.get(position).getId(), user.getId(), ApplicationStatus.VALIDATING).execute();
+                        new AssignAppToAgentAsync(applications.get(position).getId(), userProfile.getId(), ApplicationStatus.VALIDATING).execute();
                         slvBankApplication.getChildAt(position).startAnimation(createAnimation(position));
                         break;
                 }

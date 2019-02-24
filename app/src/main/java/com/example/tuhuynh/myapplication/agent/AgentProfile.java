@@ -1,9 +1,10 @@
 package com.example.tuhuynh.myapplication.agent;
 
 import com.example.tuhuynh.myapplication.bank.BankInfo;
-import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 
-public class AgentProfile extends User {
+
+public class AgentProfile extends UserProfile {
 
     private BankInfo workBank;
 
@@ -11,9 +12,11 @@ public class AgentProfile extends User {
         super();
     }
 
-    public AgentProfile(int id, String name, String surname, String identity, String gender, String phone, String address, String role,
+    public AgentProfile(UserProfile userProfile,
                         BankInfo bankInfo) {
-        super(id, name, surname, identity, gender, phone, address, role);
+        super(userProfile.getId(), userProfile.getName(), userProfile.getSurname(), userProfile.getEmail(),
+                userProfile.getIdentity(), userProfile.getGender(), userProfile.getPhone(),
+                userProfile.getAddress(), userProfile.getRole());
         setWorkBank(bankInfo);
     }
 
@@ -25,7 +28,7 @@ public class AgentProfile extends User {
         return workBank;
     }
 
-    public void setWorkBank(BankInfo workBank) {
+    private void setWorkBank(BankInfo workBank) {
         this.workBank = workBank;
     }
 

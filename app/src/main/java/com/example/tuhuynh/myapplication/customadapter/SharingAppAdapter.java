@@ -15,6 +15,7 @@ import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.util.List;
 
+
 public class SharingAppAdapter extends ArrayAdapter<ApplicationInfo> {
 
     private List<ApplicationInfo> applications;

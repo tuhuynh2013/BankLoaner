@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,7 @@ import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customadapter.CustomerAppManagerAdapter;
-import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
@@ -37,6 +36,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 
 public class CustomerAppManagerFragment extends Fragment {
 
@@ -53,15 +53,15 @@ public class CustomerAppManagerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = getLayoutInflater().inflate(R.layout.frag_customer_app_manager, container, false);
-        User user = SharedPrefManager.getInstance(getContext()).getUser();
-        getCustomerApplication(user);
+        UserProfile userProfile = SharedPrefManager.getInstance(getContext()).getUser();
+        getCustomerApplication(userProfile);
 
         lvAppHistory = view.findViewById(R.id.lv_application_list);
 
         return view;
     }
 
-    private void getCustomerApplication(final User user) {
+    private void getCustomerApplication(final UserProfile userProfile) {
 
         @SuppressLint("StaticFieldLeak")
         class CustomerApplicationList extends AsyncTask<Void, Void, String> {
@@ -80,7 +80,7 @@ public class CustomerAppManagerFragment extends Fragment {
                 // Creating request handler object
                 RequestHandler requestHandler = new RequestHandler();
                 HashMap<String, String> params = new HashMap<>();
-                params.put("customer_id", Integer.toString(user.getId()));
+                params.put("customer_id", userProfile.getId());
                 // Return the response
                 return requestHandler.sendPostRequest(URLs.URL_GET_CUSTOMER_APPLICATIONS, params);
             }
@@ -98,7 +98,7 @@ public class CustomerAppManagerFragment extends Fragment {
                     // If no error in response
                     if (!obj.getBoolean("error") && msg.equalsIgnoreCase(getString(R.string.msg_retrieve_applications_success))) {
 
-                        // Getting the user from the response
+                        // Getting the userProfile from the response
                         JSONArray jsonArray = obj.getJSONArray("applications");
                         applications = extractApplicationList(jsonArray);
                         // Sort by date
@@ -156,7 +156,7 @@ public class CustomerAppManagerFragment extends Fragment {
             AgentProfile agent = new AgentProfile();
             String strAgentID = applicationJson.getString("agent_id");
             if (!TextUtils.isEmpty(strAgentID)) {
-                agent.setId(Integer.parseInt(strAgentID));
+                agent.setId(strAgentID);
             }
             agent.setName(applicationJson.getString("agent_name"));
             agent.setSurname(applicationJson.getString("agent_surname"));

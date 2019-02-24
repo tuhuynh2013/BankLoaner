@@ -7,6 +7,7 @@ import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import java.io.Serializable;
 import java.util.Date;
 
+
 public class ApplicationInfo implements Serializable {
 
     private int id;

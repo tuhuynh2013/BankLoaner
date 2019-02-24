@@ -16,31 +16,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.user.AccountType;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.user.UserProfileActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
-import com.example.tuhuynh.myapplication.user.User;
 import com.example.tuhuynh.myapplication.util.PagerAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
+
 public class CustomerHomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private User user;
+    private UserProfile userProfile;
     FirebaseUser firebaseUser;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -69,14 +67,14 @@ public class CustomerHomeActivity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
 
-        // If the user is not logged in, starting the login activity
+        // If the userProfile is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            user = SharedPrefManager.getInstance(this).getUser();
-            // Check if user is signed in (non-null) and update UI accordingly.
-            if (user.getAccountType().equals(AccountType.GOOGLE)) {
+            userProfile = SharedPrefManager.getInstance(this).getUser();
+            // Check if userProfile is signed in (non-null) and update UI accordingly.
+            if (userProfile.getAccountType().equals(AccountType.GOOGLE)) {
                 firebaseUser = mAuth.getCurrentUser();
             }
         }
@@ -138,7 +136,7 @@ public class CustomerHomeActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
             View headerView = navigationView.getHeaderView(0);
             TextView tvUsername = headerView.findViewById(R.id.tv_username);
-            String fullName = CustomUtil.setFullName(user.getName(), user.getSurname());
+            String fullName = CustomUtil.setFullName(userProfile.getName(), userProfile.getSurname());
             tvUsername.setText(fullName);
             ImageView imgProfile = headerView.findViewById(R.id.img_profile);
             if (firebaseUser != null) {
@@ -186,7 +184,7 @@ public class CustomerHomeActivity extends AppCompatActivity
 
             case R.id.nav_setting:
                 drawer.closeDrawer(GravityCompat.START);
-                displayToast(getString(R.string.msg_setting));
+                CustomUtil.displayToast(getApplicationContext(), getString(R.string.msg_setting));
                 return true;
 
             case R.id.nav_signout:
@@ -235,16 +233,6 @@ public class CustomerHomeActivity extends AppCompatActivity
 //
 //        return super.onOptionsItemSelected(item);
 //    }
-
-
-    /**
-     * Displays a toast message.
-     *
-     * @param message Message to display in toast
-     */
-    public void displayToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-    }
 
 
 }

@@ -14,14 +14,15 @@ import com.example.tuhuynh.myapplication.asynctask.GetAgentAppsCallBack;
 import com.example.tuhuynh.myapplication.asynctask.GetSharingAppsAsync;
 import com.example.tuhuynh.myapplication.customadapter.SharingAppAdapter;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
-import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import java.util.List;
 
+
 public class SharingAppsActivity extends AppCompatActivity implements GetAgentAppsCallBack {
 
-    User user;
+    UserProfile userProfile;
     ListView lvSharingApplications;
 
     @Override
@@ -30,12 +31,12 @@ public class SharingAppsActivity extends AppCompatActivity implements GetAgentAp
         setContentView(R.layout.activity_sharing_apps);
         setTitle(getString(R.string.title_sharing_history));
 
-        // If the user is not logged in, starting the login activity
+        // If the userProfile is not logged in, starting the login activity
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         } else {
-            user = SharedPrefManager.getInstance(this).getUser();
+            userProfile = SharedPrefManager.getInstance(this).getUser();
         }
 
         // Create Up button
@@ -46,7 +47,7 @@ public class SharingAppsActivity extends AppCompatActivity implements GetAgentAp
         // Initial listview element
         lvSharingApplications = findViewById(R.id.lv_sharing_applications);
 
-        new GetSharingAppsAsync(this, this, user.getId()).execute();
+        new GetSharingAppsAsync(this, this, userProfile.getId()).execute();
     }
 
 

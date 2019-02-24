@@ -1,9 +1,10 @@
 package com.example.tuhuynh.myapplication.customer;
 
-import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
-public class CustomerProfile extends User {
+
+public class CustomerProfile extends UserProfile {
 
     private String employment;
     private String company;
@@ -21,9 +22,13 @@ public class CustomerProfile extends User {
         setBankAccount(bankAccount);
     }
 
-    public CustomerProfile(int id, String name, String surname, String identity, String gender, String phone, String address, String role,
+    // Uses for GetUserProfileAsync
+    public CustomerProfile(UserProfile userProfile,
                            String employment, String company, Long salary, String bankAccount) {
-        super(id, name, surname, identity, gender, phone, address, role);
+
+        super(userProfile.getId(), userProfile.getName(), userProfile.getSurname(), userProfile.getEmail(),
+                userProfile.getIdentity(), userProfile.getGender(), userProfile.getPhone(),
+                userProfile.getAddress(), userProfile.getRole());
         setEmployment(employment);
         setCompany(company);
         setSalary(salary);
@@ -34,7 +39,7 @@ public class CustomerProfile extends User {
         return employment;
     }
 
-    public void setEmployment(String employment) {
+    private void setEmployment(String employment) {
         this.employment = employment;
     }
 
@@ -42,7 +47,7 @@ public class CustomerProfile extends User {
         return company;
     }
 
-    public void setCompany(String company) {
+    private void setCompany(String company) {
         this.company = company;
     }
 
@@ -58,11 +63,11 @@ public class CustomerProfile extends User {
         return bankAccount;
     }
 
-    public void setBankAccount(String bankAccount) {
+    private void setBankAccount(String bankAccount) {
         this.bankAccount = bankAccount;
     }
 
-    public boolean isMissingInfo() {
+    boolean isMissingInfo() {
         return !CustomUtil.hasMeaning(this.getPhone()) ||
                 !CustomUtil.hasMeaning(this.getEmployment()) ||
                 !CustomUtil.hasMeaning(this.getCompany()) ||

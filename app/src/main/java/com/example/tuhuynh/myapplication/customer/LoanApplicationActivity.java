@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +24,8 @@ import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
-import com.example.tuhuynh.myapplication.user.ProfileEditorActivity;
-import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.user.UserProfileEditorActivity;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
@@ -38,6 +37,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+
 public class LoanApplicationActivity extends AppCompatActivity implements GetUserProfileCallBack {
 
     private static final int REQUEST_CODE = 0x9345;
@@ -46,8 +46,8 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
     CheckBox ckbAcceptTerm;
     final Context context = this;
 
-    // Getting the current user
-    User user = SharedPrefManager.getInstance(this).getUser();
+    // Getting the current userProfile
+    UserProfile userProfile = SharedPrefManager.getInstance(this).getUser();
     BankInfo bankInfo;
     String month, amount, interest;
     CustomerProfile customerProfile;
@@ -79,7 +79,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
         tvAmount.setText(amount);
         tvInterest.setText(interest);
 
-        asyncTask = new GetUserProfileAsync(this, this, user);
+        asyncTask = new GetUserProfileAsync(this, this, userProfile);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,22 +100,10 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
     }
 
     @Override
-    public void responseFromAsync(Object object) {
+    public void responseFromGetUserProfile(Object object) {
         customerProfile = new CustomerProfile();
         customerProfile = (CustomerProfile) object;
         submitApplication();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                new SubmitApplication().execute();
-            }
-            Toast.makeText(this, data.getStringExtra("msg"), Toast.LENGTH_LONG).show();
-        }
     }
 
     /**
@@ -138,7 +126,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
 
                     // set the custom dialog components - text, image and button
                     TextView tvTitle = dialog.findViewById(R.id.tv_title);
-                    tvTitle.setText("Term");
+                    tvTitle.setText(getString(R.string.dialog_title_term));
                     HtmlTextView htmlText = dialog.findViewById(R.id.html_text);
                     htmlText.setHtml("<h1><span style=\"color: green\"><span style=\"font-size: 11pt\"><span style=\"font-family: Tahoma\"><b><span style=\"line-height: 150%\"><a name=\"CVCN\"></a>CHO VAY CÁ NHÂN </span></b></span></span></span></h1>" +
                             "<div style=\"margin-left: 80px\"><span style=\"font-size: 12pt\"><span style=\"color: red\"><b><span style=\"line-height: 150%; font-family: 'Tahoma','sans-serif'\">Cùng bạn xây dựng các giải pháp tài chính</span></b></span></span></div>" +
@@ -181,13 +169,25 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
      *
      */
     private void submitApplication() {
-        // If profile not enough information, move to ProfileEditorActivity
+        // If profile not enough information, move to UserProfileEditorActivity
         if (customerProfile.isMissingInfo()) {
-            Intent intent = new Intent(this, ProfileEditorActivity.class);
+            Intent intent = new Intent(this, UserProfileEditorActivity.class);
             intent.putExtra("caller", "LoanApplication");
             startActivityForResult(intent, REQUEST_CODE);
         } else {
             new SubmitApplication().execute();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                new SubmitApplication().execute();
+            }
+            Toast.makeText(this, data.getStringExtra("msg"), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -199,7 +199,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Displaying the progress bar while user registers on the server
+            // Displaying the progress bar while userProfile registers on the server
             progressBar = findViewById(R.id.progressBar);
             progressBar.setVisibility(View.VISIBLE);
         }
@@ -223,7 +223,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
             params.put("month", month);
             params.put("amount", amount);
             params.put("interest", interest);
-            params.put("customer_id", Integer.toString(user.getId()));
+            params.put("customer_id", userProfile.getId());
             params.put("bank_id", Integer.toString(bankInfo.getId()));
             params.put("date", strDate);
             params.put("status", ApplicationStatus.PROGRESSING);

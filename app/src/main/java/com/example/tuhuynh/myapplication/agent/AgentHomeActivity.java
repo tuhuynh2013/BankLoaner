@@ -15,10 +15,11 @@ import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
-import com.example.tuhuynh.myapplication.user.User;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.user.UserProfileActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
+
 
 public class AgentHomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,9 +47,9 @@ public class AgentHomeActivity extends AppCompatActivity
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
             View headerView = navigationView.getHeaderView(0);
-            User user = SharedPrefManager.getInstance(this).getUser();
+            UserProfile userProfile = SharedPrefManager.getInstance(this).getUser();
             TextView tvUsername = headerView.findViewById(R.id.tv_username);
-            String fullName = CustomUtil.setFullName(user.getName(), user.getSurname());
+            String fullName = CustomUtil.setFullName(userProfile.getName(), userProfile.getSurname());
             tvUsername.setText(fullName);
         }
 
