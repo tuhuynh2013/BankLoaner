@@ -55,7 +55,7 @@ public class AssignedAppsActivity extends AppCompatActivity implements GetAgentA
     }
 
     @Override
-    public void responseFromAsync(List<ApplicationInfo> applications, String msg) {
+    public void responseFromGetAgentApps(List<ApplicationInfo> applications, String msg) {
         // If applications not empty, set array adapter
         if (!applications.isEmpty()) {
             AgentAppAdapter assignedAdapter = new AgentAppAdapter(this, R.layout.agent_app_adapter, applications, caller);

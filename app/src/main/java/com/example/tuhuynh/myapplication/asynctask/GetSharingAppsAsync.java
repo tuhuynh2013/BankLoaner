@@ -85,7 +85,7 @@ public class GetSharingAppsAsync extends AsyncTask<Void, Void, String> {
                 });
             }
             // Return the result
-            response.responseFromAsync(applications, message);
+            response.responseFromGetAgentApps(applications, message);
         } catch (JSONException e) {
             e.printStackTrace();
         }

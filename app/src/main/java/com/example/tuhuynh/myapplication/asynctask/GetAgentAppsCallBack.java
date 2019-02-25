@@ -6,5 +6,5 @@ import java.util.List;
 
 
 public interface GetAgentAppsCallBack {
-    void responseFromAsync(List<ApplicationInfo> applications, String msg);
+    void responseFromGetAgentApps(List<ApplicationInfo> applications, String msg);
 }

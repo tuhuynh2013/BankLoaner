@@ -12,6 +12,7 @@
     <string name="title_bank_applications">Bank Applications</string>
     <string name="title_application_history">Application History</string>
     <string name="title_sharing_history">Sharing Applications</string>
+    <string name="title_reset_pass">Reset Password</string>
 
     <!--common string-->
     <string name="id">ID</string>
@@ -22,16 +23,26 @@
     <string name="login">Log in</string>
     <string name="sign_up">Sign up</string>
     <string name="sign_out">Sign out</string>
-    <string name="tv_sign_up">"Don't have an account?\nRegister Here</string>
+
     <string name="tv_login">Already Registered?\nLog in Here</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
 
     <!--Login Activity-->
     <string name="msg_login">Logging In.. Please wait…</string>
+    <string name="tv_sign_up">"Don't have an account?\nRegister Here</string>
+    <string name="tv_forgot_pass">Forgot password?</string>
 
     <!--Register Activity-->
     <string name="error_weak_pass">Weak password.</string>
+
+    <!--ForgotPassword Activity-->
+    <string name="tv_title_forgot_pass">Forgot your password?</string>
+    <string name="hint_your_email">Your email here</string>
+    <string name="tv_reset_instruction">To reset password, enter your email, press the button and check mail to follow instruction.</string>
+    <string name="btn_reset_pass">Reset Password</string>
+    <string name="btn_back">Back</string>
+    <string name="msg_sent">Check email to reset your password!</string>
 
     <!--Change Password Activity-->
     <string name="msg_change_pass">Changing password, Please wait…</string>
@@ -45,6 +56,7 @@
     <string name="db_update_user_successfully">Update user profile successfully</string>
     <string name="db_update_customer_successfully">Update customer profile successfully</string>
     <string name="db_update_agent_successfully">Update agent profile successfully</string>
+    <string name="db_get_agents_success">Retrieve list of agents successful</string>
 
     <!--Database error messages-->
     <string name="error_retrieve_fail">Fail to retrieve data</string>
@@ -188,5 +200,13 @@
     <string name="tv_title">Title</string>
     <string name="tv_content">Content</string>
     <string name="msg_retrieve_sharing_apps_success">Retrieved list of sharing applications successful</string>
+
+    <!--Admin Home Activity-->
+    <string name="tv_agent_management">Agent Management</string>
+
+    <!--Admin Agent Manager-->
+    <string name="tv_email">Email:</string>
+    <string name="tv_bank_colon">Bank:</string>
+    <string name="title_activity_agent_management">AgentManagementActivity</string>
 
 </resources>

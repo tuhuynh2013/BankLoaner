@@ -1,4 +1,4 @@
-package com.example.tuhuynh.myapplication.agent;
+package com.example.tuhuynh.myapplication.admin;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.agent.AssignedAppsActivity;
 import com.example.tuhuynh.myapplication.user.AccountType;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
 import com.example.tuhuynh.myapplication.user.UserProfile;
@@ -29,9 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
-public class AgentHomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class AdminHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     UserProfile userProfile;
     FirebaseUser firebaseUser;
@@ -41,7 +40,7 @@ public class AgentHomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.agent_nav_config);
+        setContentView(R.layout.admin_nav_config);
         setTitle(getString(R.string.title_home));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -96,52 +95,13 @@ public class AgentHomeActivity extends AppCompatActivity
         }
 
         // Set action for assigned linear layout
-        findViewById(R.id.lnl_assigned).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.lnl_agent_management).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AssignedAppsActivity.class));
+                startActivity(new Intent(getApplicationContext(), AgentManagementActivity.class));
             }
         });
 
-        // Set action for bank linear layout
-        findViewById(R.id.lnl_bank).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), BankAppsActivity.class));
-            }
-        });
-
-        // Set action for application history linear layout
-        findViewById(R.id.lnl_history).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AgentAppHistory.class));
-            }
-        });
-
-        // Set action for application history linear layout
-        findViewById(R.id.lnl_sharing).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SharingAppsActivity.class));
-            }
-        });
-
-    }
-
-    /**
-     * Handles the Back button: closes the nav drawer.
-     */
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer != null) {
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                super.onBackPressed();
-            }
-        }
     }
 
     /**
@@ -182,3 +142,4 @@ public class AgentHomeActivity extends AppCompatActivity
 
 
 }
+

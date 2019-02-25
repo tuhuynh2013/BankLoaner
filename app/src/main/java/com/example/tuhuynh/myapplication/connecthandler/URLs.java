@@ -21,4 +21,7 @@ public class URLs {
     public static final String URL_UPDATE_APPLICATION_STATUS = ROOT_URL + "updateapplicationstatus";
     public static final String URL_ASSIGN_AGENT = ROOT_URL + "assignagent";
 
+    /*Admin activity*/
+    public static final String URL_GET_AGENTS = ROOT_URL + "getagents";
+
 }

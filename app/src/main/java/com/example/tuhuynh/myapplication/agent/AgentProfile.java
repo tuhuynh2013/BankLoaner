@@ -28,7 +28,7 @@ public class AgentProfile extends UserProfile {
         return workBank;
     }
 
-    private void setWorkBank(BankInfo workBank) {
+    public void setWorkBank(BankInfo workBank) {
         this.workBank = workBank;
     }
 

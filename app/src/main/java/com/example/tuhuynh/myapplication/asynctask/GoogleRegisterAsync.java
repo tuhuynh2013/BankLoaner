@@ -63,7 +63,7 @@ public class GoogleRegisterAsync extends AsyncTask<Void, Void, String> {
             // Converting response to json object
             JSONObject obj = new JSONObject(s);
             String msg = obj.getString("message");
-            cb.responseFromGoogleRegisterCallBack(msg);
+            cb.responseFromGoogleRegister(msg);
         } catch (JSONException e) {
             e.printStackTrace();
         }

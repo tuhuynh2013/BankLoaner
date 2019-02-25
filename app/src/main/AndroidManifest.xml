@@ -14,7 +14,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <!-- UserProfile Activities -->
+        <activity
+            android:name=".admin.AgentManagementActivity"
+            android:label="@string/title_activity_agent_management"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".admin.AdminHomeActivity" />
+        <activity android:name=".user.ForgotPasswordActivity" /> <!-- UserProfile Activities -->
         <activity android:name=".user.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,8 +36,7 @@
             android:parentActivityName=".user.UserProfileActivity" />
         <activity
             android:name=".user.ChangePasswordActivity"
-            android:parentActivityName=".user.UserProfileActivity" />
-        <!-- Agent Activities -->
+            android:parentActivityName=".user.UserProfileActivity" /> <!-- Agent Activities -->
         <activity
             android:name=".agent.AgentHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -50,8 +54,7 @@
             android:parentActivityName=".agent.AssignedAppsActivity" />
         <activity
             android:name=".agent.SharingAppsActivity"
-            android:parentActivityName=".agent.AssignedAppsActivity" />
-        <!-- Customer Activities -->
+            android:parentActivityName=".agent.AssignedAppsActivity" /> <!-- Customer Activities -->
         <activity
             android:name=".customer.CustomerHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -60,8 +63,7 @@
             android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
             android:name=".customer.LoanApplicationActivity"
-            android:parentActivityName=".customer.CustomerHomeActivity" />
-        <!-- Bank Activities -->
+            android:parentActivityName=".customer.CustomerHomeActivity" /> <!-- Bank Activities -->
         <activity
             android:name=".bank.BankInformationActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />

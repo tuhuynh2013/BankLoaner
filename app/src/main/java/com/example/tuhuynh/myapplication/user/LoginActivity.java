@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
         edtEmail = findViewById(R.id.edt_email);
         etdPassword = findViewById(R.id.edt_password);
 
-        // If userProfile presses on login, calling the method login
+        // If user presses on login, calling the method login
         findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,13 +90,23 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
             }
         });
 
-        // If userProfile presses on not registered
+        // If user presses on not registered
         findViewById(R.id.tv_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Open register screen
                 finish();
                 startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+            }
+        });
+
+        // If user presses on Forgot password?
+        findViewById(R.id.tv_forgot_pass).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Open register screen
+                finish();
+                startActivity(new Intent(getApplicationContext(), ForgotPasswordActivity.class));
             }
         });
 
@@ -164,7 +174,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
     }
 
     @Override
-    public void responseFromGoogleRegisterCallBack(String msg) {
+    public void responseFromGoogleRegister(String msg) {
         if (msg.equalsIgnoreCase(getString(R.string.db_login_success)) ||
                 msg.equalsIgnoreCase(getString(R.string.db_first_time_google_acc))) {
             setUserSession();

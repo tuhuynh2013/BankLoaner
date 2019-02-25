@@ -52,7 +52,7 @@ public class SharingAppsActivity extends AppCompatActivity implements GetAgentAp
 
 
     @Override
-    public void responseFromAsync(List<ApplicationInfo> applications, String msg) {
+    public void responseFromGetAgentApps(List<ApplicationInfo> applications, String msg) {
         // If applications not empty, set array adapter
         if (!applications.isEmpty()) {
             SharingAppAdapter sharingAppAdapter = new SharingAppAdapter(this, R.layout.sharing_app_adapter, applications);
