@@ -30,11 +30,21 @@
     <!--Login Activity-->
     <string name="msg_login">Logging In.. Please wait…</string>
 
+    <!--Register Activity-->
+    <string name="error_weak_pass">Weak password.</string>
+
+    <!--Change Password Activity-->
+    <string name="msg_change_pass">Changing password, Please wait…</string>
+    <string name="msg_pass_changed">Password changed</string>
+
     <!--Database success messages-->
     <string name="db_success_retrieved_customer_profile">Retrieve customer profile successful</string>
     <string name="db_success_retrieved_agent_profile">Retrieve agent profile successful</string>
     <string name="db_login_success">Login successful</string>
     <string name="db_first_time_google_acc">First time login with Google account</string>
+    <string name="db_update_user_successfully">Update user profile successfully</string>
+    <string name="db_update_customer_successfully">Update customer profile successfully</string>
+    <string name="db_update_agent_successfully">Update agent profile successfully</string>
 
     <!--Database error messages-->
     <string name="error_retrieve_fail">Fail to retrieve data</string>
@@ -44,11 +54,10 @@
     <string name="error_empty_name">Please enter your first name</string>
     <string name="error_invalid_name">Name is invalid</string>
     <string name="error_empty_password">Please enter your password</string>
-    <string name="error_not_match_password">Password not match</string>
     <string name="error_empty_email">Please enter your email</string>
     <string name="error_invalid_email">Please enter a valid email</string>
     <string name="error_empty_amount">Amount is empty</string>
-    <string name="error_atleast_amount">Amount must greater than 100,000,000</string>
+    <string name="error_at_least_amount">Amount must greater than 100,000,000</string>
     <string name="error_exceed_amount">Amount must less than 10,000,000,000</string>
     <string name="error_empty_surname">Please enter your surname</string>
     <string name="error_invalid_surname">Surname is invalid</string>
@@ -84,7 +93,6 @@
     <string name="calculate">Calculate</string>
     <string name="msg_retrieve_banklist_success">Retrieve list of banks successful</string>
 
-
     <!--Bank Info-->
     <string name="month">Month</string>
     <string name="balance">Balance</string>
@@ -114,9 +122,6 @@
     <string name="hint_salary">Your salary</string>
     <string name="hint_bank_account">Your bank account</string>
     <string name="save_change">Save change</string>
-    <string name="msg_update_user_successfully">Update userProfile successfully</string>
-    <string name="msg_update_customer_successfully">Update customer successfully</string>
-    <string name="msg_update_agent_successfully">Update agent successfully</string>
     <string name="msg_update_successfully">Update successfully</string>
     <string name="msg_update_not_successfully">Update NOT successfully</string>
     <string name="hint_select_bank">Select your bank</string>
@@ -153,6 +158,9 @@
     <string name="btn_change_pass">Change password</string>
     <string name="msg_change_pass_success">Password has changed</string>
     <string name="msg_wrong_old_pass">Wrong password</string>
+    <string name="msg_firebase_exception">FireBase exception</string>
+    <string name="error_not_match_password">Password not match!</string>
+    <string name="error_old_equal_new">New password is the same old password!</string>
 
     <!--Agent Home Activity-->
     <string name="tv_assigned_applications">Assigned applications</string>

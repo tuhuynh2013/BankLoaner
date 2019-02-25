@@ -15,20 +15,13 @@ public class CustomerProfile extends UserProfile {
         super();
     }
 
-    public CustomerProfile(String employment, String company, Long salary, String bankAccount) {
-        setEmployment(employment);
-        setCompany(company);
-        setSalary(salary);
-        setBankAccount(bankAccount);
-    }
-
     // Uses for GetUserProfileAsync
     public CustomerProfile(UserProfile userProfile,
                            String employment, String company, Long salary, String bankAccount) {
 
         super(userProfile.getId(), userProfile.getName(), userProfile.getSurname(), userProfile.getEmail(),
                 userProfile.getIdentity(), userProfile.getGender(), userProfile.getPhone(),
-                userProfile.getAddress(), userProfile.getRole());
+                userProfile.getAddress(), userProfile.getRole(), userProfile.getAccountType());
         setEmployment(employment);
         setCompany(company);
         setSalary(salary);

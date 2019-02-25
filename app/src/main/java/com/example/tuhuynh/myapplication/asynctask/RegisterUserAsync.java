@@ -9,7 +9,6 @@ import com.example.tuhuynh.myapplication.agent.AgentProfile;
 import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
 import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
-import com.example.tuhuynh.myapplication.user.AccountType;
 import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.user.UserRole;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
@@ -46,7 +45,7 @@ public class RegisterUserAsync extends AsyncTask<Void, Void, String> {
         params.put("id", userProfile.getId());
         params.put("name", userProfile.getName());
         params.put("email", userProfile.getEmail());
-        params.put("role", UserRole.CUSTOMER);
+        params.put("role", userProfile.getRole());
 
         // Return the response
         return requestHandler.sendPostRequest(URLs.URL_REGISTER, params);
@@ -63,30 +62,23 @@ public class RegisterUserAsync extends AsyncTask<Void, Void, String> {
 
             // If no error in response
             if (!obj.getBoolean("error")) {
-                // Getting the user from the response
-                JSONObject userJson = obj.getJSONObject("user");
-                String userID = userJson.getString("id");
-                String name = userJson.getString("name");
-                String email = userJson.getString("email");
-                String role = userJson.getString("role");
-
                 // Create object base on user role
-                if (role.equalsIgnoreCase(UserRole.CUSTOMER)) {
+                if (userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
                     CustomerProfile customer = new CustomerProfile();
-                    customer.setId(userID);
-                    customer.setName(name);
-                    customer.setEmail(email);
-                    customer.setRole(role);
-                    customer.setAccountType(AccountType.DEFAULT);
+                    customer.setId(userProfile.getId());
+                    customer.setName(userProfile.getName());
+                    customer.setEmail(userProfile.getEmail());
+                    customer.setRole(userProfile.getRole());
+                    customer.setAccountType(userProfile.getAccountType());
                     // Storing the user in shared preferences
                     SharedPrefManager.getInstance(context).userLogin(customer);
-                } else if (role.equalsIgnoreCase(UserRole.AGENT)) {
+                } else if (userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
                     AgentProfile agent = new AgentProfile();
-                    agent.setId(userID);
-                    agent.setName(name);
-                    agent.setEmail(email);
-                    agent.setRole(role);
-                    agent.setAccountType(AccountType.DEFAULT);
+                    agent.setId(userProfile.getId());
+                    agent.setName(userProfile.getName());
+                    agent.setEmail(userProfile.getEmail());
+                    agent.setRole(userProfile.getRole());
+                    agent.setAccountType(userProfile.getAccountType());
                     // Storing the user in shared preferences
                     SharedPrefManager.getInstance(context).userLogin(agent);
                 }

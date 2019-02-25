@@ -19,28 +19,6 @@ import java.util.regex.Pattern;
 public class CustomUtil {
 
     /**
-     * Check string has meaning value or not
-     *
-     * @param str String
-     * @return true if string is meaning
-     */
-    public static boolean hasMeaning(String str) {
-        return !TextUtils.isEmpty(str) && !str.equalsIgnoreCase("null");
-    }
-
-    /**
-     * Check username is correct format
-     *
-     * @param username username
-     * @return true if username is correct format
-     */
-    public static boolean isIncorrectUsername(String username) {
-        Pattern p = Pattern.compile("[a-z][A-Za-z0-9]{5,16}");
-        Matcher m = p.matcher(username);
-        return !m.matches();
-    }
-
-    /**
      * Check name is correct format
      *
      * @param name name
@@ -184,5 +162,16 @@ public class CustomUtil {
     public static void displayToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
+
+    /**
+     * Check string has meaning value or not
+     *
+     * @param text String
+     * @return true if string is meaning
+     */
+    public static boolean hasMeaning(String text) {
+        return !TextUtils.isEmpty(text) && !text.equalsIgnoreCase("null");
+    }
+
 
 }

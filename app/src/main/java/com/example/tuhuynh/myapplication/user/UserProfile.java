@@ -20,31 +20,7 @@ public class UserProfile implements Serializable {
 
     }
 
-    // Uses for update user profile
-    public UserProfile(String id, String name, String surname, String identity, String gender, String phone, String address) {
-        setId(id);
-        setName(name);
-        setSurname(surname);
-        setIdentity(identity);
-        setGender(gender);
-        setPhone(phone);
-        setAddress(address);
-    }
-
-    // Uses for AgentProfile and CustomerProfile
-    public UserProfile(String id, String name, String surname, String email, String identity, String gender, String phone, String address, String role) {
-        setId(id);
-        setName(name);
-        setSurname(surname);
-        setEmail(email);
-        setIdentity(identity);
-        setGender(gender);
-        setPhone(phone);
-        setAddress(address);
-        setRole(role);
-    }
-
-    // Uses for SharedPrefManager
+    // Uses for SharedPrefManager and update user profile
     public UserProfile(String id, String name, String surname, String email, String identity, String gender, String phone, String address, String role, String accountType) {
         setId(id);
         setName(name);

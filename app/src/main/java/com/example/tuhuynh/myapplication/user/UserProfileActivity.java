@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -24,7 +25,22 @@ public class UserProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        String[] menu = new String[]{"Profile", "Change password"};
+        // If the userProfile is not logged in, starting the login activity
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+        // Getting the current userProfile
+        UserProfile userProfile = SharedPrefManager.getInstance(this).getUser();
+
+        String[] menu;
+
+        if (userProfile.getAccountType().equalsIgnoreCase(AccountType.GOOGLE)) {
+            menu = new String[]{"Profile"};
+        } else {
+            menu = new String[]{"Profile", "Change password"};
+        }
+
         final ListView lvUserProfile = findViewById(R.id.lv_userProfile);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, menu);

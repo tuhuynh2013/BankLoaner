@@ -1,34 +1,35 @@
 package com.example.tuhuynh.myapplication.user;
 
-import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.connecthandler.RequestHandler;
-import com.example.tuhuynh.myapplication.connecthandler.URLs;
+import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
+import java.util.Objects;
 
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
-    TextView tvUsername;
+    TextView tvEmail, tvFireBaseException;
     EditText edtOldPass, edtNewPass, edtConfirmPass;
-    UserProfile userProfile = SharedPrefManager.getInstance(this).getUser();
     String oldPass, newPass;
+    FirebaseUser user;
+    private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +37,15 @@ public class ChangePasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_change_password);
         setTitle(getString(R.string.title_change_pass));
 
+        // Initializing firebase authentication object
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         // If the userProfile is not logged in, starting the login activity
-        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+        if (!SharedPrefManager.getInstance(this).isLoggedIn() || mAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
         }
+        user = mAuth.getCurrentUser();
+        pDialog = new ProgressDialog(this);
 
         // Create Up button
         if (getSupportActionBar() != null) {
@@ -48,12 +53,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
         }
 
         // Initial elements
-        tvUsername = findViewById(R.id.tv_username);
+        tvEmail = findViewById(R.id.tv_email);
+        tvFireBaseException = findViewById(R.id.tv_firebase_exception);
         edtOldPass = findViewById(R.id.edt_old_pass);
         edtNewPass = findViewById(R.id.edt_new_pass);
         edtConfirmPass = findViewById(R.id.edt_confirm_new_password);
 
-        tvUsername.setText(userProfile.getUsername());
+        tvEmail.setText(user.getEmail());
 
         findViewById(R.id.btn_change_pass).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +76,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         oldPass = edtOldPass.getText().toString();
         newPass = edtNewPass.getText().toString();
-        String confirmPass = edtConfirmPass.getText().toString();
+        final String confirmPass = edtConfirmPass.getText().toString();
 
         if (TextUtils.isEmpty(oldPass)) {
             edtOldPass.setError(getString(R.string.error_empty_password));
@@ -90,6 +96,15 @@ public class ChangePasswordActivity extends AppCompatActivity {
             return;
         }
 
+        if (oldPass.equals(newPass)) {
+            edtOldPass.getText().clear();
+            edtOldPass.setError(getString(R.string.error_old_equal_new));
+            edtOldPass.requestFocus();
+            edtNewPass.getText().clear();
+            edtConfirmPass.getText().clear();
+            return;
+        }
+
         if (!confirmPass.equals(newPass)) {
             edtNewPass.setText("");
             edtConfirmPass.setText("");
@@ -98,72 +113,58 @@ public class ChangePasswordActivity extends AppCompatActivity {
             return;
         }
 
-        new ChangePasswordAsyncTask().execute();
+        displayProgressDialog();
+        AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(user.getEmail()), oldPass);
 
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            updatePassword();
+                        } else {
+                            displayFireBaseException(Objects.requireNonNull(task.getException()).getMessage());
+                        }
+                    }
+                });
+    }
+
+    private void updatePassword() {
+        user.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    pDialog.dismiss();
+                    CustomUtil.displayToast(getApplicationContext(), getString(R.string.msg_pass_changed));
+                    // Closing this activity
+                    finish();
+                    // Starting login activity
+                    startActivity(new Intent(getApplicationContext(), UserProfileActivity.class));
+                } else {
+                    displayFireBaseException(Objects.requireNonNull(task.getException()).getMessage());
+                }
+            }
+        });
+    }
+
+    private void displayFireBaseException(String msg) {
+        pDialog.dismiss();
+        edtOldPass.getText().clear();
+        edtOldPass.requestFocus();
+        edtNewPass.getText().clear();
+        edtConfirmPass.getText().clear();
+        tvFireBaseException.setVisibility(View.VISIBLE);
+        tvFireBaseException.setText(msg);
     }
 
     /**
-     *
+     * Display Progress bar while Logging in
      */
-    @SuppressLint("StaticFieldLeak")
-    class ChangePasswordAsyncTask extends AsyncTask<Void, Void, String> {
-
-        private ProgressBar progressBar;
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            // Creating request handler object
-            RequestHandler requestHandler = new RequestHandler();
-            // Creating request parameters
-            HashMap<String, String> params = new HashMap<>();
-            params.put("id", Integer.toString(userProfile.getId()));
-            params.put("username", userProfile.getUsername());
-            params.put("old_pass", oldPass);
-            params.put("new_pass", newPass);
-            // Return the response
-            return requestHandler.sendPostRequest(URLs.URL_CHANGE_PASSWORD, params);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Displaying the progress bar while userProfile registers on the server
-            progressBar = findViewById(R.id.progressBar);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            // Hiding the progressbar after completion
-            progressBar.setVisibility(View.GONE);
-
-            try {
-                // Converting response to json object
-                JSONObject obj = new JSONObject(s);
-                String msg = obj.getString("message");
-
-                // If no error in response
-                if (!obj.getBoolean("error") && msg.equalsIgnoreCase(getString(R.string.msg_change_pass_success))) {
-                    // Starting the ProfileActivity
-                    startActivity(new Intent(getApplicationContext(), UserProfileActivity.class));
-                    finish();
-                } else if (obj.getBoolean("error") && msg.equalsIgnoreCase(getString(R.string.msg_wrong_old_pass))) {
-                    edtOldPass.setError(getString(R.string.msg_wrong_old_pass));
-                    edtOldPass.requestFocus();
-                    edtOldPass.setText("");
-                    edtNewPass.setText("");
-                    edtConfirmPass.setText("");
-                }
-
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-
+    private void displayProgressDialog() {
+        pDialog.setMessage(getString(R.string.msg_change_pass));
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        pDialog.show();
     }
 
 

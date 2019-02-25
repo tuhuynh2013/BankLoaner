@@ -47,9 +47,10 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
     private Spinner spinBankName;
     private Button btnSave;
 
-    UserProfile userProfile;
-    List<BankInfo> banks;
-    List<String> bankNames = new ArrayList<>();
+    private String caller;
+    private UserProfile userProfile;
+    private List<BankInfo> banks;
+    private List<String> bankNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +62,13 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
             finish();
             startActivity(new Intent(this, LoginActivity.class));
-        } else {
-            // Getting the current userProfile
-            userProfile = SharedPrefManager.getInstance(this).getUser();
         }
+        // Getting the current userProfile
+        userProfile = SharedPrefManager.getInstance(this).getUser();
 
         // Turn off Up navigation, when called from LoanApplication
         final Intent intent = this.getIntent();
-        String caller = intent.getStringExtra("caller");
+        caller = intent.getStringExtra("caller");
         if (caller != null) {
             if (caller.equalsIgnoreCase("LoanApplication")) {
                 // Create Up button
@@ -160,15 +160,15 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         edtName.setText(userProfile.getName());
         tvEmail.setText(this.userProfile.getEmail());
 
-        if (!TextUtils.isEmpty(surname)) {
+        if (CustomUtil.hasMeaning(surname)) {
             edtSurname.setText(surname);
         }
 
-        if (!TextUtils.isEmpty(identity)) {
+        if (CustomUtil.hasMeaning(identity)) {
             edtIdentity.setText(identity);
         }
 
-        if (!TextUtils.isEmpty(gender)) {
+        if (CustomUtil.hasMeaning(gender)) {
             if (gender.equalsIgnoreCase(rdMale.getText().toString())) {
                 rdMale.setChecked(true);
             } else if (gender.equalsIgnoreCase(rdFemale.getText().toString())) {
@@ -178,11 +178,11 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             }
         }
 
-        if (!TextUtils.isEmpty(phone)) {
+        if (CustomUtil.hasMeaning(phone)) {
             edtPhone.setText(phone);
         }
 
-        if (!TextUtils.isEmpty(address)) {
+        if (CustomUtil.hasMeaning(address)) {
             edtAddress.setText(address);
         }
 
@@ -194,11 +194,11 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             Long salary = customer.getSalary();
             String bankAccount = customer.getBankAccount();
 
-            if (!TextUtils.isEmpty(employment)) {
+            if (CustomUtil.hasMeaning(employment)) {
                 edtEmployment.setText(employment);
             }
 
-            if (!TextUtils.isEmpty(company)) {
+            if (CustomUtil.hasMeaning(company)) {
                 edtCompany.setText(company);
             }
 
@@ -207,7 +207,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
                 edtSalary.setText(strSalary);
             }
 
-            if (!TextUtils.isEmpty(bankAccount)) {
+            if (CustomUtil.hasMeaning(bankAccount)) {
                 edtBankAccount.setText(bankAccount);
             }
         }
@@ -216,7 +216,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             AgentProfile agent = (AgentProfile) object;
             String bankName = agent.getWorkBank().getName();
             // Set value for spinner
-            if (!TextUtils.isEmpty(bankName)) {
+            if (CustomUtil.hasMeaning(bankName)) {
                 for (int i = 0; i < spinBankName.getAdapter().getCount(); i++) {
                     if (spinBankName.getAdapter().getItem(i).toString().contains(bankName)) {
                         spinBankName.setSelection(i);
@@ -271,7 +271,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             edtIdentity.setError(getString(R.string.error_empty_identity));
             edtIdentity.requestFocus();
             return;
-        } else if (CustomUtil.isCorrectIdentity(identity)) {
+        } else if (!CustomUtil.isCorrectIdentity(identity)) {
             edtIdentity.setError(getString(R.string.error_invalid_identity));
             edtIdentity.requestFocus();
             return;
@@ -296,7 +296,9 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         }
 
         // Execute update userProfile profile
-        UserProfile updateUserProfile = new UserProfile(userProfile.getId(), name, surname, identity, gender, phone, address);
+        UserProfile updateUserProfile = new UserProfile(userProfile.getId(), name, surname,
+                userProfile.getEmail(), identity, gender, phone, address, userProfile.getRole(),
+                userProfile.getAccountType());
         new UpdateUserProfileAsync(this, this, updateUserProfile).execute();
 
     }
@@ -304,14 +306,16 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
     @Override
     public void responseFromUpdateUserProfile(String msg) {
         // If update UserProfile success, execute update CustomerProfile or AgentProfile
-        if (msg.equalsIgnoreCase(getString(R.string.msg_update_user_successfully))) {
+        if (msg.equalsIgnoreCase(getString(R.string.db_update_user_successfully))) {
             if (userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
                 updateCustomerProfile();
             } else if (userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
                 updateAgentProfile();
             }
         } else {
-            CustomUtil.displayToast(getApplicationContext(), msg);
+            edtIdentity.getText().clear();
+            edtIdentity.setError(msg);
+            edtIdentity.requestFocus();
         }
     }
 
@@ -356,7 +360,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             return;
         }
 
-        CustomerProfile customerProfile = new CustomerProfile(employment, company, salary, bankAccount);
+        CustomerProfile customerProfile = new CustomerProfile(userProfile, employment, company, salary, bankAccount);
         new UpdateCustomerProfileAsync(this, this, customerProfile).execute();
 
     }
@@ -364,8 +368,13 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
     @Override
     public void responseFromUpdateCustomerProfile(String msg) {
         // If update CustomerProfile success, return intent result
-        if (msg.equalsIgnoreCase(getString(R.string.msg_update_customer_successfully))) {
-            returnIntent(Activity.RESULT_OK, msg);
+        if (msg.equalsIgnoreCase(getString(R.string.db_update_customer_successfully))) {
+            if (TextUtils.isEmpty(caller)) {
+                finish();
+                startActivity(new Intent(this, UserProfileActivity.class));
+            } else {
+                returnIntent(Activity.RESULT_OK, msg);
+            }
         } else {
             returnIntent(Activity.RESULT_CANCELED, msg);
         }
@@ -390,8 +399,13 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
     @Override
     public void responseFromUpdateAgentProfile(String msg) {
         // If update Agent success, return intent result
-        if (msg.equalsIgnoreCase(getString(R.string.msg_update_agent_successfully))) {
-            returnIntent(Activity.RESULT_OK, msg);
+        if (msg.equalsIgnoreCase(getString(R.string.db_update_agent_successfully))) {
+            if (TextUtils.isEmpty(caller)) {
+                finish();
+                startActivity(new Intent(this, UserProfileActivity.class));
+            } else {
+                returnIntent(Activity.RESULT_OK, msg);
+            }
         } else {
             returnIntent(Activity.RESULT_CANCELED, msg);
         }
@@ -408,7 +422,8 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             bankNames.add(bankInfo.getName());
         }
         // Initial spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, bankNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_spinner_item, bankNames);
         adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         spinBankName.setAdapter(adapter);
         spinBankName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

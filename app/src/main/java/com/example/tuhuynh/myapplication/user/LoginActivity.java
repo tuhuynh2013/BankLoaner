@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
         findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                defaulSignIn();
+                defaultSignIn();
             }
         });
 
@@ -100,14 +100,6 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
             }
         });
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if userProfile is signed in (non-null) and update UI accordingly.
-        user = mAuth.getCurrentUser();
-        googleLogin();
     }
 
     private void googleSignIn() {
@@ -154,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                             userProfile.setEmail(user.getEmail());
                             userProfile.setAccountType(AccountType.GOOGLE);
                             userProfile.setRole(UserRole.CUSTOMER);
-                            googleLogin();
+                            registerGoogleAccount();
                         } else {
                             // If sign in fails, display a message to the userProfile.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -166,7 +158,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                 });
     }
 
-    private void googleLogin() {
+    private void registerGoogleAccount() {
         pDialog.dismiss();
         new GoogleRegisterAsync(this, this, userProfile).execute();
     }
@@ -175,24 +167,23 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
     public void responseFromGoogleRegisterCallBack(String msg) {
         if (msg.equalsIgnoreCase(getString(R.string.db_login_success)) ||
                 msg.equalsIgnoreCase(getString(R.string.db_first_time_google_acc))) {
-            setUserSession(userProfile);
-            CustomUtil.displayToast(getApplicationContext(), msg);
+            setUserSession();
         }
         CustomUtil.displayToast(getApplicationContext(), msg);
     }
 
-    private void defaulSignIn() {
+    private void defaultSignIn() {
         // First getting the values
         final String email = edtEmail.getText().toString();
         final String password = etdPassword.getText().toString();
 
         // Validating inputs
-        if (CustomUtil.isIncorrectUsername(email)) {
-            edtEmail.setError(getString(R.string.error_invalid_email));
+        if (TextUtils.isEmpty(email)) {
+            edtEmail.setError(getString(R.string.error_empty_email));
             edtEmail.requestFocus();
             return;
-        } else if (TextUtils.isEmpty(email)) {
-            edtEmail.setError(getString(R.string.error_empty_email));
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            edtEmail.setError(getString(R.string.error_invalid_email));
             edtEmail.requestFocus();
             return;
         }
@@ -217,9 +208,10 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                             assert user != null;
                             userProfile = new UserProfile();
                             userProfile.setId(user.getUid());
+                            userProfile.setEmail(user.getEmail());
                             userProfile.setAccountType(AccountType.DEFAULT);
-                            setUserSession(userProfile);
-                            CustomUtil.displayToast(getApplicationContext(), getString(R.string.db_login_success));
+                            setUserSession();
+
                         } else {
                             etdPassword.getText().clear();
                             etdPassword.setError(Objects.requireNonNull(task.getException()).getMessage());
@@ -229,7 +221,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                 });
     }
 
-    private void setUserSession(UserProfile userProfile) {
+    private void setUserSession() {
         new GetUserProfileAsync(this, getApplicationContext(), userProfile).execute();
     }
 
@@ -240,6 +232,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
         SharedPrefManager.getInstance(getApplicationContext()).userLogin(userProfile);
         // Start the profile activity
         finish();
+        CustomUtil.displayToast(getApplicationContext(), getString(R.string.db_login_success));
         navigateBaseOnRole(userProfile.getRole());
     }
 

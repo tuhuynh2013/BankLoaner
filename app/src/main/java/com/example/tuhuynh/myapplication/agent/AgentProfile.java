@@ -16,7 +16,7 @@ public class AgentProfile extends UserProfile {
                         BankInfo bankInfo) {
         super(userProfile.getId(), userProfile.getName(), userProfile.getSurname(), userProfile.getEmail(),
                 userProfile.getIdentity(), userProfile.getGender(), userProfile.getPhone(),
-                userProfile.getAddress(), userProfile.getRole());
+                userProfile.getAddress(), userProfile.getRole(), userProfile.getAccountType());
         setWorkBank(bankInfo);
     }
 

@@ -127,7 +127,7 @@ public class BankInformationActivity extends AppCompatActivity {
                     return false;
                 }
             } else {
-                edtAmount.setError(getString(R.string.error_atleast_amount));
+                edtAmount.setError(getString(R.string.error_at_least_amount));
                 edtAmount.requestFocus();
                 return false;
             }
