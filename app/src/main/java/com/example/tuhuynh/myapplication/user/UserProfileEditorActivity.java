@@ -6,51 +6,37 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
-import com.example.tuhuynh.myapplication.asynctask.UpdateAgentProfileAsync;
-import com.example.tuhuynh.myapplication.asynctask.UpdateAgentProfileCallBack;
 import com.example.tuhuynh.myapplication.asynctask.UpdateCustomerProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.UpdateCustomerProfileCallBack;
 import com.example.tuhuynh.myapplication.asynctask.UpdateUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.UpdateUserProfileCallBack;
-import com.example.tuhuynh.myapplication.bank.BankInfo;
-import com.example.tuhuynh.myapplication.asynctask.GetBanksAsync;
-import com.example.tuhuynh.myapplication.asynctask.GetBanksCallBack;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
-import java.util.ArrayList;
-import java.util.List;
 
+public class UserProfileEditorActivity extends AppCompatActivity implements GetUserProfileCallBack,
+        UpdateUserProfileCallBack, UpdateCustomerProfileCallBack {
 
-public class UserProfileEditorActivity extends AppCompatActivity implements GetUserProfileCallBack, GetBanksCallBack,
-        UpdateUserProfileCallBack, UpdateCustomerProfileCallBack, UpdateAgentProfileCallBack {
-
-    private TextView tvEmail;
+    private TextView tvEmail, tvBankName;
     private EditText edtName, edtSurname, edtIdentity, edtPhone, edtAddress, edtEmployment,
             edtCompany, edtSalary, edtBankAccount;
     private RadioGroup rdgGender;
     private RadioButton rdMale, rdFemale;
-    private Spinner spinBankName;
     private Button btnSave;
 
     private String caller;
     private UserProfile userProfile;
-    private List<BankInfo> banks;
-    private List<String> bankNames = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,12 +103,12 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         TextView tvBankAccount = findViewById(R.id.tv_bank_account);
         edtBankAccount = findViewById(R.id.edt_bank_account);
         TextView tvBank = findViewById(R.id.tv_bank);
-        spinBankName = findViewById(R.id.spin_bank_name);
+        tvBankName = findViewById(R.id.tv_bank_name);
         btnSave = findViewById(R.id.btn_save);
 
         if (userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
             tvBank.setVisibility(View.GONE);
-            spinBankName.setVisibility(View.GONE);
+            tvBankName.setVisibility(View.GONE);
         } else if (userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
             tvEmployment.setVisibility(View.GONE);
             edtEmployment.setVisibility(View.GONE);
@@ -132,9 +118,6 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             edtSalary.setVisibility(View.GONE);
             tvBankAccount.setVisibility(View.GONE);
             edtBankAccount.setVisibility(View.GONE);
-
-            // Get bank info from db
-            new GetBanksAsync(this, this).execute();
 
         }
         // Retrieve userProfile profile from db
@@ -217,14 +200,9 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             String bankName = agent.getWorkBank().getName();
             // Set value for spinner
             if (CustomUtil.hasMeaning(bankName)) {
-                for (int i = 0; i < spinBankName.getAdapter().getCount(); i++) {
-                    if (spinBankName.getAdapter().getItem(i).toString().contains(bankName)) {
-                        spinBankName.setSelection(i);
-                    }
-                }
+                tvBankName.setText(bankName);
             }
         }
-
     }
 
     /**
@@ -310,13 +288,21 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             if (userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
                 updateCustomerProfile();
             } else if (userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
-                updateAgentProfile();
+                // If update Agent success, return intent result
+                if (TextUtils.isEmpty(caller)) {
+                    finish();
+                    startActivity(new Intent(this, UserProfileActivity.class));
+                } else {
+                    returnIntent(Activity.RESULT_OK, msg);
+                }
+                CustomUtil.displayToast(getApplicationContext(), msg);
             }
         } else {
             edtIdentity.getText().clear();
             edtIdentity.setError(msg);
             edtIdentity.requestFocus();
         }
+        CustomUtil.displayToast(getApplicationContext(), msg);
     }
 
     /**
@@ -379,64 +365,6 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             returnIntent(Activity.RESULT_CANCELED, msg);
         }
         CustomUtil.displayToast(getApplicationContext(), msg);
-    }
-
-    /**
-     * Execute update customer profile function
-     */
-    private void updateAgentProfile() {
-        // Get bank info from userProfile selected
-        BankInfo bank = new BankInfo();
-        for (BankInfo bankInfo : banks) {
-            if (bankInfo.getName().equalsIgnoreCase(spinBankName.getSelectedItem().toString())) {
-                bank = bankInfo;
-                break;
-            }
-        }
-        new UpdateAgentProfileAsync(this, this, new AgentProfile(bank)).execute();
-    }
-
-    @Override
-    public void responseFromUpdateAgentProfile(String msg) {
-        // If update Agent success, return intent result
-        if (msg.equalsIgnoreCase(getString(R.string.db_update_agent_successfully))) {
-            if (TextUtils.isEmpty(caller)) {
-                finish();
-                startActivity(new Intent(this, UserProfileActivity.class));
-            } else {
-                returnIntent(Activity.RESULT_OK, msg);
-            }
-        } else {
-            returnIntent(Activity.RESULT_CANCELED, msg);
-        }
-        CustomUtil.displayToast(getApplicationContext(), msg);
-    }
-
-    /**
-     * Get list of banks
-     */
-    @Override
-    public void responseFromGetBanks(List<BankInfo> banks) {
-        this.banks = banks;
-        for (BankInfo bankInfo : banks) {
-            bankNames.add(bankInfo.getName());
-        }
-        // Initial spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
-                android.R.layout.simple_spinner_item, bankNames);
-        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        spinBankName.setAdapter(adapter);
-        spinBankName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     /**
