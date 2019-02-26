@@ -1,6 +1,7 @@
 package com.example.tuhuynh.myapplication.customer;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
@@ -35,7 +35,7 @@ public class BankListFragment extends Fragment {
 
     private View view;
     private List<BankInfo> banks;
-
+    private ProgressDialog pDialog;
     public BankListFragment() {
         // Required empty public constructor
     }
@@ -44,6 +44,7 @@ public class BankListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = getLayoutInflater().inflate(R.layout.frag_bank_list, container, false);
+        pDialog = new ProgressDialog(view.getContext());
         getBanks();
         return view;
     }
@@ -53,16 +54,14 @@ public class BankListFragment extends Fragment {
      */
     private void getBanks() {
 
+        displayProgressDialog();
+
         @SuppressLint("StaticFieldLeak")
         class BankList extends AsyncTask<Void, Void, String> {
-
-            private ProgressBar progressBar;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                progressBar = view.findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -78,7 +77,6 @@ public class BankListFragment extends Fragment {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                progressBar.setVisibility(View.GONE);
 
                 try {
                     // Converting response to json object
@@ -95,6 +93,7 @@ public class BankListFragment extends Fragment {
                         ListView listView = view.findViewById(R.id.lv_bank_list);
                         BankListAdapter bankListAdapter = new BankListAdapter(view.getContext(), R.layout.bank_list_adapter, banks);
                         listView.setAdapter(bankListAdapter);
+                        pDialog.dismiss();
 
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
@@ -171,6 +170,16 @@ public class BankListFragment extends Fragment {
             }
         }
         return false;
+    }
+
+    /**
+     * Display Progress bar
+     */
+    private void displayProgressDialog() {
+        pDialog.setMessage(getString(R.string.dialog_get_bank));
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        pDialog.show();
     }
 
 

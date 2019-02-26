@@ -165,15 +165,13 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             CustomUtil.displayToast(getApplicationContext(), "Login Failed: ");
                         }
-                        pDialog.dismiss();
                     }
 
                 });
     }
 
     private void registerGoogleAccount() {
-        pDialog.dismiss();
-        new GoogleRegisterAsync(this, this, userProfile).execute();
+        new GoogleRegisterAsync(this, userProfile).execute();
     }
 
     @Override
@@ -181,6 +179,8 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
         if (msg.equalsIgnoreCase(getString(R.string.db_login_success)) ||
                 msg.equalsIgnoreCase(getString(R.string.db_first_time_google_acc))) {
             setUserSession();
+        } else {
+            pDialog.dismiss();
         }
         CustomUtil.displayToast(getApplicationContext(), msg);
     }
@@ -213,7 +213,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
     }
 
     @Override
-    public void responseFromGoogleRegister(boolean isUserExisted, String status, String msg) {
+    public void responseFromGetUserStatus(boolean isUserExisted, String status, String msg) {
         final String email = edtEmail.getText().toString();
         final String password = edtPassword.getText().toString();
 
@@ -224,7 +224,6 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                pDialog.dismiss();
                                 // If the task is successful
                                 if (task.isSuccessful()) {
                                     user = mAuth.getCurrentUser();
@@ -234,11 +233,11 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                                     userProfile.setEmail(user.getEmail());
                                     userProfile.setAccountType(AccountType.DEFAULT);
                                     setUserSession();
-
                                 } else {
                                     edtPassword.getText().clear();
                                     edtPassword.setError(Objects.requireNonNull(task.getException()).getMessage());
                                     edtPassword.requestFocus();
+                                    pDialog.dismiss();
                                 }
                             }
                         });
@@ -246,13 +245,14 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                 edtEmail.setError(getString(R.string.msg_user_deactivate));
                 edtEmail.requestFocus();
                 edtPassword.getText().clear();
+                pDialog.dismiss();
             }
         } else {
             edtEmail.setError(msg);
             edtEmail.requestFocus();
             edtPassword.getText().clear();
+            pDialog.dismiss();
         }
-        pDialog.dismiss();
     }
 
     private void setUserSession() {
@@ -282,6 +282,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
             startActivity(new Intent(getApplicationContext(), AdminHomeActivity.class));
         }
         finish();
+        pDialog.dismiss();
     }
 
     /**

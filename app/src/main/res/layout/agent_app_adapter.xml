@@ -6,7 +6,6 @@
     tools:context=".customer.BankListFragment">
 
     <ImageView
-
         android:id="@+id/img_avatar"
         android:layout_width="200dp"
         android:layout_height="100dp"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -405,38 +406,37 @@
 
     </TableLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone" />
-
-    <ImageButton
-        android:id="@+id/btn_approved"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_approved"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="75dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/approved_shape"
-        android:contentDescription="@string/des_approved"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_approved" />
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="341dp"
+        android:layout_marginBottom="90dp"
+        android:backgroundTint="@android:color/holo_green_light"
+        android:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_approved" />
 
-    <ImageButton
-        android:id="@+id/btn_rejected"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_alignParentEnd="true"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_rejected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="75dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/rejected_shape"
-        android:contentDescription="@string/des_rejected"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_rejected" />
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="341dp"
+        android:layout_marginBottom="22dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_rejected" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="95dp"
+        android:layout_height="72dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

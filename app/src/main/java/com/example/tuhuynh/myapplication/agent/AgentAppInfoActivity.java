@@ -2,11 +2,11 @@ package com.example.tuhuynh.myapplication.agent;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
@@ -24,7 +24,7 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
     TextView tvApplicationID, tvMonth, tvAmount, tvInterest, tvDate, tvStatus;
     TextView tvCustomerName, tvSurname, tvCompany, tvEmployment, tvSalary,
             tvGender, tvPhone, tvAddress, tvIdentity;
-    ImageButton btnApprove, btnRejected;
+    FloatingActionButton fabApproved, fabRejected;
 
     ApplicationInfo application;
 
@@ -53,11 +53,11 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
 
         String caller = intent.getStringExtra("caller");
         if (caller.equalsIgnoreCase("AgentAppHistory")) {
-            btnApprove.setVisibility(View.GONE);
-            btnRejected.setVisibility(View.GONE);
+            fabApproved.hide();
+            fabRejected.hide();
         } else {
             // Set action for approved button
-            btnApprove.setOnClickListener(new View.OnClickListener() {
+            fabApproved.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String strAmount = CustomUtil.convertLongToFormattedString(application.getAmount());
@@ -67,7 +67,7 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
             });
 
             // Set action for rejected button
-            btnRejected.setOnClickListener(new View.OnClickListener() {
+            fabRejected.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     application.setStatus(ApplicationStatus.REJECTED);
@@ -102,8 +102,8 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
         tvIdentity = findViewById(R.id.tv_identity);
 
         // Button section
-        btnApprove = findViewById(R.id.btn_approved);
-        btnRejected = findViewById(R.id.btn_rejected);
+        fabApproved = findViewById(R.id.fab_approved);
+        fabRejected = findViewById(R.id.fab_rejected);
     }
 
     /**

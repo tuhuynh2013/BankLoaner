@@ -289,6 +289,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:maxLines="100"
+                        android:scrollHorizontally="false"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
                 </TableRow>
@@ -307,10 +311,9 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_width="95dp"
+        android:layout_height="72dp"
+        android:layout_centerInParent="true"
         android:visibility="gone" />
 
 </RelativeLayout>

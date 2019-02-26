@@ -32,6 +32,7 @@ public class AgentProfileActivity extends AppCompatActivity implements UpdateUse
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_profile);
+        setTitle(getString(R.string.title_agent_management));
 
         // Create Up button
         if (getSupportActionBar() != null) {
@@ -79,14 +80,28 @@ public class AgentProfileActivity extends AppCompatActivity implements UpdateUse
         btnDeactivate = findViewById(R.id.btn_deactivate);
 
         tvName.setText(agentProfile.getName());
-        tvSurname.setText(agentProfile.getSurname());
+
+        if (CustomUtil.hasMeaning(agentProfile.getSurname())) {
+            tvSurname.setText(agentProfile.getSurname());
+        }
+
+
         tvEmail.setText(agentProfile.getEmail());
-        tvIdentity.setText(agentProfile.getIdentity());
+
+        if (CustomUtil.hasMeaning(agentProfile.getIdentity()))
+            tvIdentity.setText(agentProfile.getIdentity());
+
         tvGender.setText(agentProfile.getGender());
+
         tvPhone.setText(agentProfile.getPhone());
-        tvAddress.setText(agentProfile.getAddress());
+
+        if (CustomUtil.hasMeaning(agentProfile.getAddress()))
+            tvAddress.setText(agentProfile.getAddress());
+
         setStatusColor();
+
         tvBank.setText(agentProfile.getWorkBank().getName());
+
         setButton();
     }
 

@@ -19,11 +19,13 @@ import java.util.HashMap;
 
 public class CustomerRegisterAsync extends AsyncTask<Void, Void, String> {
 
+    private CustomerRegisterCallBack cb;
     @SuppressLint("StaticFieldLeak")
     private Context context;
     private UserProfile userProfile;
 
-    public CustomerRegisterAsync(Context context, UserProfile userProfile) {
+    public CustomerRegisterAsync(CustomerRegisterCallBack cb, Context context, UserProfile userProfile) {
+        this.cb = cb;
         this.context = context;
         this.userProfile = userProfile;
     }
@@ -72,6 +74,7 @@ public class CustomerRegisterAsync extends AsyncTask<Void, Void, String> {
             } else {
                 CustomUtil.displayToast(context, msg);
             }
+            cb.responseFromCustomerRegister(msg);
         } catch (JSONException e) {
             e.printStackTrace();
         }

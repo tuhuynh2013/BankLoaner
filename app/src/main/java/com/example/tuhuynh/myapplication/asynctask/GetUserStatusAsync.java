@@ -51,9 +51,9 @@ public class GetUserStatusAsync extends AsyncTask<Void, Void, String> {
             // If no error in response
             if (!obj.getBoolean("error")) {
                 status = obj.getString("status");
-                cb.responseFromGoogleRegister(true, status, msg);
+                cb.responseFromGetUserStatus(true, status, msg);
             } else {
-                cb.responseFromGoogleRegister(false, status, msg);
+                cb.responseFromGetUserStatus(false, status, msg);
             }
         } catch (
                 JSONException e) {

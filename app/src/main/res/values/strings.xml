@@ -45,7 +45,7 @@
     <string name="tv_reset_instruction">To reset password, enter your email, press the button and check mail to follow instruction.</string>
     <string name="btn_reset_pass">Reset Password</string>
     <string name="btn_back">Back</string>
-    <string name="msg_sent">Check email to reset your password!</string>
+    <string name="msg_sent">**Check email to reset your password!</string>
 
     <!--Change Password Activity-->
     <string name="msg_change_pass">Changing password, Please wait…</string>
@@ -61,6 +61,7 @@
     <string name="db_update_agent_successfully">Update agent profile successfully</string>
     <string name="db_get_agents_success">Retrieve list of agents successful</string>
     <string name="db_user_status_updated">User status updated</string>
+    <string name="db_customer_register_success">Customer registered successfully</string>
 
     <!--Database error messages-->
     <string name="error_retrieve_fail">Fail to retrieve data</string>
@@ -108,6 +109,7 @@
     <string name="debit_amount">Debit amount</string>
     <string name="calculate">Calculate</string>
     <string name="msg_retrieve_banklist_success">Retrieve list of banks successful</string>
+    <string name="dialog_get_bank">Getting list of banks. Please wait....</string>
 
     <!--Bank Info-->
     <string name="month">Month</string>
@@ -143,6 +145,9 @@
     <string name="hint_select_bank">Select your bank</string>
     <string name="tv_bank">Bank</string>
     <string name="apply">Apply</string>
+
+    <!--Profile Editor Activity-->
+    <string name="ui_customer_profile_updated">Your profile has updated!</string>
 
     <!--Loan Application-->
     <string name="tv_bank_name">Bank name:</string>

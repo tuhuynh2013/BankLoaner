@@ -63,7 +63,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@string/surname"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -109,7 +108,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@string/identity_id"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -178,7 +176,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@string/address"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -201,6 +198,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:ellipsize="none"
+            android:maxLines="100"
+            android:scrollHorizontally="false"
             android:text="@string/tv_bank"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
@@ -230,27 +231,29 @@
 
     </TableRow>
 
-    <TableRow
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="2">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_active"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/btn_active"
+            android:layout_weight="1"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/btn_deactivate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/btn_deactivate"
+            android:layout_weight="1"
             tools:ignore="ButtonStyle" />
 
-    </TableRow>
+    </LinearLayout>
+
 
 </TableLayout>

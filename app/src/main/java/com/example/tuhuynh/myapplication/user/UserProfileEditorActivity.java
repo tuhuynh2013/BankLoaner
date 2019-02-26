@@ -68,6 +68,9 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             }
         }
 
+        // Retrieve userProfile profile from db
+        new GetUserProfileAsync(this, this, userProfile).execute();
+
         // Initial for profile editor screen
         initialProfileEditorScreen();
 
@@ -84,6 +87,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
      * Initial elements and set its own value
      */
     private void initialProfileEditorScreen() {
+
         // Initial element
         edtName = findViewById(R.id.edt_name);
         edtSurname = findViewById(R.id.edt_surname);
@@ -120,8 +124,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             edtBankAccount.setVisibility(View.GONE);
 
         }
-        // Retrieve userProfile profile from db
-        new GetUserProfileAsync(this, this, userProfile).execute();
+
     }
 
     /**
@@ -358,13 +361,13 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             if (TextUtils.isEmpty(caller)) {
                 finish();
                 startActivity(new Intent(this, UserProfileActivity.class));
+                CustomUtil.displayToast(getApplicationContext(), getString(R.string.ui_customer_profile_updated));
             } else {
                 returnIntent(Activity.RESULT_OK, msg);
             }
         } else {
             returnIntent(Activity.RESULT_CANCELED, msg);
         }
-        CustomUtil.displayToast(getApplicationContext(), msg);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.example.tuhuynh.myapplication.customadapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
+import com.example.tuhuynh.myapplication.user.UserStatus;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import java.util.List;
@@ -48,12 +50,14 @@ public class AgentListAdapter extends ArrayAdapter<AgentProfile> {
         TextView tvBank = rowView.findViewById(R.id.tv_bank);
         TextView tvPhone = rowView.findViewById(R.id.tv_phone);
         TextView tvEmail = rowView.findViewById(R.id.tv_email);
+        TextView tvStatus = rowView.findViewById(R.id.tv_status);
 
         // Get value
         AgentProfile agent = agents.get(position);
         String bank = agent.getWorkBank().getName();
         String phone = agent.getPhone();
         String email = agent.getEmail();
+        String status = agent.getStatus();
 
         // Set value for text view
         if (CustomUtil.hasMeaning(agent.getSurname())) {
@@ -65,6 +69,13 @@ public class AgentListAdapter extends ArrayAdapter<AgentProfile> {
         tvBank.setText(bank);
         tvPhone.setText(phone);
         tvEmail.setText(email);
+        tvStatus.setText(status);
+
+        if (status.equalsIgnoreCase(UserStatus.DEACTIVATE)) {
+            tvStatus.setTextColor(Color.parseColor("#CC0000"));
+        } else {
+            tvStatus.setTextColor(Color.parseColor("#009900"));
+        }
         imgAvatar.setImageResource(R.drawable.ic_user_avatar);
 
         return rowView;

@@ -22,20 +22,16 @@ public class GoogleRegisterAsync extends AsyncTask<Void, Void, String> {
 
     private GoogleRegisterCallBack cb;
     @SuppressLint("StaticFieldLeak")
-    private ProgressBar progressBar;
     private UserProfile userProfile;
 
-    public GoogleRegisterAsync(GoogleRegisterCallBack cb, Context context, UserProfile userProfile) {
+    public GoogleRegisterAsync(GoogleRegisterCallBack cb, UserProfile userProfile) {
         this.cb = cb;
-        progressBar = ((Activity) context).findViewById(R.id.progressBar);
         this.userProfile = userProfile;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        // Displaying the progress bar while userProfile registers on the server
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -56,8 +52,6 @@ public class GoogleRegisterAsync extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        // Hiding the progressbar after completion
-        progressBar.setVisibility(View.GONE);
 
         try {
             // Converting response to json object
@@ -68,4 +62,6 @@ public class GoogleRegisterAsync extends AsyncTask<Void, Void, String> {
             e.printStackTrace();
         }
     }
+
+
 }

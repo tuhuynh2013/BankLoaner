@@ -1,6 +1,5 @@
 package com.example.tuhuynh.myapplication.user;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.asynctask.CustomerRegisterAsync;
+import com.example.tuhuynh.myapplication.asynctask.CustomerRegisterCallBack;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,8 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Objects;
 
 
-@SuppressLint("Registered")
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements CustomerRegisterCallBack {
 
     EditText edtName, edtEmail, edtPassword, edtConfirmPassword;
     TextView tvLogin;
@@ -144,9 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                             userProfile.setEmail(user.getEmail());
                             userProfile.setRole(UserRole.CUSTOMER);
                             userProfile.setAccountType(AccountType.DEFAULT);
-                            new CustomerRegisterAsync(getApplicationContext(), userProfile).execute();
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), UserProfileEditorActivity.class));
+                            writeCustomerProfileToDB(userProfile);
                         } else {
                             try {
                                 throw Objects.requireNonNull(task.getException());
@@ -166,6 +163,20 @@ public class RegisterActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     }
                 });
+    }
+
+    private void writeCustomerProfileToDB(UserProfile userProfile) {
+        new CustomerRegisterAsync(this, this, userProfile).execute();
+    }
+
+    @Override
+    public void responseFromCustomerRegister(String msg) {
+        if (msg.equalsIgnoreCase(getString(R.string.db_customer_register_success))) {
+            finish();
+            startActivity(new Intent(this, UserProfileEditorActivity.class));
+        } else {
+            CustomUtil.displayToast(this, msg);
+        }
     }
 
 

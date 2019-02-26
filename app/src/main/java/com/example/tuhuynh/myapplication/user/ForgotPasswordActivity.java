@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
@@ -19,6 +21,8 @@ import java.util.Objects;
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     EditText edtResetEmail;
+    TextView tvMessage;
+    Button btnResetPass;
     private FirebaseAuth mAuth;
 
     @Override
@@ -29,10 +33,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         // Initial element
         edtResetEmail = findViewById(R.id.edt_reset_email);
+        tvMessage = findViewById(R.id.tv_msg);
+        btnResetPass = findViewById(R.id.btn_reset_password);
 
         mAuth = FirebaseAuth.getInstance();
 
-        findViewById(R.id.btn_reset_password).setOnClickListener(new View.OnClickListener() {
+        btnResetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resetPassword();
@@ -66,9 +72,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            CustomUtil.displayToast(getApplicationContext(), getString(R.string.msg_sent));
+                            tvMessage.setVisibility(View.VISIBLE);
+                            tvMessage.setText(getString(R.string.msg_sent));
+                            btnResetPass.setEnabled(false);
                         } else {
-                            CustomUtil.displayToast(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage());
+                            tvMessage.setVisibility(View.VISIBLE);
+                            tvMessage.setText(Objects.requireNonNull(task.getException()).getMessage());
                         }
                     }
                 });
