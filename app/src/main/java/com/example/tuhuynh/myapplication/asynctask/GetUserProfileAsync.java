@@ -89,6 +89,8 @@ public class GetUserProfileAsync extends AsyncTask<Void, Void, String> {
 
                     AgentProfile agentProfile = new AgentProfile(userProfile, bank);
                     cb.responseFromGetUserProfile(agentProfile);
+                } else if (userProfile.getRole().equalsIgnoreCase(UserRole.ADMIN)) {
+                    cb.responseFromGetUserProfile(userProfile);
                 }
             } else {
                 CustomUtil.displayToast(context.getApplicationContext(), msg);

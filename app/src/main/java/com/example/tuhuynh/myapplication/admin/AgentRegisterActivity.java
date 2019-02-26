@@ -1,20 +1,29 @@
-package com.example.tuhuynh.myapplication.user;
+package com.example.tuhuynh.myapplication.admin;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Spinner;
 
-import com.example.tuhuynh.myapplication.asynctask.CustomerRegisterAsync;
-import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.agent.AgentProfile;
+import com.example.tuhuynh.myapplication.asynctask.AgentRegisterAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetBanksAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetBanksCallBack;
+import com.example.tuhuynh.myapplication.asynctask.CustomerRegisterAsync;
+import com.example.tuhuynh.myapplication.bank.BankInfo;
+import com.example.tuhuynh.myapplication.user.AccountType;
+import com.example.tuhuynh.myapplication.user.UserProfile;
+import com.example.tuhuynh.myapplication.user.UserRole;
+import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,32 +33,34 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
-@SuppressLint("Registered")
-public class RegisterActivity extends AppCompatActivity {
+public class AgentRegisterActivity extends AppCompatActivity implements GetBanksCallBack {
 
-    EditText edtName, edtEmail, edtPassword, edtConfirmPassword;
-    TextView tvLogin;
+    EditText edtName, edtEmail, edtPhone, edtPassword, edtConfirmPassword;
     Button btnRegister;
+    private Spinner spinBankName;
     private ProgressDialog progressDialog;
-
     // Defining firebase auth object
     private FirebaseAuth mAuth;
+    BankInfo selectedBank;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        setTitle(getString(R.string.title_register));
+        setContentView(R.layout.activity_agent_register);
+        setTitle(getString(R.string.title_agent_register));
 
-        edtName = findViewById(R.id.edt_name);
-        edtEmail = findViewById(R.id.edt_email);
-        edtPassword = findViewById(R.id.edt_password);
-        edtConfirmPassword = findViewById(R.id.edt_confirm_password);
-        btnRegister = findViewById(R.id.btn_register);
-        tvLogin = findViewById(R.id.tv_login);
+        // Create Up button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        // Initial views of this activity
+        initialViews();
 
         // Initializing firebase auth object
         mAuth = FirebaseAuth.getInstance();
@@ -59,29 +70,58 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // If userProfile pressed on button register, we will register the userProfile to server
-                registerUser();
-            }
-        });
-
-        tvLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // If userProfile pressed on login, we will open the login screen
-                finish();
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                registerAgent();
             }
         });
 
     }
 
+    private void initialViews() {
+        edtName = findViewById(R.id.edt_name);
+        edtEmail = findViewById(R.id.edt_email);
+        edtPhone = findViewById(R.id.edt_phone);
+        edtPassword = findViewById(R.id.edt_password);
+        edtConfirmPassword = findViewById(R.id.edt_confirm_password);
+        spinBankName = findViewById(R.id.spin_bank_name);
+        btnRegister = findViewById(R.id.btn_register);
+        // Get bank info from db
+        new GetBanksAsync(this, this).execute();
+    }
+
+    @Override
+    public void responseFromGetBanks(final List<BankInfo> banks) {
+        List<String> bankArrayList = new ArrayList<>();
+
+        for (BankInfo bankInfo : banks) {
+            bankArrayList.add(bankInfo.getName());
+        }
+        // Initial spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
+                android.R.layout.simple_spinner_item, bankArrayList);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        spinBankName.setAdapter(adapter);
+        spinBankName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedBank = banks.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     /**
      * Function uses to validate input and process register
      */
-    private void registerUser() {
+    private void registerAgent() {
 
         final String capitalName;
         String name = edtName.getText().toString().trim();
         final String email = edtEmail.getText().toString().trim();
+        final String phone = edtPhone.getText().toString().trim();
         final String password = edtPassword.getText().toString().trim();
         final String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
@@ -107,6 +147,16 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if (TextUtils.isEmpty(phone)) {
+            edtPhone.setError(getString(R.string.error_empty_phone));
+            edtPhone.requestFocus();
+            return;
+        } else if (!CustomUtil.isCorrectPhone(phone)) {
+            edtPhone.setError(getString(R.string.error_invalid_phone));
+            edtPhone.requestFocus();
+            return;
+        }
+
         if (TextUtils.isEmpty(password)) {
             edtPassword.setError(getString(R.string.error_empty_password));
             edtPassword.requestFocus();
@@ -122,6 +172,10 @@ public class RegisterActivity extends AppCompatActivity {
         if (!password.equals(confirmPassword)) {
             edtPassword.setError(getString(R.string.error_not_match_password));
             edtPassword.requestFocus();
+            return;
+        }
+
+        if (selectedBank == null) {
             return;
         }
 
@@ -142,11 +196,13 @@ public class RegisterActivity extends AppCompatActivity {
                             userProfile.setId(user.getUid());
                             userProfile.setName(capitalName);
                             userProfile.setEmail(user.getEmail());
-                            userProfile.setRole(UserRole.CUSTOMER);
+                            userProfile.setPhone(phone);
+                            userProfile.setRole(UserRole.AGENT);
                             userProfile.setAccountType(AccountType.DEFAULT);
-                            new CustomerRegisterAsync(getApplicationContext(), userProfile).execute();
+                            AgentProfile agentProfile = new AgentProfile(userProfile, selectedBank);
+                            new AgentRegisterAsync(getApplicationContext(), agentProfile).execute();
                             finish();
-                            startActivity(new Intent(getApplicationContext(), UserProfileEditorActivity.class));
+                            startActivity(new Intent(getApplicationContext(), AgentManagementActivity.class));
                         } else {
                             try {
                                 throw Objects.requireNonNull(task.getException());

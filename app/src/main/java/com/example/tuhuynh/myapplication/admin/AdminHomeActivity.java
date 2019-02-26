@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.agent.AssignedAppsActivity;
 import com.example.tuhuynh.myapplication.user.AccountType;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
 import com.example.tuhuynh.myapplication.user.UserProfile;

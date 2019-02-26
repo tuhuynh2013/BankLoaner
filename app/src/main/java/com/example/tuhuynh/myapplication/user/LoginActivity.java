@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.tuhuynh.myapplication.admin.AdminHomeActivity;
 import com.example.tuhuynh.myapplication.agent.AgentHomeActivity;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
@@ -254,6 +255,8 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
             startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
         } else if (userRole.equalsIgnoreCase(UserRole.AGENT)) {
             startActivity(new Intent(getApplicationContext(), AgentHomeActivity.class));
+        } else if (userRole.equalsIgnoreCase(UserRole.ADMIN)) {
+            startActivity(new Intent(getApplicationContext(), AdminHomeActivity.class));
         }
         finish();
     }

@@ -68,7 +68,7 @@ public class GetAgentsAsync extends AsyncTask<Void, Void, String> {
                     msg.equalsIgnoreCase(context.getString(R.string.db_get_agents_success))) {
 
                 // Getting the user from the response
-                JSONArray jsonArray = obj.getJSONArray("banks");
+                JSONArray jsonArray = obj.getJSONArray("agents");
                 List<AgentProfile> agents = extractAgentList(jsonArray);
                 // Sort by agent name
                 Collections.sort(agents, new Comparator<AgentProfile>() {

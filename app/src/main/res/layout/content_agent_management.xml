@@ -8,4 +8,18 @@
     tools:context=".admin.AgentManagementActivity"
     tools:showIn="@layout/activity_agent_management">
 
+    <ListView
+        android:id="@+id/lv_agents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
+
 </android.support.constraint.ConstraintLayout>

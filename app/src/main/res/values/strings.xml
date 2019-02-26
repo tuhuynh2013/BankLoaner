@@ -13,6 +13,8 @@
     <string name="title_application_history">Application History</string>
     <string name="title_sharing_history">Sharing Applications</string>
     <string name="title_reset_pass">Reset Password</string>
+    <string name="title_agent_management">Agent Management</string>
+    <string name="title_agent_register">Agent Register</string>
 
     <!--common string-->
     <string name="id">ID</string>
@@ -208,5 +210,6 @@
     <string name="tv_email">Email:</string>
     <string name="tv_bank_colon">Bank:</string>
     <string name="title_activity_agent_management">AgentManagementActivity</string>
+    <string name="title_activity_main">MainActivity</string>
 
 </resources>

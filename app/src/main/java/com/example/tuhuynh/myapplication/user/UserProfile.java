@@ -16,7 +16,7 @@ public class UserProfile implements Serializable {
     private String role;
     private String accountType;
 
-    protected UserProfile() {
+    public UserProfile() {
 
     }
 
