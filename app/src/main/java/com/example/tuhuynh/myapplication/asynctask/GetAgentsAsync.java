@@ -100,8 +100,13 @@ public class GetAgentsAsync extends AsyncTask<Void, Void, String> {
             agent.setId(agentJson.getString("id"));
             agent.setName(agentJson.getString("name"));
             agent.setSurname(agentJson.getString("surname"));
-            agent.setPhone(agentJson.getString("phone"));
             agent.setEmail(agentJson.getString("email"));
+            agent.setIdentity(agentJson.getString("identity"));
+            agent.setGender(agentJson.getString("gender"));
+            agent.setPhone(agentJson.getString("phone"));
+            agent.setAddress(agentJson.getString("address"));
+            agent.setAddress(agentJson.getString("address"));
+            agent.setStatus(agentJson.getString("status"));
             BankInfo bank = new BankInfo();
             bank.setName(agentJson.getString("bank_name"));
             agent.setWorkBank(bank);
@@ -110,5 +115,6 @@ public class GetAgentsAsync extends AsyncTask<Void, Void, String> {
         }
         return agentList;
     }
+
 
 }

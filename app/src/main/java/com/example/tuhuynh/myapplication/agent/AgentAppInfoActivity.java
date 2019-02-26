@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
-import com.example.tuhuynh.myapplication.asynctask.UpdateStatusAsync;
+import com.example.tuhuynh.myapplication.asynctask.UpdateApplicationStatusAsync;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
@@ -159,7 +159,7 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                new UpdateStatusAsync(getApplicationContext(), application).execute();
+                new UpdateApplicationStatusAsync(getApplicationContext(), application).execute();
                 startActivity(new Intent(getApplicationContext(), AssignedAppsActivity.class));
                 finish();
             }

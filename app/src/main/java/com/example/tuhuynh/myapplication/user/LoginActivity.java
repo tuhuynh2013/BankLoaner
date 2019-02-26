@@ -15,6 +15,8 @@ import com.example.tuhuynh.myapplication.agent.AgentHomeActivity;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
+import com.example.tuhuynh.myapplication.asynctask.GetUserStatusAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetUserStatusCallBack;
 import com.example.tuhuynh.myapplication.asynctask.GoogleRegisterAsync;
 import com.example.tuhuynh.myapplication.asynctask.GoogleRegisterCallBack;
 import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
@@ -37,9 +39,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Objects;
 
 
-public class LoginActivity extends AppCompatActivity implements GetUserProfileCallBack, GoogleRegisterCallBack {
+public class LoginActivity extends AppCompatActivity implements GetUserProfileCallBack, GoogleRegisterCallBack, GetUserStatusCallBack {
 
-    EditText edtEmail, etdPassword;
+    EditText edtEmail, edtPassword;
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -81,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
 
         // Initial element
         edtEmail = findViewById(R.id.edt_email);
-        etdPassword = findViewById(R.id.edt_password);
+        edtPassword = findViewById(R.id.edt_password);
 
         // If user presses on login, calling the method login
         findViewById(R.id.btn_sign_in).setOnClickListener(new View.OnClickListener() {
@@ -186,7 +188,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
     private void defaultSignIn() {
         // First getting the values
         final String email = edtEmail.getText().toString();
-        final String password = etdPassword.getText().toString();
+        final String password = edtPassword.getText().toString();
 
         // Validating inputs
         if (TextUtils.isEmpty(email)) {
@@ -200,36 +202,57 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
         }
 
         if (TextUtils.isEmpty(password)) {
-            etdPassword.setError(getString(R.string.error_empty_password));
-            etdPassword.requestFocus();
+            edtPassword.setError(getString(R.string.error_empty_password));
+            edtPassword.requestFocus();
             return;
         }
-
         // Display progress dialog
         displayProgressDialog();
-        // Logging in with email and password
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        pDialog.dismiss();
-                        // If the task is successful
-                        if (task.isSuccessful()) {
-                            user = mAuth.getCurrentUser();
-                            assert user != null;
-                            userProfile = new UserProfile();
-                            userProfile.setId(user.getUid());
-                            userProfile.setEmail(user.getEmail());
-                            userProfile.setAccountType(AccountType.DEFAULT);
-                            setUserSession();
+        new GetUserStatusAsync(this, email).execute();
 
-                        } else {
-                            etdPassword.getText().clear();
-                            etdPassword.setError(Objects.requireNonNull(task.getException()).getMessage());
-                            etdPassword.requestFocus();
-                        }
-                    }
-                });
+    }
+
+    @Override
+    public void responseFromGoogleRegister(boolean isUserExisted, String status, String msg) {
+        final String email = edtEmail.getText().toString();
+        final String password = edtPassword.getText().toString();
+
+        if (isUserExisted) {
+            if (status.equalsIgnoreCase(UserStatus.ACTIVE)) {
+                // Logging in with email and password
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                pDialog.dismiss();
+                                // If the task is successful
+                                if (task.isSuccessful()) {
+                                    user = mAuth.getCurrentUser();
+                                    assert user != null;
+                                    userProfile = new UserProfile();
+                                    userProfile.setId(user.getUid());
+                                    userProfile.setEmail(user.getEmail());
+                                    userProfile.setAccountType(AccountType.DEFAULT);
+                                    setUserSession();
+
+                                } else {
+                                    edtPassword.getText().clear();
+                                    edtPassword.setError(Objects.requireNonNull(task.getException()).getMessage());
+                                    edtPassword.requestFocus();
+                                }
+                            }
+                        });
+            } else if (status.equalsIgnoreCase(UserStatus.DEACTIVATE)) {
+                edtEmail.setError(getString(R.string.msg_user_deactivate));
+                edtEmail.requestFocus();
+                edtPassword.getText().clear();
+            }
+        } else {
+            edtEmail.setError(msg);
+            edtEmail.requestFocus();
+            edtPassword.getText().clear();
+        }
+        pDialog.dismiss();
     }
 
     private void setUserSession() {

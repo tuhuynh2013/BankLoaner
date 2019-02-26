@@ -15,13 +15,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 
-public class UpdateStatusAsync extends AsyncTask<Void, Void, String> {
+public class UpdateApplicationStatusAsync extends AsyncTask<Void, Void, String> {
 
     @SuppressLint("StaticFieldLeak")
     private Context context;
     private ApplicationInfo application;
 
-    public UpdateStatusAsync(Context context, ApplicationInfo application) {
+    public UpdateApplicationStatusAsync(Context context, ApplicationInfo application) {
         this.context = context;
         this.application = application;
     }
@@ -50,9 +50,7 @@ public class UpdateStatusAsync extends AsyncTask<Void, Void, String> {
             // Converting response to json object
             JSONObject obj = new JSONObject(s);
             String message = obj.getString("message");
-
             Toast.makeText(context.getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -3,11 +3,12 @@ package com.example.tuhuynh.myapplication.admin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
@@ -28,8 +29,10 @@ public class AgentManagementActivity extends AppCompatActivity implements GetAge
         setContentView(R.layout.activity_agent_management);
         setTitle(getString(R.string.title_agent_management));
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        // Create Up button
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         // Initial listview element
         lvAgents = findViewById(R.id.lv_agents);
@@ -38,9 +41,6 @@ public class AgentManagementActivity extends AppCompatActivity implements GetAge
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                finish();
                 startActivity(new Intent(getApplicationContext(), AgentRegisterActivity.class));
             }
         });
@@ -49,8 +49,31 @@ public class AgentManagementActivity extends AppCompatActivity implements GetAge
 
     @Override
     public void responseFromGetAgents(List<AgentProfile> agentProfiles, String msg) {
-        AgentListAdapter agentListAdapter = new AgentListAdapter(this, R.layout.agent_list_adapter, agentProfiles);
-        lvAgents.setAdapter(agentListAdapter);
+        // If agentProfiles not empty, set array adapter
+        if (!agentProfiles.isEmpty()) {
+            AgentListAdapter agentListAdapter = new AgentListAdapter(this, R.layout.agent_list_adapter, agentProfiles);
+            lvAgents.setAdapter(agentListAdapter);
+
+            lvAgents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    AgentProfile agentProfile = (AgentProfile) parent.getItemAtPosition(position);
+                    Intent intent = new Intent(parent.getContext(), AgentProfileActivity.class);
+                    intent.putExtra("agentProfile", agentProfile);
+                    parent.getContext().startActivity(intent);
+                }
+            });
+
+        } else {
+            // Create text view to show message
+            lvAgents.setVisibility(View.INVISIBLE);
+            TextView tvMsg = new TextView(this);
+            tvMsg.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            tvMsg.setText(msg);
+            setContentView(tvMsg);
+        }
+
     }
+
 
 }

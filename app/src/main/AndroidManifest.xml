@@ -16,14 +16,16 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <!-- Administrator Activity -->
         <activity
-            android:name=".admin.AgentManagementActivity"
-            android:label="@string/title_activity_agent_management"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".admin.AdminHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".admin.AgentManagementActivity"
+            android:parentActivityName=".admin.AdminHomeActivity" />
+        <activity
             android:name=".admin.AgentRegisterActivity"
+            android:parentActivityName=".admin.AgentManagementActivity" />
+        <activity
+            android:name=".admin.AgentProfileActivity"
             android:parentActivityName=".admin.AgentManagementActivity" />
         <!-- UserProfile Activities -->
         <activity android:name=".user.LoginActivity">

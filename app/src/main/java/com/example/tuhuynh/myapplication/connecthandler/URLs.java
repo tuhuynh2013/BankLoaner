@@ -15,6 +15,7 @@ public class URLs {
     public static final String URL_UPDATE_AGENT_PROFILE = ROOT_URL + "updateagentprofile";
     public static final String URL_SUBMIT_APPLICATION = ROOT_URL + "submitapplication";
     public static final String URL_GET_CUSTOMER_APPLICATIONS = ROOT_URL + "getcustomerapplications";
+    public static final String URL_GET_USER_STATUS = ROOT_URL + "getuserstatus";
 
     /*Agent activities*/
     public static final String URL_GET_AGENT_APPLICATIONS = ROOT_URL + "getagentapplications";
@@ -24,5 +25,6 @@ public class URLs {
 
     /*Admin activity*/
     public static final String URL_GET_AGENTS = ROOT_URL + "getagents";
+    public static final String URL_UPDATE_USER_STATUS = ROOT_URL + "updateuserstatus";
 
 }

@@ -34,6 +34,7 @@
     <string name="msg_login">Logging In.. Please wait…</string>
     <string name="tv_sign_up">"Don't have an account?\nRegister Here</string>
     <string name="tv_forgot_pass">Forgot password?</string>
+    <string name="msg_user_deactivate">User has deactivated. Please, contact to Administration!</string>
 
     <!--Register Activity-->
     <string name="error_weak_pass">Weak password.</string>
@@ -59,6 +60,7 @@
     <string name="db_update_customer_successfully">Update customer profile successfully</string>
     <string name="db_update_agent_successfully">Update agent profile successfully</string>
     <string name="db_get_agents_success">Retrieve list of agents successful</string>
+    <string name="db_user_status_updated">User status updated</string>
 
     <!--Database error messages-->
     <string name="error_retrieve_fail">Fail to retrieve data</string>
@@ -211,5 +213,12 @@
     <string name="tv_bank_colon">Bank:</string>
     <string name="title_activity_agent_management">AgentManagementActivity</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <!--Agent Profile Activity-->
+    <string name="title_agent_profile">Agent Profile</string>
+    <string name="btn_active">Active</string>
+    <string name="btn_deactivate">Deactivate</string>
+    <string name="dialog_active">Do you want to active agent %1$s?</string>
+    <string name="dialog_deactivate">Do you really want to deactivate agent %1$s?</string>
 
 </resources>

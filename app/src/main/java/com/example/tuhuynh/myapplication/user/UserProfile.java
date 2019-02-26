@@ -15,6 +15,7 @@ public class UserProfile implements Serializable {
     private String address;
     private String role;
     private String accountType;
+    private String status;
 
     public UserProfile() {
 
@@ -113,5 +114,15 @@ public class UserProfile implements Serializable {
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
 }
 
