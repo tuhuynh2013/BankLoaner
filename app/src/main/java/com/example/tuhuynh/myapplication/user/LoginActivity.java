@@ -192,17 +192,17 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
 
         // Validating inputs
         if (TextUtils.isEmpty(email)) {
-            edtEmail.setError(getString(R.string.error_empty_email));
+            edtEmail.setError(getString(R.string.msg_empty_email));
             edtEmail.requestFocus();
             return;
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            edtEmail.setError(getString(R.string.error_invalid_email));
+            edtEmail.setError(getString(R.string.msg_invalid_email));
             edtEmail.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            edtPassword.setError(getString(R.string.error_empty_password));
+            edtPassword.setError(getString(R.string.msg_empty_password));
             edtPassword.requestFocus();
             return;
         }

@@ -63,7 +63,7 @@ public class GetBanksAsync extends AsyncTask<Void, Void, String> {
             String message = obj.getString("message");
 
             // If no error in response
-            if (!obj.getBoolean("error") && message.equalsIgnoreCase(context.getString(R.string.msg_retrieve_banklist_success))) {
+            if (!obj.getBoolean("error") && message.equalsIgnoreCase(context.getString(R.string.msg_retrieve_bank_list_success))) {
 
                 // Getting the user from the response
                 JSONArray jsonArray = obj.getJSONArray("banks");

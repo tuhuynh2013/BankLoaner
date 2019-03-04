@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.customer.LoanApplicationActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
+import com.example.tuhuynh.myapplication.util.LoanCalculator;
 
 import java.text.DecimalFormat;
 
@@ -31,8 +33,10 @@ public class BankInformationActivity extends AppCompatActivity {
     private RadioButton rd;
     private TextView tvInterest;
     private TableLayout tblInterestTable;
+    private Button btnApply, btnCalculate;
 
-    BankInfo bankInfo;
+    private BankInfo bankInfo;
+    private final static String CALLER_LOAN_SEARCH = "LoanSearchActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,33 +49,19 @@ public class BankInformationActivity extends AppCompatActivity {
         }
 
         final Intent intent = this.getIntent();
+        String caller = intent.getStringExtra("caller");
         bankInfo = (BankInfo) intent.getSerializableExtra("bank");
         setTitle(bankInfo.getName());
 
-        // Initial elements
-        edtAmount = findViewById(R.id.edtAmount);
-        rdgMonth = findViewById(R.id.rgp_month);
-        tvInterest = findViewById(R.id.tvInterest);
-        tblInterestTable = findViewById(R.id.tbl_InterestTable);
+        initialViews();
 
+        // If caller is LoanSearchActivity, set debit amount
+        if (caller.equalsIgnoreCase(CALLER_LOAN_SEARCH)) {
+            String strDebitAmount = intent.getStringExtra("debitAmount");
+            edtAmount.setText(strDebitAmount);
+        }
 
-        rdgMonth.setOrientation(LinearLayout.HORIZONTAL);
-        createRadioButton(bankInfo);
-        // Get checked radio button
-        rd = findViewById(rdgMonth.getCheckedRadioButtonId());
-        // Initial interest value
-        setInterest(rd.getId(), bankInfo);
-
-        rdgMonth.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                setInterest(checkedId, bankInfo);
-            }
-        });
-
-        edtAmount.addTextChangedListener(onTextChangedListener());
-
-        findViewById(R.id.btnCalculate).setOnClickListener(new View.OnClickListener() {
+        btnCalculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tblInterestTable.removeAllViews();
@@ -88,8 +78,7 @@ public class BankInformationActivity extends AppCompatActivity {
             }
         });
 
-
-        findViewById(R.id.btn_apply).setOnClickListener(new View.OnClickListener() {
+        btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get checked radio button
@@ -111,6 +100,36 @@ public class BankInformationActivity extends AppCompatActivity {
     }
 
     /**
+     *
+     */
+    private void initialViews() {
+        // Initial views
+        edtAmount = findViewById(R.id.edtAmount);
+        rdgMonth = findViewById(R.id.rgp_month);
+        tvInterest = findViewById(R.id.tvInterest);
+        tblInterestTable = findViewById(R.id.tbl_InterestTable);
+        btnApply = findViewById(R.id.btn_apply);
+        btnCalculate = findViewById(R.id.btn_calculate);
+
+        rdgMonth.setOrientation(LinearLayout.HORIZONTAL);
+        createRadioButton(bankInfo);
+        // Get checked radio button
+        rd = findViewById(rdgMonth.getCheckedRadioButtonId());
+        // Initial interest value
+        setInterest(rd.getId(), bankInfo);
+
+        rdgMonth.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                setInterest(checkedId, bankInfo);
+            }
+        });
+
+        edtAmount.addTextChangedListener(onTextChangedListener());
+
+    }
+
+    /**
      * Check amount that user inputted is correct or not
      *
      * @param amount amount
@@ -118,21 +137,21 @@ public class BankInformationActivity extends AppCompatActivity {
      */
     private boolean isValidAmount(Long amount) {
         if (amount != null) {
-            if (amount > 100000000) {
-                if (amount < Long.parseLong("10000000000")) {
+            if (amount >= 100000000) {
+                if (amount <= Long.parseLong("10000000000")) {
                     return true;
                 } else {
-                    edtAmount.setError(getString(R.string.error_exceed_amount));
+                    edtAmount.setError(getString(R.string.msg_exceed_amount));
                     edtAmount.requestFocus();
                     return false;
                 }
             } else {
-                edtAmount.setError(getString(R.string.error_at_least_amount));
+                edtAmount.setError(getString(R.string.msg_at_least_amount));
                 edtAmount.requestFocus();
                 return false;
             }
         } else {
-            edtAmount.setError(getString(R.string.error_empty_amount));
+            edtAmount.setError(getString(R.string.msg_empty_amount));
             edtAmount.requestFocus();
             return false;
         }
@@ -151,7 +170,7 @@ public class BankInformationActivity extends AppCompatActivity {
         createTableTitle();
 
         // Calculate principal
-        long principal = calculatePrincipal((long) month, amount);
+        long principal = LoanCalculator.calculatePrincipal((long) month, amount);
         String formattedPrincipal = CustomUtil.convertLongToFormattedString(principal);
 
         long totalInterest = 0;
@@ -182,7 +201,7 @@ public class BankInformationActivity extends AppCompatActivity {
             } else {
                 principalCell.setText(formattedPrincipal);
 
-                long tempInterest = (long) calculateInterest(amount, interest);
+                long tempInterest = (long) LoanCalculator.calculateInterest(amount, interest);
                 totalInterest += tempInterest;
                 interestCell.setText(CustomUtil.convertLongToFormattedString(tempInterest));
 
@@ -266,21 +285,6 @@ public class BankInformationActivity extends AppCompatActivity {
         textView.setTextColor(Color.BLACK);
         textView.setPadding(10, 10, 10, 10);
     }
-
-    /**
-     *
-     */
-    private double calculateInterest(double amount, double interest) {
-        return (amount * interest) / 1200;
-    }
-
-    /**
-     *
-     */
-    private long calculatePrincipal(long month, long amount) {
-        return amount / month;
-    }
-
 
     /**
      *

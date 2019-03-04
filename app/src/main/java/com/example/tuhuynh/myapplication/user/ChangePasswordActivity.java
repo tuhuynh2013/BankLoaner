@@ -79,19 +79,19 @@ public class ChangePasswordActivity extends AppCompatActivity {
         final String confirmPass = edtConfirmPass.getText().toString();
 
         if (TextUtils.isEmpty(oldPass)) {
-            edtOldPass.setError(getString(R.string.error_empty_password));
+            edtOldPass.setError(getString(R.string.msg_empty_password));
             edtOldPass.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(newPass)) {
-            edtNewPass.setError(getString(R.string.error_empty_password));
+            edtNewPass.setError(getString(R.string.msg_empty_password));
             edtNewPass.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(confirmPass)) {
-            edtConfirmPass.setError(getString(R.string.error_empty_password));
+            edtConfirmPass.setError(getString(R.string.msg_empty_password));
             edtConfirmPass.requestFocus();
             return;
         }

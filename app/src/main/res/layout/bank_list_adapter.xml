@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_marginStart="10dp"
-                    android:text="@string/tv_month" />
+                    android:text="@string/tv_month_colon" />
 
                 <TextView
                     android:id="@+id/tv_month"

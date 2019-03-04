@@ -15,6 +15,7 @@
     <string name="title_reset_pass">Reset Password</string>
     <string name="title_agent_management">Agent Management</string>
     <string name="title_agent_register">Agent Register</string>
+    <string name="title_loan_search">Search</string>
 
     <!--common string-->
     <string name="id">ID</string>
@@ -26,30 +27,22 @@
     <string name="sign_up">Sign up</string>
     <string name="sign_out">Sign out</string>
 
-    <string name="tv_login">Already Registered?\nLog in Here</string>
+
     <string name="male">Male</string>
     <string name="female">Female</string>
 
     <!--Login Activity-->
-    <string name="msg_login">Logging In.. Please wait…</string>
-    <string name="tv_sign_up">"Don't have an account?\nRegister Here</string>
-    <string name="tv_forgot_pass">Forgot password?</string>
-    <string name="msg_user_deactivate">User has deactivated. Please, contact to Administration!</string>
 
     <!--Register Activity-->
     <string name="error_weak_pass">Weak password.</string>
 
     <!--ForgotPassword Activity-->
-    <string name="tv_title_forgot_pass">Forgot your password?</string>
-    <string name="hint_your_email">Your email here</string>
-    <string name="tv_reset_instruction">To reset password, enter your email, press the button and check mail to follow instruction.</string>
     <string name="btn_reset_pass">Reset Password</string>
     <string name="btn_back">Back</string>
-    <string name="msg_sent">**Check email to reset your password!</string>
+
 
     <!--Change Password Activity-->
-    <string name="msg_change_pass">Changing password, Please wait…</string>
-    <string name="msg_pass_changed">Password changed</string>
+
 
     <!--Database success messages-->
     <string name="db_success_retrieved_customer_profile">Retrieve customer profile successful</string>
@@ -65,37 +58,15 @@
 
     <!--Database error messages-->
     <string name="error_retrieve_fail">Fail to retrieve data</string>
-    <string name="error_username_password">Invalid username or password</string>
-    <string name="error_empty_username">Please enter your username</string>
-    <string name="error_invalid_username">Username is invalid</string>
-    <string name="error_empty_name">Please enter your first name</string>
-    <string name="error_invalid_name">Name is invalid</string>
-    <string name="error_empty_password">Please enter your password</string>
-    <string name="error_empty_email">Please enter your email</string>
-    <string name="error_invalid_email">Please enter a valid email</string>
-    <string name="error_empty_amount">Amount is empty</string>
-    <string name="error_at_least_amount">Amount must greater than 100,000,000</string>
-    <string name="error_exceed_amount">Amount must less than 10,000,000,000</string>
-    <string name="error_empty_surname">Please enter your surname</string>
-    <string name="error_invalid_surname">Surname is invalid</string>
-    <string name="error_empty_identity">Please enter your identity number</string>
-    <string name="error_invalid_identity">Identity number must contains only 9 digits</string>
-    <string name="error_empty_phone">Please enter your phone number</string>
-    <string name="error_invalid_phone">Phone must contains only 10 to 11 digits</string>
-    <string name="error_empty_address">Please enter your address</string>
-    <string name="error_empty_workplace">Please enter your workplace</string>
-    <string name="error_empty_designation">Please enter your designation</string>
 
     <!--Navigation toolbar-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="my_app_title">My App</string>
     <string name="action_settings">Settings</string>
-    <string name="msg_setting">You chose Setting.</string>
-    <string name="msg_signout">You are sign out.</string>
     <string name="nav_profile">Profile</string>
     <string name="nav_setting">Setting</string>
-    <string name="nav_signout">Sign out</string>
+    <string name="nav_sign_out">Sign out</string>
     <string name="des_avatar">User avatar</string>
 
     <!--Tab-->
@@ -108,7 +79,7 @@
     <string name="amount">Amount</string>
     <string name="debit_amount">Debit amount</string>
     <string name="calculate">Calculate</string>
-    <string name="msg_retrieve_banklist_success">Retrieve list of banks successful</string>
+    <string name="msg_retrieve_bank_list_success">Retrieve list of banks successful</string>
     <string name="dialog_get_bank">Getting list of banks. Please wait....</string>
 
     <!--Bank Info-->
@@ -127,73 +98,34 @@
     <string name="gender">Gender</string>
     <string name="phone">Phone</string>
     <string name="address">Address</string>
-    <string name="tv_employment">Employment</string>
-    <string name="tv_company">Company</string>
-    <string name="tv_salary">Salary</string>
-    <string name="tv_bank_account">Bank account</string>
-    <string name="hint_surname">Your surname</string>
-    <string name="hint_identity_id">Your identity number</string>
-    <string name="hint_phone">Your phone number</string>
-    <string name="hint_address">Your address</string>
-    <string name="hint_employment">Your employment</string>
-    <string name="hint_company">Your company</string>
-    <string name="hint_salary">Your salary</string>
-    <string name="hint_bank_account">Your bank account</string>
     <string name="save_change">Save change</string>
     <string name="msg_update_successfully">Update successfully</string>
     <string name="msg_update_not_successfully">Update NOT successfully</string>
-    <string name="hint_select_bank">Select your bank</string>
-    <string name="tv_bank">Bank</string>
     <string name="apply">Apply</string>
 
     <!--Profile Editor Activity-->
     <string name="ui_customer_profile_updated">Your profile has updated!</string>
 
     <!--Loan Application-->
-    <string name="tv_bank_name">Bank name:</string>
-    <string name="tv_month">Month:</string>
-    <string name="tv_amount">Amount:</string>
     <string name="ckb_accept_term">I accept license terms</string>
     <string name="note_provide_profile">*Note: Apply button will direct to Profile screen if we need more information</string>
     <string name="respond_existed_application">You already submitted application to this bank</string>
-    <string name="msg_existed_application">*Note: You already submitted application to %1$s</string>
-    <string name="tv_application">Application</string>
-    <string name="tv_application_id">Application ID:</string>
-    <string name="tv_date">Date:</string>
-    <string name="tv_text">Sample text</string>
-    <string name="tv_status">Status:</string>
-    <string name="tv_agent">Agent:</string>
-    <string name="hint_agent">Agent</string>
     <string name="msg_submit_success">Success to submit application</string>
     <string name="dialog_title_term">Term</string>
 
     <!--Application Manager-->
-    <string name="hint_date">Date</string>
-    <string name="hint_status">Status</string>
     <string name="msg_retrieve_applications_success">Retrieved list of applications successful</string>
 
     <!--Change Password Activity-->
-    <string name="tv_old_pass">Old password</string>
-    <string name="tv_new_pass">New password</string>
-    <string name="tv_confirm_new_pass">Confirm new password</string>
     <string name="btn_change_pass">Change password</string>
-    <string name="msg_change_pass_success">Password has changed</string>
-    <string name="msg_wrong_old_pass">Wrong password</string>
-    <string name="msg_firebase_exception">FireBase exception</string>
     <string name="error_not_match_password">Password not match!</string>
     <string name="error_old_equal_new">New password is the same old password!</string>
 
     <!--Agent Home Activity-->
-    <string name="tv_assigned_applications">Assigned applications</string>
-    <string name="tv_bank_applications">Bank applications</string>
-    <string name="tv_shared_applications">Shared applications</string>
-    <string name="tv_applications_history">Applications history</string>
+
 
     <!--Agent Application Activity-->
     <string name="customer_info">Customer Info</string>
-    <string name="tv_name">Name:</string>
-    <string name="hint_customer_name">Customer name</string>
-    <string name="tv_surname">Surname:</string>
     <string name="des_approved">Approved</string>
     <string name="des_rejected">Rejected</string>
     <string name="dialog_approved">Do you want to approve for amount %1$s?</string>
@@ -204,18 +136,13 @@
 
     <!--Sharing Application Activity-->
     <string name="salary">Salary:</string>
-    <string name="tv_phone">Phone:</string>
     <string name="btn_close">Close</string>
-    <string name="tv_title">Title</string>
-    <string name="tv_content">Content</string>
     <string name="msg_retrieve_sharing_apps_success">Retrieved list of sharing applications successful</string>
 
     <!--Admin Home Activity-->
-    <string name="tv_agent_management">Agent Management</string>
+
 
     <!--Admin Agent Manager-->
-    <string name="tv_email">Email:</string>
-    <string name="tv_bank_colon">Bank:</string>
     <string name="title_activity_agent_management">AgentManagementActivity</string>
     <string name="title_activity_main">MainActivity</string>
 
@@ -225,5 +152,99 @@
     <string name="btn_deactivate">Deactivate</string>
     <string name="dialog_active">Do you want to active agent %1$s?</string>
     <string name="dialog_deactivate">Do you really want to deactivate agent %1$s?</string>
+
+    <!--Hint for edit text-->
+    <string name="hint_debit_amount">Your debit amount</string>
+    <string name="hint_payment_per_month">Total payment per month</string>
+    <string name="hint_your_email">Your email here</string>
+    <string name="hint_surname">Your surname</string>
+    <string name="hint_identity_id">Your identity number</string>
+    <string name="hint_phone">Your phone number</string>
+    <string name="hint_address">Your address</string>
+    <string name="hint_employment">Your employment</string>
+    <string name="hint_company">Your company</string>
+    <string name="hint_salary">Your salary</string>
+    <string name="hint_bank_account">Your bank account</string>
+    <string name="hint_select_bank">Select your bank</string>
+    <string name="hint_customer_name">Customer name</string>
+    <string name="hint_date">Date</string>
+    <string name="hint_status">Status</string>
+    <string name="hint_agent">Agent</string>
+
+    <!--TextView section-->
+    <string name="tv_email_colon">Email:</string>
+    <string name="tv_bank_colon">Bank:</string>
+    <string name="tv_phone_colon">Phone:</string>
+    <string name="tv_bank_name_colon">Bank name:</string>
+    <string name="tv_month_colon">Month:</string>
+    <string name="tv_amount_colon">Amount:</string>
+    <string name="tv_application_id_colon">Application ID:</string>
+    <string name="tv_date_colon">Date:</string>
+    <string name="tv_status_colon">Status:</string>
+    <string name="tv_agent_colon">Agent:</string>
+    <string name="tv_name_colon">Name:</string>
+    <string name="tv_surname_colon">Surname:</string>
+    <string name="tv_application">Application</string>
+    <string name="tv_text">Sample text</string>
+    <string name="tv_old_pass">Old password</string>
+    <string name="tv_new_pass">New password</string>
+    <string name="tv_confirm_new_pass">Confirm new password</string>
+    <string name="tv_assigned_applications">Assigned applications</string>
+    <string name="tv_bank_applications">Bank applications</string>
+    <string name="tv_shared_applications">Shared applications</string>
+    <string name="tv_applications_history">Applications history</string>
+    <string name="tv_employment">Employment</string>
+    <string name="tv_company">Company</string>
+    <string name="tv_salary">Salary</string>
+    <string name="tv_bank_account">Bank account</string>
+    <string name="tv_title">Title</string>
+    <string name="tv_content">Content</string>
+    <string name="tv_agent_management">Agent Management</string>
+    <string name="tv_bank">Bank</string>
+    <string name="tv_login">Already Registered?\nLog in Here</string>
+    <string name="tv_sign_up">"Don't have an account?\nRegister Here</string>
+    <string name="tv_forgot_pass">Forgot password?</string>
+    <string name="tv_title_forgot_pass">Forgot your password?</string>
+    <string name="tv_reset_instruction">To reset password, enter your email, press the button and check mail to follow instruction.</string>
+    <string name="tv_payment">Payment</string>
+    <string name="btn_search">Search</string>
+
+    <!--UI message-->
+    <string name="msg_change_pass">Changing password, Please wait…</string>
+    <string name="msg_pass_changed">Password changed</string>
+    <string name="msg_setting">You chose Setting.</string>
+    <string name="msg_sign_out">You are sign out.</string>
+    <string name="msg_sent">**Check email to reset your password!</string>
+    <string name="msg_existed_application">*Note: You already submitted application to %1$s</string>
+    <string name="msg_login">Logging In.. Please wait…</string>
+    <string name="msg_user_deactivate">User has deactivated. Please, contact to Administration!</string>
+    <string name="msg_change_pass_success">Password has changed</string>
+    <string name="msg_wrong_old_pass">Wrong password</string>
+    <string name="msg_username_password">Invalid username or password</string>
+    <string name="msg_empty_username">Please enter your username</string>
+    <string name="msg_invalid_username">Username is invalid</string>
+    <string name="msg_empty_name">Please enter your first name</string>
+    <string name="msg_invalid_name">Name is invalid</string>
+    <string name="msg_empty_password">Please enter your password</string>
+    <string name="msg_empty_email">Please enter your email</string>
+    <string name="msg_invalid_email">Please enter a valid email</string>
+    <string name="msg_empty_amount">Amount is empty</string>
+    <string name="msg_at_least_amount">Amount must greater than 99,000,000</string>
+    <string name="msg_exceed_amount">Amount must less than 10,000,000,000</string>
+    <string name="msg_empty_surname">Please enter your surname</string>
+    <string name="msg_invalid_surname">Surname is invalid</string>
+    <string name="msg_empty_identity">Please enter your identity number</string>
+    <string name="msg_invalid_identity">Identity number must contains only 9 digits</string>
+    <string name="msg_empty_phone">Please enter your phone number</string>
+    <string name="msg_invalid_phone">Phone must contains only 10 to 11 digits</string>
+    <string name="msg_empty_address">Please enter your address</string>
+    <string name="msg_empty_workplace">Please enter your workplace</string>
+    <string name="msg_empty_designation">Please enter your designation</string>
+    <string name="msg_empty_debit_amount">Please enter your debit amount</string>
+    <string name="msg_empty_payment">Please enter your payment per month</string>
+    <string name="msg_not_enough_payment">**Payment per month is not enough!!\nIncreasing Payment per month or Month, Please!</string>
+
+    <!--Dialog message-->
+    <string name="dialog_search_banks">Searching… Please wait…</string>
 
 </resources>

@@ -33,7 +33,7 @@
                 android:ellipsize="none"
                 android:maxLines="100"
                 android:scrollHorizontally="false"
-                android:text="@string/tv_bank_name"
+                android:text="@string/tv_bank_name_colon"
                 android:textAlignment="textStart"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
-                android:text="@string/tv_date"
+                android:text="@string/tv_date_colon"
                 android:textAlignment="textStart" />
 
             <TextView

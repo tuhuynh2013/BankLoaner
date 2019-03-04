@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.admin.AgentRegisterActivity;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.bank.BankInformationActivity;
 import com.example.tuhuynh.myapplication.bank.InterestAmount;
@@ -26,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +48,17 @@ public class BankListFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = getLayoutInflater().inflate(R.layout.frag_bank_list, container, false);
         pDialog = new ProgressDialog(view.getContext());
+
+        FloatingActionButton fabSearch = view.findViewById(R.id.fab_search);
+        fabSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LoanSearchActivity.class);
+                intent.putExtra("banks", (Serializable) banks);
+                startActivity(intent);
+            }
+        });
+
         getBanks();
         return view;
     }
@@ -84,11 +98,11 @@ public class BankListFragment extends Fragment {
                     String message = obj.getString("message");
 
                     // If no error in response
-                    if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_retrieve_banklist_success))) {
+                    if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_retrieve_bank_list_success))) {
 
                         // Getting the userProfile from the response
                         JSONArray jsonArray = obj.getJSONArray("banks");
-                        banks = extractBanklist(jsonArray);
+                        banks = extractBankList(jsonArray);
 
                         ListView listView = view.findViewById(R.id.lv_bank_list);
                         BankListAdapter bankListAdapter = new BankListAdapter(view.getContext(), R.layout.bank_list_adapter, banks);
@@ -101,6 +115,7 @@ public class BankListFragment extends Fragment {
                                 BankInfo bank = (BankInfo) parent.getItemAtPosition(position);
                                 Toast.makeText(v.getContext(), bank.getName(), Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(parent.getContext(), BankInformationActivity.class);
+                                intent.putExtra("caller", "BankListFragment");
                                 intent.putExtra("bank", bank);
                                 parent.getContext().startActivity(intent);
                             }
@@ -125,7 +140,7 @@ public class BankListFragment extends Fragment {
      * @param jsonArray JSONArray
      * @return List of banks
      */
-    private List<BankInfo> extractBanklist(JSONArray jsonArray) throws JSONException {
+    private List<BankInfo> extractBankList(JSONArray jsonArray) throws JSONException {
         List<BankInfo> bankList = new ArrayList<>();
         List<InterestAmount> interestAmounts = new ArrayList<>();
         BankInfo bankInfo;

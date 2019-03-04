@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,11 +57,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         String email = edtResetEmail.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            edtResetEmail.setError(getString(R.string.error_empty_email));
+            edtResetEmail.setError(getString(R.string.msg_empty_email));
             edtResetEmail.requestFocus();
             return;
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            edtResetEmail.setError(getString(R.string.error_invalid_email));
+            edtResetEmail.setError(getString(R.string.msg_invalid_email));
             edtResetEmail.requestFocus();
             return;
         }

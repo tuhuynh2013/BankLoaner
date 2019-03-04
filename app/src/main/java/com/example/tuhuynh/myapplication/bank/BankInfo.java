@@ -1,6 +1,7 @@
 package com.example.tuhuynh.myapplication.bank;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,7 +13,7 @@ public class BankInfo implements Serializable {
     private List<InterestAmount> interestAmounts;
 
     public BankInfo() {
-
+        interestAmounts = new ArrayList<>();
     }
 
     public BankInfo(int id, String name, String shortName) {

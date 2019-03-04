@@ -26,8 +26,7 @@
             android:parentActivityName=".admin.AgentManagementActivity" />
         <activity
             android:name=".admin.AgentProfileActivity"
-            android:parentActivityName=".admin.AgentManagementActivity" />
-        <!-- UserProfile Activities -->
+            android:parentActivityName=".admin.AgentManagementActivity" /> <!-- UserProfile Activities -->
         <activity android:name=".user.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,6 +66,9 @@
         <activity
             android:name=".customer.CustomerHomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".customer.LoanSearchActivity"
+            android:parentActivityName=".customer.CustomerHomeActivity" />
         <activity
             android:name=".customer.CustomerAppInfoActivity"
             android:parentActivityName=".customer.CustomerHomeActivity" />

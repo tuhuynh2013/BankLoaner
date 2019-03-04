@@ -223,11 +223,11 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
 
         // Check name
         if (TextUtils.isEmpty(name)) {
-            edtName.setError(getString(R.string.error_empty_name));
+            edtName.setError(getString(R.string.msg_empty_name));
             edtName.requestFocus();
             return;
         } else if (CustomUtil.isIncorrectName(name)) {
-            edtName.setError(getString(R.string.error_invalid_name));
+            edtName.setError(getString(R.string.msg_invalid_name));
             edtName.requestFocus();
             return;
         } else {
@@ -236,11 +236,11 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
 
         // Check surname
         if (TextUtils.isEmpty(surname)) {
-            edtSurname.setError(getString(R.string.error_empty_surname));
+            edtSurname.setError(getString(R.string.msg_empty_surname));
             edtSurname.requestFocus();
             return;
         } else if (CustomUtil.isIncorrectName(surname)) {
-            edtSurname.setError(getString(R.string.error_invalid_surname));
+            edtSurname.setError(getString(R.string.msg_invalid_surname));
             edtSurname.requestFocus();
             return;
         } else {
@@ -249,29 +249,29 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
 
         // Check identity
         if (TextUtils.isEmpty(identity)) {
-            edtIdentity.setError(getString(R.string.error_empty_identity));
+            edtIdentity.setError(getString(R.string.msg_empty_identity));
             edtIdentity.requestFocus();
             return;
         } else if (!CustomUtil.isCorrectIdentity(identity)) {
-            edtIdentity.setError(getString(R.string.error_invalid_identity));
+            edtIdentity.setError(getString(R.string.msg_invalid_identity));
             edtIdentity.requestFocus();
             return;
         }
 
         // Check phone number
         if (TextUtils.isEmpty(phone)) {
-            edtPhone.setError(getString(R.string.error_empty_phone));
+            edtPhone.setError(getString(R.string.msg_empty_phone));
             edtPhone.requestFocus();
             return;
         } else if (!CustomUtil.isCorrectPhone(phone)) {
-            edtPhone.setError(getString(R.string.error_invalid_phone));
+            edtPhone.setError(getString(R.string.msg_invalid_phone));
             edtPhone.requestFocus();
             return;
         }
 
         // Check address
         if (TextUtils.isEmpty(address)) {
-            edtAddress.setError(getString(R.string.error_empty_address));
+            edtAddress.setError(getString(R.string.msg_empty_address));
             edtAddress.requestFocus();
             return;
         }
@@ -321,14 +321,14 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
 
         // Check employment
         if (TextUtils.isEmpty(employment)) {
-            edtEmployment.setError(getString(R.string.error_empty_workplace));
+            edtEmployment.setError(getString(R.string.msg_empty_workplace));
             edtEmployment.requestFocus();
             return;
         }
 
         // Check company
         if (TextUtils.isEmpty(company)) {
-            edtCompany.setError(getString(R.string.error_empty_designation));
+            edtCompany.setError(getString(R.string.msg_empty_designation));
             edtCompany.requestFocus();
             return;
         } else {
@@ -337,14 +337,14 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
 
         // Check salary
         if (TextUtils.isEmpty(strSalary)) {
-            edtSalary.setError(getString(R.string.error_empty_designation));
+            edtSalary.setError(getString(R.string.msg_empty_designation));
             edtSalary.requestFocus();
             return;
         }
 
         // Check bank account
         if (TextUtils.isEmpty(bankAccount)) {
-            edtBankAccount.setError(getString(R.string.error_empty_designation));
+            edtBankAccount.setError(getString(R.string.msg_empty_designation));
             edtBankAccount.requestFocus();
             return;
         }

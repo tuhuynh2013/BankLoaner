@@ -41,7 +41,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/tv_amount"
+                    android:text="@string/tv_amount_colon"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
@@ -62,7 +62,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/tv_month"
+                    android:text="@string/tv_month_colon"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 
@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/tv_date"
+                    android:text="@string/tv_date_colon"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 

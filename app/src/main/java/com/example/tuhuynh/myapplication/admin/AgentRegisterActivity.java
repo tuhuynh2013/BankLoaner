@@ -18,7 +18,6 @@ import com.example.tuhuynh.myapplication.agent.AgentProfile;
 import com.example.tuhuynh.myapplication.asynctask.AgentRegisterAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetBanksAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetBanksCallBack;
-import com.example.tuhuynh.myapplication.asynctask.CustomerRegisterAsync;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.user.AccountType;
 import com.example.tuhuynh.myapplication.user.UserProfile;
@@ -126,11 +125,11 @@ public class AgentRegisterActivity extends AppCompatActivity implements GetBanks
         final String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
-            edtName.setError(getString(R.string.error_empty_name));
+            edtName.setError(getString(R.string.msg_empty_name));
             edtName.requestFocus();
             return;
         } else if (CustomUtil.isIncorrectName(name)) {
-            edtName.setError(getString(R.string.error_invalid_name));
+            edtName.setError(getString(R.string.msg_invalid_name));
             edtName.requestFocus();
             return;
         } else {
@@ -138,33 +137,33 @@ public class AgentRegisterActivity extends AppCompatActivity implements GetBanks
         }
 
         if (TextUtils.isEmpty(email)) {
-            edtEmail.setError(getString(R.string.error_empty_email));
+            edtEmail.setError(getString(R.string.msg_empty_email));
             edtEmail.requestFocus();
             return;
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            edtEmail.setError(getString(R.string.error_invalid_email));
+            edtEmail.setError(getString(R.string.msg_invalid_email));
             edtEmail.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(phone)) {
-            edtPhone.setError(getString(R.string.error_empty_phone));
+            edtPhone.setError(getString(R.string.msg_empty_phone));
             edtPhone.requestFocus();
             return;
         } else if (!CustomUtil.isCorrectPhone(phone)) {
-            edtPhone.setError(getString(R.string.error_invalid_phone));
+            edtPhone.setError(getString(R.string.msg_invalid_phone));
             edtPhone.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            edtPassword.setError(getString(R.string.error_empty_password));
+            edtPassword.setError(getString(R.string.msg_empty_password));
             edtPassword.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(confirmPassword)) {
-            edtConfirmPassword.setError(getString(R.string.error_empty_password));
+            edtConfirmPassword.setError(getString(R.string.msg_empty_password));
             edtConfirmPassword.requestFocus();
             return;
         }
