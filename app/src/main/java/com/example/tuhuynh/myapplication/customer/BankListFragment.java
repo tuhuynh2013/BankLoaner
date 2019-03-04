@@ -2,13 +2,19 @@ package com.example.tuhuynh.myapplication.customer;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,7 +22,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.admin.AgentRegisterActivity;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.bank.BankInformationActivity;
 import com.example.tuhuynh.myapplication.bank.InterestAmount;
@@ -32,13 +37,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 
-public class BankListFragment extends Fragment {
+public class BankListFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private View view;
     private List<BankInfo> banks;
     private ProgressDialog pDialog;
+    private BankListAdapter bankListAdapter;
+
     public BankListFragment() {
         // Required empty public constructor
     }
@@ -47,7 +55,10 @@ public class BankListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = getLayoutInflater().inflate(R.layout.frag_bank_list, container, false);
-        pDialog = new ProgressDialog(view.getContext());
+        pDialog = new ProgressDialog(getContext());
+        displayProgressDialog();
+
+        setHasOptionsMenu(true);
 
         FloatingActionButton fabSearch = view.findViewById(R.id.fab_search);
         fabSearch.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +71,7 @@ public class BankListFragment extends Fragment {
         });
 
         getBanks();
+
         return view;
     }
 
@@ -67,8 +79,6 @@ public class BankListFragment extends Fragment {
      * Uses to get list of banks from database
      */
     private void getBanks() {
-
-        displayProgressDialog();
 
         @SuppressLint("StaticFieldLeak")
         class BankList extends AsyncTask<Void, Void, String> {
@@ -99,27 +109,10 @@ public class BankListFragment extends Fragment {
 
                     // If no error in response
                     if (!obj.getBoolean("error") && message.equalsIgnoreCase(getString(R.string.msg_retrieve_bank_list_success))) {
-
                         // Getting the userProfile from the response
                         JSONArray jsonArray = obj.getJSONArray("banks");
                         banks = extractBankList(jsonArray);
-
-                        ListView listView = view.findViewById(R.id.lv_bank_list);
-                        BankListAdapter bankListAdapter = new BankListAdapter(view.getContext(), R.layout.bank_list_adapter, banks);
-                        listView.setAdapter(bankListAdapter);
-                        pDialog.dismiss();
-
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                                BankInfo bank = (BankInfo) parent.getItemAtPosition(position);
-                                Toast.makeText(v.getContext(), bank.getName(), Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(parent.getContext(), BankInformationActivity.class);
-                                intent.putExtra("caller", "BankListFragment");
-                                intent.putExtra("bank", bank);
-                                parent.getContext().startActivity(intent);
-                            }
-                        });
+                        setListView();
 
                     } else {
                         Toast.makeText(view.getContext(), R.string.error_retrieve_fail, Toast.LENGTH_LONG).show();
@@ -132,6 +125,29 @@ public class BankListFragment extends Fragment {
         }
         BankList banklist = new BankList();
         banklist.execute();
+    }
+
+    /**
+     *
+     */
+    private void setListView() {
+        final ListView lvBanks = view.findViewById(R.id.lv_bank_list);
+        bankListAdapter = new BankListAdapter(view.getContext(), R.layout.bank_list_adapter, banks);
+        lvBanks.setAdapter(bankListAdapter);
+
+        lvBanks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                BankInfo bank = (BankInfo) parent.getItemAtPosition(position);
+                Toast.makeText(v.getContext(), bank.getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(parent.getContext(), BankInformationActivity.class);
+                intent.putExtra("caller", "BankListFragment");
+                intent.putExtra("bank", bank);
+                parent.getContext().startActivity(intent);
+            }
+        });
+
+        pDialog.dismiss();
     }
 
     /**
@@ -195,6 +211,33 @@ public class BankListFragment extends Fragment {
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         pDialog.show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.main, menu);
+//        SearchManager searchManager = (SearchManager) Objects.requireNonNull(getContext()).getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+//        if (searchView != null) {
+//            searchView.setSearchableInfo(searchManager.getSearchableInfo(Objects.requireNonNull(getActivity()).getComponentName()));
+//            searchView.setIconifiedByDefault(false);
+//        }
+        assert searchView != null;
+        searchView.setOnQueryTextListener(this);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        this.bankListAdapter.getFilter().filter(s);
+        return true;
     }
 
 

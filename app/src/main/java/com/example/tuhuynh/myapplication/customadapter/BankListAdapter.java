@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,21 +17,35 @@ import com.example.tuhuynh.myapplication.bank.BankInfo;
 import com.example.tuhuynh.myapplication.bank.InterestAmount;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class BankListAdapter extends ArrayAdapter<BankInfo> {
+public class BankListAdapter extends ArrayAdapter<BankInfo> implements Filterable {
 
-    private List<BankInfo> banks;
+    private List<BankInfo> originalBanks;
+    private List<BankInfo> filteredBanks;
+    private BankFilter filter;
 
     public BankListAdapter(Context context, int textViewResourceId, List<BankInfo> objects) {
         super(context, textViewResourceId, objects);
-        this.banks = objects;
+        this.originalBanks = objects;
+        this.filteredBanks = objects;
     }
 
     @Override
     public int getCount() {
-        return super.getCount();
+        return filteredBanks.size();
+    }
+
+    @Override
+    public BankInfo getItem(int i) {
+        return filteredBanks.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
     }
 
     @SuppressLint("InflateParams")
@@ -49,14 +65,15 @@ public class BankListAdapter extends ArrayAdapter<BankInfo> {
         TextView tvMonth = rowView.findViewById(R.id.tv_month);
         TextView tvInterest = rowView.findViewById(R.id.tvInterest);
 
-        tvBankName.setText(banks.get(position).getName());
+        BankInfo bankInfo = filteredBanks.get(position);
+        tvBankName.setText(bankInfo.getName());
 
-        List<InterestAmount> interestAmounts = banks.get(position).getInterestAmounts();
+        List<InterestAmount> interestAmounts = bankInfo.getInterestAmounts();
         tvMonth.setText(new DecimalFormat("##.##").format(interestAmounts.get(0).getMonth()));
         tvInterest.setText(new DecimalFormat("##.##").format(interestAmounts.get(0).getInterest()));
 
         // Change icon based on name
-        String shortName = banks.get(position).getShortName();
+        String shortName = bankInfo.getShortName();
 
         switch (shortName) {
             case "ACB":
@@ -96,5 +113,55 @@ public class BankListAdapter extends ArrayAdapter<BankInfo> {
 
         return rowView;
     }
+
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new BankFilter();
+        }
+        return filter;
+    }
+
+    private class BankFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            constraint = constraint.toString().toLowerCase();
+            FilterResults result = new FilterResults();
+
+            if (constraint.toString().length() > 0) {
+                ArrayList<BankInfo> filteredItems = new ArrayList<>();
+
+                for (int i = 0, l = originalBanks.size(); i < l; i++) {
+                    BankInfo bankInfo = originalBanks.get(i);
+                    if (bankInfo.getName().toLowerCase().contains(constraint))
+                        filteredItems.add(bankInfo);
+                }
+                result.count = filteredItems.size();
+                result.values = filteredItems;
+
+            } else {
+                synchronized (this) {
+                    result.values = originalBanks;
+                    result.count = originalBanks.size();
+                }
+            }
+            return result;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredBanks = (ArrayList<BankInfo>) results.values;
+            if (filteredBanks.size() > 0) {
+                notifyDataSetChanged();
+            } else {
+                notifyDataSetInvalidated();
+            }
+        }
+
+    }
+
 
 }
