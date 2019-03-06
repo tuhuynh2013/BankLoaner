@@ -9,9 +9,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -124,6 +126,9 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
                     // custom dialog
                     final Dialog dialog = new Dialog(context);
                     dialog.setContentView(R.layout.term_dialog);
+                    Window window = dialog.getWindow();
+                    assert window != null;
+                    window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                     // set the custom dialog components - text, image and button
                     TextView tvTitle = dialog.findViewById(R.id.tv_title);

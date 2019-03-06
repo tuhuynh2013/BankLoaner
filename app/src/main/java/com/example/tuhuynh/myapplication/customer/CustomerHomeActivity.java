@@ -136,8 +136,10 @@ public class CustomerHomeActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
             View headerView = navigationView.getHeaderView(0);
             TextView tvUsername = headerView.findViewById(R.id.tv_username);
-            String fullName = CustomUtil.setFullName(userProfile.getName(), userProfile.getSurname());
-            tvUsername.setText(fullName);
+            if (userProfile != null) {
+                String fullName = CustomUtil.setFullName(userProfile.getName(), userProfile.getSurname());
+                tvUsername.setText(fullName);
+            }
             ImageView imgProfile = headerView.findViewById(R.id.img_profile);
             if (firebaseUser != null) {
                 Uri profilePicUrl = firebaseUser.getPhotoUrl();
