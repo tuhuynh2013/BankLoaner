@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,20 +18,25 @@ import com.example.tuhuynh.myapplication.agent.AgentProfile;
 import com.example.tuhuynh.myapplication.user.UserStatus;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AgentListAdapter extends ArrayAdapter<AgentProfile> {
 
-    private List<AgentProfile> agents;
+public class AgentListAdapter extends ArrayAdapter<AgentProfile> implements Filterable {
+
+    private List<AgentProfile> originalAgents;
+    private List<AgentProfile> filteredAgents;
+    private AgentFilter filter;
 
     public AgentListAdapter(Context context, int textViewResourceId, List<AgentProfile> agents) {
         super(context, textViewResourceId, agents);
-        this.agents = agents;
+        this.originalAgents = agents;
+        this.filteredAgents = agents;
     }
 
     @Override
     public int getCount() {
-        return super.getCount();
+        return filteredAgents.size();
     }
 
     @SuppressLint("InflateParams")
@@ -53,7 +60,7 @@ public class AgentListAdapter extends ArrayAdapter<AgentProfile> {
         TextView tvStatus = rowView.findViewById(R.id.tv_status);
 
         // Get value
-        AgentProfile agent = agents.get(position);
+        AgentProfile agent = filteredAgents.get(position);
         String bank = agent.getWorkBank().getName();
         String phone = agent.getPhone();
         String email = agent.getEmail();
@@ -79,6 +86,55 @@ public class AgentListAdapter extends ArrayAdapter<AgentProfile> {
         imgAvatar.setImageResource(R.drawable.ic_user_avatar);
 
         return rowView;
+    }
+
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new AgentFilter();
+        }
+        return filter;
+    }
+
+    private class AgentFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            constraint = constraint.toString().toLowerCase();
+            FilterResults result = new FilterResults();
+
+            if (constraint.toString().length() > 0) {
+                ArrayList<AgentProfile> filteredItems = new ArrayList<>();
+
+                for (int i = 0, l = originalAgents.size(); i < l; i++) {
+                    AgentProfile agentProfile = originalAgents.get(i);
+                    if (agentProfile.getName().toLowerCase().contains(constraint))
+                        filteredItems.add(agentProfile);
+                }
+                result.count = filteredItems.size();
+                result.values = filteredItems;
+
+            } else {
+                synchronized (this) {
+                    result.values = originalAgents;
+                    result.count = originalAgents.size();
+                }
+            }
+            return result;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredAgents = (ArrayList<AgentProfile>) results.values;
+            if (filteredAgents.size() > 0) {
+                notifyDataSetChanged();
+            } else {
+                notifyDataSetInvalidated();
+            }
+        }
+
     }
 
 
