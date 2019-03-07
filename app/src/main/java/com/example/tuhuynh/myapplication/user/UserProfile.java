@@ -6,6 +6,7 @@ import java.io.Serializable;
 public class UserProfile implements Serializable {
 
     private String id;
+    private String profileImg;
     private String name;
     private String surname;
     private String email;
@@ -18,10 +19,25 @@ public class UserProfile implements Serializable {
     private String status;
 
     public UserProfile() {
-
+        setProfileImg("");
     }
 
-    // Uses for SharedPrefManager and update user profile
+    // Uses for SharedPrefManager
+    public UserProfile(String id, String profileImg, String name, String surname, String email, String identity, String gender, String phone, String address, String role, String accountType) {
+        setId(id);
+        setProfileImg(profileImg);
+        setName(name);
+        setSurname(surname);
+        setEmail(email);
+        setIdentity(identity);
+        setGender(gender);
+        setPhone(phone);
+        setAddress(address);
+        setRole(role);
+        setAccountType(accountType);
+    }
+
+    // Uses for update user profile
     public UserProfile(String id, String name, String surname, String email, String identity, String gender, String phone, String address, String role, String accountType) {
         setId(id);
         setName(name);
@@ -123,6 +139,14 @@ public class UserProfile implements Serializable {
         this.status = status;
     }
 
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
 
 }
 

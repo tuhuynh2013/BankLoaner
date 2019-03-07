@@ -158,6 +158,7 @@
     <string name="hint_debit_amount">Your debit amount</string>
     <string name="hint_payment_per_month">Total payment per month</string>
     <string name="hint_your_email">Your email here</string>
+    <string name="hint_name">Your first name</string>
     <string name="hint_surname">Your surname</string>
     <string name="hint_identity_id">Your identity number</string>
     <string name="hint_phone">Your phone number</string>
@@ -247,5 +248,6 @@
 
     <!--Dialog message-->
     <string name="dialog_search_banks">Searching… Please wait…</string>
+    <string name="des_profile_picture">Your profile picture</string>
 
 </resources>

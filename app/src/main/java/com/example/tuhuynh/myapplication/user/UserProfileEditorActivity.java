@@ -1,17 +1,24 @@
 package com.example.tuhuynh.myapplication.user;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
@@ -23,11 +30,27 @@ import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.IOException;
 
 
 public class UserProfileEditorActivity extends AppCompatActivity implements GetUserProfileCallBack,
         UpdateUserProfileCallBack, UpdateCustomerProfileCallBack {
 
+    private ImageView imgProfile;
     private TextView tvEmail, tvBankName;
     private EditText edtName, edtSurname, edtIdentity, edtPhone, edtAddress, edtEmployment,
             edtCompany, edtSalary, edtBankAccount;
@@ -37,6 +60,12 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
 
     private String caller;
     private UserProfile userProfile;
+    private Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 71;
+
+    private FirebaseUser firebaseUser;
+
+    private String profileImgUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +73,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         setContentView(R.layout.activity_profile_editor);
         setTitle(getString(R.string.title_update_profile));
 
-        // If the userProfile is not logged in, starting the login activity
-        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-        // Getting the current userProfile
-        userProfile = SharedPrefManager.getInstance(this).getUser();
+        isLoggedInAndInitialFireBase();
 
         // Turn off Up navigation, when called from LoanApplication
         final Intent intent = this.getIntent();
@@ -72,7 +95,14 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         new GetUserProfileAsync(this, this, userProfile).execute();
 
         // Initial for profile editor screen
-        initialProfileEditorScreen();
+        initialViews();
+
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseImage();
+            }
+        });
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,11 +114,28 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
     }
 
     /**
+     * Check user is logged in and initial firebase component
+     **/
+    private void isLoggedInAndInitialFireBase() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        // If the userProfile is not logged in, starting the login activity
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            userProfile = SharedPrefManager.getInstance(this).getUser();
+            firebaseUser = mAuth.getCurrentUser();
+        }
+    }
+
+    /**
      * Initial elements and set its own value
      */
-    private void initialProfileEditorScreen() {
+    private void initialViews() {
 
         // Initial element
+        imgProfile = findViewById(R.id.img_profile);
         edtName = findViewById(R.id.edt_name);
         edtSurname = findViewById(R.id.edt_surname);
         edtIdentity = findViewById(R.id.edt_identity);
@@ -122,9 +169,36 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             edtSalary.setVisibility(View.GONE);
             tvBankAccount.setVisibility(View.GONE);
             edtBankAccount.setVisibility(View.GONE);
-
         }
 
+    }
+
+    /**
+     *
+     **/
+    private void chooseImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    /**
+     *
+     **/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                imgProfile.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -171,6 +245,11 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         if (CustomUtil.hasMeaning(address)) {
             edtAddress.setText(address);
         }
+
+        if (CustomUtil.hasMeaning(userProfile.getProfileImg())) {
+            Glide.with(getApplicationContext()).load(userProfile.getProfileImg()).into(imgProfile);
+        }
+
 
         // Customer section
         if (this.userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
@@ -286,10 +365,10 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
 
     @Override
     public void responseFromUpdateUserProfile(String msg) {
-        // If update UserProfile success, execute update CustomerProfile or AgentProfile
+        // If update UserProfile success, execute update upload profile picture
         if (msg.equalsIgnoreCase(getString(R.string.db_update_user_successfully))) {
             if (userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
-                updateCustomerProfile();
+                uploadImage();
             } else if (userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
                 // If update Agent success, return intent result
                 if (TextUtils.isEmpty(caller)) {
@@ -306,6 +385,72 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
             edtIdentity.requestFocus();
         }
         CustomUtil.displayToast(getApplicationContext(), msg);
+    }
+
+    /**
+     *
+     **/
+    private void uploadImage() {
+
+        if (filePath != null) {
+            //Firebase
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageReference = storage.getReference();
+
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            final StorageReference ref = storageReference.child("user/" + userProfile.getId() + "/images/profile picture");
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    profileImgUrl = uri.toString();
+                                    saveUserInfoToFireBase();
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+        }
+    }
+
+    private void saveUserInfoToFireBase() {
+        UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder().
+                setPhotoUri(Uri.parse(profileImgUrl)).build();
+
+        firebaseUser.updateProfile(changeRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    updateCustomerProfile();
+                }
+            }
+        });
+
+        //Change user profile image
+        userProfile.setProfileImg(profileImgUrl);
+        SharedPrefManager.getInstance(this).userLogin(userProfile);
+
     }
 
     /**

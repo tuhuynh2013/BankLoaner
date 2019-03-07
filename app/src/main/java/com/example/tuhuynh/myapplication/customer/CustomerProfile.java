@@ -19,7 +19,7 @@ public class CustomerProfile extends UserProfile {
     public CustomerProfile(UserProfile userProfile,
                            String employment, String company, Long salary, String bankAccount) {
 
-        super(userProfile.getId(), userProfile.getName(), userProfile.getSurname(), userProfile.getEmail(),
+        super(userProfile.getId(), userProfile.getProfileImg(), userProfile.getName(), userProfile.getSurname(), userProfile.getEmail(),
                 userProfile.getIdentity(), userProfile.getGender(), userProfile.getPhone(),
                 userProfile.getAddress(), userProfile.getRole(), userProfile.getAccountType());
         setEmployment(employment);

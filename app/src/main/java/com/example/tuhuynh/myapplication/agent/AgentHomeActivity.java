@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.tuhuynh.myapplication.R;
-import com.example.tuhuynh.myapplication.user.AccountType;
 import com.example.tuhuynh.myapplication.user.LoginActivity;
 import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.user.UserProfileActivity;
@@ -44,29 +43,10 @@ public class AgentHomeActivity extends AppCompatActivity
         setContentView(R.layout.agent_nav_config);
         setTitle(getString(R.string.title_home));
 
+        isLoggedInAndInitialFireBase();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        mAuth = FirebaseAuth.getInstance();
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        // If the userProfile is not logged in, starting the login activity
-        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        } else {
-            userProfile = SharedPrefManager.getInstance(this).getUser();
-            // Check if userProfile is signed in (non-null) and update UI accordingly.
-            if (userProfile.getAccountType().equals(AccountType.GOOGLE)) {
-                firebaseUser = mAuth.getCurrentUser();
-            }
-        }
 
         // Initial Navigation View
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -127,6 +107,29 @@ public class AgentHomeActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    /**
+     * Check user is logged in and initial firebase component
+     **/
+    private void isLoggedInAndInitialFireBase() {
+        mAuth = FirebaseAuth.getInstance();
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // If the userProfile is not logged in, starting the login activity
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            userProfile = SharedPrefManager.getInstance(this).getUser();
+            firebaseUser = mAuth.getCurrentUser();
+        }
     }
 
     /**

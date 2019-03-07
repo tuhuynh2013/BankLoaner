@@ -1,7 +1,6 @@
 package com.example.tuhuynh.myapplication.customer;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -57,27 +56,7 @@ public class CustomerHomeActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        mAuth = FirebaseAuth.getInstance();
-
-        // If the userProfile is not logged in, starting the login activity
-        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        } else {
-            userProfile = SharedPrefManager.getInstance(this).getUser();
-            // Check if userProfile is signed in (non-null) and update UI accordingly.
-            if (userProfile.getAccountType().equals(AccountType.GOOGLE)) {
-                firebaseUser = mAuth.getCurrentUser();
-            }
-        }
+        isLoggedInAndInitialFireBase();
 
         // Create an instance of the tab layout from the view.
         TabLayout tabLayout = findViewById(R.id.tab_layout);
@@ -139,17 +118,42 @@ public class CustomerHomeActivity extends AppCompatActivity
             if (userProfile != null) {
                 String fullName = CustomUtil.setFullName(userProfile.getName(), userProfile.getSurname());
                 tvUsername.setText(fullName);
-            }
-            ImageView imgProfile = headerView.findViewById(R.id.img_profile);
-            if (firebaseUser != null) {
-                Uri profilePicUrl = firebaseUser.getPhotoUrl();
-                if (profilePicUrl != null) {
+                ImageView imgProfile = headerView.findViewById(R.id.img_profile);
+                String profilePicUrl = userProfile.getProfileImg();
+                if (CustomUtil.hasMeaning(profilePicUrl)) {
                     Glide.with(this).load(profilePicUrl)
                             .into(imgProfile);
                 }
             }
         }
 
+    }
+
+    /**
+     * Check user is logged in and initial firebase component
+     **/
+    private void isLoggedInAndInitialFireBase() {
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        // If the userProfile is not logged in, starting the login activity
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            userProfile = SharedPrefManager.getInstance(this).getUser();
+            // Check if userProfile is signed in (non-null) and update UI accordingly.
+            if (userProfile.getAccountType().equals(AccountType.GOOGLE)) {
+                firebaseUser = mAuth.getCurrentUser();
+            }
+        }
     }
 
     /**

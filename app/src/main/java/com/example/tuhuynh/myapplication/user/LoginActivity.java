@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
     EditText edtEmail, edtPassword;
 
     private static final String TAG = "LoginActivity";
-    private static final int RC_SIGN_IN = 9001;
+    private static final int RC_GOOGLE_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private UserProfile userProfile;
@@ -55,31 +55,6 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        mAuth = FirebaseAuth.getInstance();
-        pDialog = new ProgressDialog(this);
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        SignInButton signInButton = findViewById(R.id.btn_google_sign_in);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleSignIn();
-            }
-        });
-
-        // If the userProfile is already logged in, we will start the proper activity base on userProfile's role
-        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
-            SharedPrefManager.getInstance(this).logout();
-            mAuth.signOut();
-            // Google sign out
-            mGoogleSignInClient.signOut();
-        }
 
         // Initial element
         edtEmail = findViewById(R.id.edt_email);
@@ -115,9 +90,39 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        pDialog = new ProgressDialog(this);
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("946395224241-a6e4tp9hlm3392ekj13n3c2lsf09us60.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        SignInButton signInButton = findViewById(R.id.btn_google_sign_in);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                googleSignIn();
+            }
+        });
+
+        // If the userProfile is already logged in, we will start the proper activity base on userProfile's role
+        if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            SharedPrefManager.getInstance(this).logout();
+            mAuth.signOut();
+            // Google sign out
+            mGoogleSignInClient.signOut();
+        }
+
+    }
+
     private void googleSignIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
 
     @Override
@@ -125,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sign In was successful, authenticate with Firebase
@@ -155,6 +160,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                             user = mAuth.getCurrentUser();
                             userProfile = new UserProfile();
                             userProfile.setId(user.getUid());
+                            userProfile.setProfileImg(Objects.requireNonNull(user.getPhotoUrl()).toString());
                             userProfile.setName(user.getDisplayName());
                             userProfile.setEmail(user.getEmail());
                             userProfile.setAccountType(AccountType.GOOGLE);
@@ -230,6 +236,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                                     assert user != null;
                                     userProfile = new UserProfile();
                                     userProfile.setId(user.getUid());
+                                    userProfile.setProfileImg(Objects.requireNonNull(user.getPhotoUrl()).toString());
                                     userProfile.setEmail(user.getEmail());
                                     userProfile.setAccountType(AccountType.DEFAULT);
                                     setUserSession();

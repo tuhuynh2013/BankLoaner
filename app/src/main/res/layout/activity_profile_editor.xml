@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".user.UserProfileEditorActivity">
 
     <ScrollView
@@ -12,298 +14,316 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:orientation="vertical">
 
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp">
+                android:orientation="horizontal">
 
-                <TableRow
+                <ImageView
+                    android:id="@+id/img_profile"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    app:srcCompat="@drawable/ic_user_avatar"
+                    android:contentDescription="@string/des_profile_picture" />
+
+                <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/name"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <EditText
-                        android:id="@+id/edt_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/name"
-                        android:inputType="textPersonName"
-                        android:singleLine="true"
-                        tools:ignore="Autofill" />
+                        <EditText
+                            android:id="@+id/edt_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_name"
+                            android:inputType="textPersonName"
+                            android:singleLine="true"
+                            tools:ignore="Autofill" />
 
-                </TableRow>
+                    </TableRow>
 
-                <TableRow
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <EditText
+                            android:id="@+id/edt_surname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_surname"
+                            android:inputType="textPersonName"
+                            tools:ignore="Autofill" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/surname"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                    <TableRow>
 
-                    <EditText
-                        android:id="@+id/edt_surname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_surname"
-                        android:inputType="textPersonName"
-                        tools:ignore="Autofill" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/email"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-                </TableRow>
+                        <TextView
+                            android:id="@+id/tv_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-                <TableRow>
+                    </TableRow>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/email"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/tv_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/identity_id"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-                </TableRow>
+                        <EditText
+                            android:id="@+id/edt_identity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_identity_id"
+                            android:inputType="number"
+                            tools:ignore="Autofill" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    </TableRow>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/identity_id"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <EditText
-                        android:id="@+id/edt_identity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_identity_id"
-                        android:inputType="number"
-                        tools:ignore="Autofill" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/gender"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-                </TableRow>
+                        <RadioGroup
+                            android:id="@+id/rdg_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                            <RadioButton
+                                android:id="@+id/rd_male"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/male" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/gender"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                            <RadioButton
+                                android:id="@+id/rd_female"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/female" />
+                        </RadioGroup>
 
-                    <RadioGroup
-                        android:id="@+id/rdg_gender"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                    </TableRow>
 
-                        <RadioButton
-                            android:id="@+id/rd_male"
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/phone"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                        <EditText
+                            android:id="@+id/edt_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_phone"
+                            android:inputType="phone"
+                            tools:ignore="Autofill" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/address"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                        <EditText
+                            android:id="@+id/edt_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_address"
+                            android:inputType="textPersonName"
+                            tools:ignore="Autofill" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/tv_employment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/tv_employment"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                        <EditText
+                            android:id="@+id/edt_employment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_employment"
+                            android:inputType="textPersonName"
+                            tools:ignore="Autofill" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/tv_company"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/tv_company"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                        <EditText
+                            android:id="@+id/edt_company"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_company"
+                            android:inputType="textPersonName"
+                            tools:ignore="Autofill" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/tv_salary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/tv_salary"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                        <EditText
+                            android:id="@+id/edt_salary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_salary"
+                            android:inputType="number"
+                            tools:ignore="Autofill" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/tv_bank_account"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/tv_bank_account"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                        <EditText
+                            android:id="@+id/edt_bank_account"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/hint_bank_account"
+                            android:inputType="number"
+                            tools:ignore="Autofill" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/tv_bank"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="@string/tv_bank"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                        <TextView
+                            android:id="@+id/tv_bank_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/male" />
+                            android:ellipsize="none"
+                            android:maxLines="100"
+                            android:padding="10dp"
+                            android:scrollHorizontally="false"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
-                        <RadioButton
-                            android:id="@+id/rd_female"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/female" />
-                    </RadioGroup>
+                    </TableRow>
 
-                </TableRow>
+                </TableLayout>
 
-                <TableRow>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/phone"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                    <EditText
-                        android:id="@+id/edt_phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_phone"
-                        android:inputType="phone"
-                        tools:ignore="Autofill" />
-
-                </TableRow>
-
-                <TableRow
+                <Button
+                    android:id="@+id/btn_save"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:text="@string/save_change" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/address"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                    <EditText
-                        android:id="@+id/edt_address"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_address"
-                        android:inputType="textPersonName"
-                        tools:ignore="Autofill" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_employment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/tv_employment"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                    <EditText
-                        android:id="@+id/edt_employment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_employment"
-                        android:inputType="textPersonName"
-                        tools:ignore="Autofill" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_company"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/tv_company"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                    <EditText
-                        android:id="@+id/edt_company"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_company"
-                        android:inputType="textPersonName"
-                        tools:ignore="Autofill" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_salary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/tv_salary"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                    <EditText
-                        android:id="@+id/edt_salary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_salary"
-                        android:inputType="number"
-                        tools:ignore="Autofill" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_bank_account"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/tv_bank_account"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                    <EditText
-                        android:id="@+id/edt_bank_account"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/hint_bank_account"
-                        android:inputType="number"
-                        tools:ignore="Autofill" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_bank"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="@string/tv_bank"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                    <TextView
-                        android:id="@+id/tv_bank_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:layout_weight="1"
-                        android:ellipsize="none"
-                        android:maxLines="100"
-                        android:scrollHorizontally="false"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-                </TableRow>
-
-            </TableLayout>
-
-            <Button
-                android:id="@+id/btn_save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/save_change" />
+            </LinearLayout>
 
         </LinearLayout>
 
