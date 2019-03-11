@@ -22,9 +22,12 @@ public class URLs {
     public static final String URL_GET_SHARING_APPLICATIONS = ROOT_URL + "getsharingapplications";
     public static final String URL_UPDATE_APPLICATION_STATUS = ROOT_URL + "updateapplicationstatus";
     public static final String URL_ASSIGN_AGENT = ROOT_URL + "assignagent";
+    public static final String URL_SEND_NOTIFICATION = ROOT_URL + "sendnotification";
 
     /*Admin activity*/
     public static final String URL_GET_AGENTS = ROOT_URL + "getagents";
     public static final String URL_UPDATE_USER_STATUS = ROOT_URL + "updateuserstatus";
+
+    public static final String URL_ASSIGN_TOKEN = ROOT_URL + "assigntoken";
 
 }

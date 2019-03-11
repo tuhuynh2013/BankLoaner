@@ -13,12 +13,14 @@ import android.widget.EditText;
 import com.example.tuhuynh.myapplication.admin.AdminHomeActivity;
 import com.example.tuhuynh.myapplication.agent.AgentHomeActivity;
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.asynctask.AssignFCMTokenAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
 import com.example.tuhuynh.myapplication.asynctask.GetUserStatusAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserStatusCallBack;
 import com.example.tuhuynh.myapplication.asynctask.GoogleRegisterAsync;
 import com.example.tuhuynh.myapplication.asynctask.GoogleRegisterCallBack;
+import com.example.tuhuynh.myapplication.asynctask.SendNotificationAsync;
 import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
@@ -29,12 +31,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.Objects;
 
@@ -85,6 +90,14 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                 // Open register screen
                 finish();
                 startActivity(new Intent(getApplicationContext(), ForgotPasswordActivity.class));
+            }
+        });
+
+        // If user presses on Forgot password?
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new SendNotificationAsync(getApplicationContext()).execute();
             }
         });
 
@@ -160,12 +173,15 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                             user = mAuth.getCurrentUser();
                             userProfile = new UserProfile();
                             userProfile.setId(user.getUid());
-                            userProfile.setProfileImg(Objects.requireNonNull(user.getPhotoUrl()).toString());
+                            if (user.getPhotoUrl() != null)
+                                userProfile.setProfileImg(user.getPhotoUrl().toString());
                             userProfile.setName(user.getDisplayName());
                             userProfile.setEmail(user.getEmail());
                             userProfile.setAccountType(AccountType.GOOGLE);
                             userProfile.setRole(UserRole.CUSTOMER);
                             registerGoogleAccount();
+                            // Add FCM token for user
+                            getFCMToken();
                         } else {
                             // If sign in fails, display a message to the userProfile.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -188,7 +204,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
         } else {
             pDialog.dismiss();
         }
-        CustomUtil.displayToast(getApplicationContext(), msg);
+        CustomUtil.displayToast(this, msg);
     }
 
     private void defaultSignIn() {
@@ -236,10 +252,13 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                                     assert user != null;
                                     userProfile = new UserProfile();
                                     userProfile.setId(user.getUid());
-                                    userProfile.setProfileImg(Objects.requireNonNull(user.getPhotoUrl()).toString());
+                                    if (user.getPhotoUrl() != null)
+                                        userProfile.setProfileImg(user.getPhotoUrl().toString());
                                     userProfile.setEmail(user.getEmail());
                                     userProfile.setAccountType(AccountType.DEFAULT);
                                     setUserSession();
+                                    // Add FCM token for user
+                                    getFCMToken();
                                 } else {
                                     edtPassword.getText().clear();
                                     edtPassword.setError(Objects.requireNonNull(task.getException()).getMessage());
@@ -262,18 +281,27 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
         }
     }
 
+    private void getFCMToken() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                new AssignFCMTokenAsync(userProfile.getId(), instanceIdResult.getToken()).execute();
+            }
+        });
+    }
+
     private void setUserSession() {
-        new GetUserProfileAsync(this, getApplicationContext(), userProfile).execute();
+        new GetUserProfileAsync(this, this, userProfile).execute();
     }
 
     @Override
     public void responseFromGetUserProfile(Object object) {
         UserProfile userProfile = (UserProfile) object;
         // Storing the userProfile in shared preferences
-        SharedPrefManager.getInstance(getApplicationContext()).userLogin(userProfile);
+        SharedPrefManager.getInstance(this).userLogin(userProfile);
         // Start the profile activity
         finish();
-        CustomUtil.displayToast(getApplicationContext(), getString(R.string.db_login_success));
+        CustomUtil.displayToast(this, getString(R.string.db_login_success));
         navigateBaseOnRole(userProfile.getRole());
     }
 
@@ -282,11 +310,11 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
      */
     private void navigateBaseOnRole(String userRole) {
         if (userRole.equalsIgnoreCase(UserRole.CUSTOMER)) {
-            startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
+            startActivity(new Intent(this, CustomerHomeActivity.class));
         } else if (userRole.equalsIgnoreCase(UserRole.AGENT)) {
-            startActivity(new Intent(getApplicationContext(), AgentHomeActivity.class));
+            startActivity(new Intent(this, AgentHomeActivity.class));
         } else if (userRole.equalsIgnoreCase(UserRole.ADMIN)) {
-            startActivity(new Intent(getApplicationContext(), AdminHomeActivity.class));
+            startActivity(new Intent(this, AdminHomeActivity.class));
         }
         finish();
         pDialog.dismiss();

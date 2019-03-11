@@ -199,7 +199,7 @@ public class AgentRegisterActivity extends AppCompatActivity implements GetBanks
                             userProfile.setRole(UserRole.AGENT);
                             userProfile.setAccountType(AccountType.DEFAULT);
                             AgentProfile agentProfile = new AgentProfile(userProfile, selectedBank);
-                            new AgentRegisterAsync(getApplicationContext(), agentProfile).execute();
+                            new AgentRegisterAsync(agentProfile).execute();
                             finish();
                             startActivity(new Intent(getApplicationContext(), AgentManagementActivity.class));
                         } else {

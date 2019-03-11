@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -33,7 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class NotificationUtils {
+class NotificationUtils {
 
     private Context mContext;
     // notification icon
@@ -78,6 +77,8 @@ public class NotificationUtils {
                 } else {
                     showSmallNotification(mBuilder, title, message, timeStamp, resultPendingIntent, alarmSound);
                 }
+            } else {
+                showSmallNotification(mBuilder, title, message, timeStamp, resultPendingIntent, alarmSound);
             }
         } else {
             showSmallNotification(mBuilder, title, message, timeStamp, resultPendingIntent, alarmSound);
@@ -110,7 +111,11 @@ public class NotificationUtils {
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        setChannel(notificationManager);
+        notificationManager.notify(0, notification);
+    }
 
+    private void setChannel(NotificationManager notificationManager) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(Config.CHANNEL_ID, Config.CHANNEL_NAME, importance);
@@ -121,10 +126,17 @@ public class NotificationUtils {
             mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             notificationManager.createNotificationChannel(mChannel);
         }
-        notificationManager.notify(0, notification);
     }
 
     private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
+
+        long timeMilliSec;
+        if (TextUtils.isEmpty(timeStamp)) {
+            timeMilliSec = System.currentTimeMillis();
+        } else {
+            timeMilliSec = getTimeMilliSec(timeStamp);
+        }
+
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
         bigPictureStyle.setBigContentTitle(title);
         bigPictureStyle.setSummaryText(Html.fromHtml(message).toString());
@@ -136,12 +148,13 @@ public class NotificationUtils {
                 .setContentIntent(resultPendingIntent)
                 .setSound(alarmSound)
                 .setStyle(bigPictureStyle)
-                .setWhen(getTimeMilliSec(timeStamp))
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                .setWhen(timeMilliSec)
+                .setLargeIcon(bitmap)
                 .setContentText(message)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        setChannel(notificationManager);
         notificationManager.notify(Config.NOTIFICATION_ID_BIG_IMAGE, notification);
     }
 
@@ -160,17 +173,6 @@ public class NotificationUtils {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
-        }
-    }
-
-    // Playing notification sound
-    void playNotificationSound() {
-        try {
-            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
