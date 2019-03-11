@@ -29,5 +29,6 @@ public class URLs {
     public static final String URL_UPDATE_USER_STATUS = ROOT_URL + "updateuserstatus";
 
     public static final String URL_ASSIGN_TOKEN = ROOT_URL + "assigntoken";
+    public static final String URL_GET_FCM_TOKENS = ROOT_URL + "gettokens";
 
 }
