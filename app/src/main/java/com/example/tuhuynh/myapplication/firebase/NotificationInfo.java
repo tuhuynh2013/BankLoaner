@@ -2,21 +2,21 @@ package com.example.tuhuynh.myapplication.firebase;
 
 public class NotificationInfo {
 
-    private String registrationID;
+    private String fcmToken;
     private String tile;
     private String message;
     private String imageUrl;
 
-    NotificationInfo() {
+    public NotificationInfo() {
 
     }
 
-    public String getRegistrationID() {
-        return registrationID;
+    public String getFcmToken() {
+        return fcmToken;
     }
 
-    public void setRegistrationID(String registrationID) {
-        this.registrationID = registrationID;
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 
     public String getTile() {

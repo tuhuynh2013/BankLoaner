@@ -245,6 +245,11 @@
     <string name="msg_empty_debit_amount">Please enter your debit amount</string>
     <string name="msg_empty_payment">Please enter your payment per month</string>
     <string name="msg_not_enough_payment">**Payment per month is not enough!!\nIncreasing Payment per month or Month, Please!</string>
+    <string name="msg_app_approved">Congratulation!! Your application at %1$s has approved!</string>
+    <string name="msg_app_rejected">We\'re sorry! Your application at %1$s has rejected!</string>
+
+    <!--Notification-->
+    <string name="ntf_tile_app_status">Application Status</string>
 
     <!--Dialog message-->
     <string name="dialog_search_banks">Searching… Please wait…</string>

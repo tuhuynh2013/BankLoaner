@@ -2,6 +2,7 @@ package com.example.tuhuynh.myapplication.agent;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,21 +13,28 @@ import android.widget.TextView;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
 import com.example.tuhuynh.myapplication.appication.ApplicationStatus;
+import com.example.tuhuynh.myapplication.asynctask.GetUserFCMTokensAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetUserFCMTokensCallBack;
+import com.example.tuhuynh.myapplication.asynctask.SendNotificationAsync;
 import com.example.tuhuynh.myapplication.asynctask.UpdateApplicationStatusAsync;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
+import com.example.tuhuynh.myapplication.firebase.NotificationInfo;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 
+import java.util.List;
 
-public class AgentAppInfoActivity extends AppCompatActivity implements GetUserProfileCallBack {
 
-    TextView tvApplicationID, tvMonth, tvAmount, tvInterest, tvDate, tvStatus;
-    TextView tvCustomerName, tvSurname, tvCompany, tvEmployment, tvSalary,
+public class AgentAppInfoActivity extends AppCompatActivity implements GetUserProfileCallBack, GetUserFCMTokensCallBack {
+
+    private TextView tvApplicationID, tvMonth, tvAmount, tvInterest, tvDate, tvStatus;
+    private TextView tvCustomerName, tvSurname, tvCompany, tvEmployment, tvSalary,
             tvGender, tvPhone, tvAddress, tvIdentity;
-    FloatingActionButton fabApproved, fabRejected;
+    private FloatingActionButton fabApproved, fabRejected;
 
-    ApplicationInfo application;
+    private ApplicationInfo application;
+    private NotificationInfo notificationInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +168,14 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 new UpdateApplicationStatusAsync(getApplicationContext(), application).execute();
+                String title = getString(R.string.ntf_tile_app_status);
+                if (application.getStatus().equalsIgnoreCase(ApplicationStatus.APPROVED)) {
+                    String msg = getString(R.string.msg_app_approved, application.getBankInfo().getName());
+                    sendNotifications(title, msg);
+                } else {
+                    String msg = getString(R.string.msg_app_rejected, application.getBankInfo().getName());
+                    sendNotifications(title, msg);
+                }
                 startActivity(new Intent(getApplicationContext(), AssignedAppsActivity.class));
                 finish();
             }
@@ -172,6 +188,31 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    /**
+     * Send notifications to user on multi-device
+     **/
+    private void sendNotifications(String title, String msg) {
+        notificationInfo = new NotificationInfo();
+        notificationInfo.setTile(title);
+        notificationInfo.setMessage(msg);
+        new GetUserFCMTokensAsync(this, this, application.getCustomer().getId()).execute();
+    }
+
+    @Override
+    public void responseFromGetUserFCMTokens(final List<String> tokens) {
+        int count = 0;
+        for (final String token : tokens) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    notificationInfo.setFcmToken(token);
+                    new SendNotificationAsync(notificationInfo).execute();
+                }
+            }, count);
+            count += 5000;
+        }
     }
 
 

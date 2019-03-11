@@ -20,7 +20,6 @@ import com.example.tuhuynh.myapplication.asynctask.GetUserStatusAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserStatusCallBack;
 import com.example.tuhuynh.myapplication.asynctask.GoogleRegisterAsync;
 import com.example.tuhuynh.myapplication.asynctask.GoogleRegisterCallBack;
-import com.example.tuhuynh.myapplication.asynctask.SendNotificationAsync;
 import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
@@ -90,14 +89,6 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
                 // Open register screen
                 finish();
                 startActivity(new Intent(getApplicationContext(), ForgotPasswordActivity.class));
-            }
-        });
-
-        // If user presses on Forgot password?
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new SendNotificationAsync(getApplicationContext()).execute();
             }
         });
 
@@ -209,8 +200,8 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
 
     private void defaultSignIn() {
         // First getting the values
-        final String email = edtEmail.getText().toString();
-        final String password = edtPassword.getText().toString();
+        String email = edtEmail.getText().toString();
+        String password = edtPassword.getText().toString();
 
         // Validating inputs
         if (TextUtils.isEmpty(email)) {
@@ -218,9 +209,14 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
             edtEmail.requestFocus();
             return;
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            edtEmail.setError(getString(R.string.msg_invalid_email));
-            edtEmail.requestFocus();
-            return;
+            if (!edtEmail.toString().contains("@")) {
+                edtEmail.setText(email.concat("@gmail.com"));
+                email = edtEmail.getText().toString();
+            } else {
+                edtEmail.setError(getString(R.string.msg_invalid_email));
+                edtEmail.requestFocus();
+                return;
+            }
         }
 
         if (TextUtils.isEmpty(password)) {
