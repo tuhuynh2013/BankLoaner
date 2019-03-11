@@ -30,8 +30,6 @@ import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.util.SharedPrefManager;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -62,6 +60,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
     private UserProfile userProfile;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 71;
+    private boolean isChangedImg = false;
 
     private FirebaseUser firebaseUser;
 
@@ -191,6 +190,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
+            isChangedImg = true;
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
@@ -368,7 +368,11 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         // If update UserProfile success, execute update upload profile picture
         if (msg.equalsIgnoreCase(getString(R.string.db_update_user_successfully))) {
             if (userProfile.getRole().equalsIgnoreCase(UserRole.CUSTOMER)) {
-                uploadImage();
+                if (isChangedImg) {
+                    uploadImage();
+                } else {
+                    updateCustomerProfile();
+                }
             } else if (userProfile.getRole().equalsIgnoreCase(UserRole.AGENT)) {
                 // If update Agent success, return intent result
                 if (TextUtils.isEmpty(caller)) {
@@ -411,7 +415,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     profileImgUrl = uri.toString();
-                                    saveUserInfoToFireBase();
+                                    saveProfileImgToFireBaseAuth();
                                 }
                             });
                         }
@@ -434,7 +438,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         }
     }
 
-    private void saveUserInfoToFireBase() {
+    private void saveProfileImgToFireBaseAuth() {
         UserProfileChangeRequest changeRequest = new UserProfileChangeRequest.Builder().
                 setPhotoUri(Uri.parse(profileImgUrl)).build();
 
