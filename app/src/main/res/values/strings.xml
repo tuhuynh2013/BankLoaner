@@ -172,6 +172,7 @@
     <string name="hint_date">Date</string>
     <string name="hint_status">Status</string>
     <string name="hint_agent">Agent</string>
+    <string name="hint_agent_comment">Enter some note for customer…</string>
 
     <!--TextView section-->
     <string name="tv_email_colon">Email:</string>
@@ -245,8 +246,8 @@
     <string name="msg_empty_debit_amount">Please enter your debit amount</string>
     <string name="msg_empty_payment">Please enter your payment per month</string>
     <string name="msg_not_enough_payment">**Payment per month is not enough!!\nIncreasing Payment per month or Month, Please!</string>
-    <string name="msg_app_approved">Congratulation!! Your application at %1$s has approved!</string>
-    <string name="msg_app_rejected">We\'re sorry! Your application at %1$s has rejected!</string>
+    <string name="msg_app_approved">Congratulation!! Your application at %1$s has approved! Check email for more info!</string>
+    <string name="msg_app_rejected">We\'re sorry! Your application at %1$s has rejected! Check email for more info!</string>
 
     <!--Notification-->
     <string name="ntf_tile_app_status">Application Status</string>
@@ -254,5 +255,8 @@
     <!--Dialog message-->
     <string name="dialog_search_banks">Searching… Please wait…</string>
     <string name="des_profile_picture">Your profile picture</string>
+
+    <string name="email_approved">Dear %1$s,\n\nCONGRATULATION! Your application has approved by %2$s from %3$s.\n\nHere is some note to progress debit section:\n\n%4$s\n\nThank you for co-operating with us!\n\nSincerely,\nBankLoaner Team</string>
+    <string name="email_rejected">Dear %1$s,\n\nWe\'re sorry! Your application has rejected by %2$s from %3$s.\n\nHere is some note from agent:\n\n%4$s\n\nThank you for co-operating with us!\n\nSincerely,\nBankLoaner Team</string>
 
 </resources>

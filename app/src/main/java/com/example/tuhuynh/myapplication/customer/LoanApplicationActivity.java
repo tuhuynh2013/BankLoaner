@@ -82,7 +82,7 @@ public class LoanApplicationActivity extends AppCompatActivity implements GetUse
         tvAmount.setText(amount);
         tvInterest.setText(interest);
 
-        asyncTask = new GetUserProfileAsync(this, this, userProfile);
+        asyncTask = new GetUserProfileAsync(this, userProfile);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override

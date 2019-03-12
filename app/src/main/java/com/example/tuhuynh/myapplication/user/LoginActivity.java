@@ -287,7 +287,7 @@ public class LoginActivity extends AppCompatActivity implements GetUserProfileCa
     }
 
     private void setUserSession() {
-        new GetUserProfileAsync(this, this, userProfile).execute();
+        new GetUserProfileAsync(this, userProfile).execute();
     }
 
     @Override

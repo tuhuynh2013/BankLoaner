@@ -2,13 +2,18 @@ package com.example.tuhuynh.myapplication.agent;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tuhuynh.myapplication.R;
 import com.example.tuhuynh.myapplication.appication.ApplicationInfo;
@@ -21,7 +26,10 @@ import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
 import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
 import com.example.tuhuynh.myapplication.firebase.NotificationInfo;
+import com.example.tuhuynh.myapplication.user.LoginActivity;
+import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
+import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 
 import java.util.List;
 
@@ -34,7 +42,11 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
     private FloatingActionButton fabApproved, fabRejected;
 
     private ApplicationInfo application;
+    private CustomerProfile customerProfile;
+    private UserProfile agentProfile;
     private NotificationInfo notificationInfo;
+
+    private final int REQUEST_CODE = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +57,8 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        isLoggedIn();
 
         // Initial element
         initialElement();
@@ -57,7 +71,7 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
         setApplicationInfo();
 
         // Retrieve customer profile from db
-        new GetUserProfileAsync(this, this, application.getCustomer()).execute();
+        new GetUserProfileAsync(this, application.getCustomer()).execute();
 
         String caller = intent.getStringExtra("caller");
         if (caller.equalsIgnoreCase("AgentAppHistory")) {
@@ -84,6 +98,19 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
             });
         }
 
+    }
+
+    /**
+     * Check user is logged in and initial firebase component
+     **/
+    private void isLoggedIn() {
+        // If the userProfile is not logged in, starting the login activity
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        } else {
+            agentProfile = SharedPrefManager.getInstance(this).getUser();
+        }
     }
 
     /**
@@ -151,6 +178,8 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
         tvPhone.setText(customer.getPhone());
         tvAddress.setText(customer.getAddress());
         tvIdentity.setText(customer.getIdentity());
+
+        customerProfile = customer;
     }
 
     /**
@@ -160,38 +189,98 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
      * @param msgDialog content of dialog
      */
     private void showAlertDialog(String title, String msgDialog) {
+        final EditText input = new EditText(this);
+
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
+        input.setHint(getString(R.string.hint_agent_comment));
+        input.setSingleLine(false);
+        input.setLines(4);
+        input.setMaxLines(7);
+        input.setGravity(Gravity.START | Gravity.TOP);
+        input.setHorizontalScrollBarEnabled(false);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
         builder.setMessage(msgDialog);
         builder.setCancelable(false);
+        builder.setView(input);
+
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 new UpdateApplicationStatusAsync(getApplicationContext(), application).execute();
                 String title = getString(R.string.ntf_tile_app_status);
                 if (application.getStatus().equalsIgnoreCase(ApplicationStatus.APPROVED)) {
-                    String msg = getString(R.string.msg_app_approved, application.getBankInfo().getName());
-                    sendNotifications(title, msg);
+                    // Send notification
+                    String ntfMessage = getString(R.string.msg_app_approved, application.getBankInfo().getName());
+                    sendNotifications(title, ntfMessage);
+                    // Send an email
+                    String emailMessage = getString(R.string.email_approved, getProfessionalName(), agentProfile.getName(), application.getBankInfo().getName(), input.getText().toString());
+                    sendEmailToCustomer(title, emailMessage);
                 } else {
+                    // Send notification
                     String msg = getString(R.string.msg_app_rejected, application.getBankInfo().getName());
                     sendNotifications(title, msg);
+                    // Send an email
+                    String emailMessage = getString(R.string.email_rejected, getProfessionalName(), agentProfile.getName(), application.getBankInfo().getName(), input.getText().toString());
+                    sendEmailToCustomer(title, emailMessage);
                 }
-                startActivity(new Intent(getApplicationContext(), AssignedAppsActivity.class));
-                finish();
             }
         });
+
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
             }
         });
+
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
     /**
-     * Send notifications to user on multi-device
+     *
+     **/
+    private void sendEmailToCustomer(String title, String message) {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", customerProfile.getEmail(), null));
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+        try {
+            startActivityForResult(Intent.createChooser(emailIntent, "Send mail..."), REQUEST_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(AgentAppInfoActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Generate customer professional name
+     **/
+    private String getProfessionalName() {
+        String customerName;
+        if (customerProfile.getGender().equalsIgnoreCase("male")) {
+            customerName = "Mr.";
+        } else {
+            customerName = "Mrs.";
+        }
+        return customerName.concat(customerProfile.getName());
+    }
+
+    /**
+     *
+     **/
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            startActivity(new Intent(getApplicationContext(), AssignedAppsActivity.class));
+            finish();
+        }
+    }
+
+    /**
+     * Send notifications to customer. Support FCM for multi-devices
      **/
     private void sendNotifications(String title, String msg) {
         notificationInfo = new NotificationInfo();

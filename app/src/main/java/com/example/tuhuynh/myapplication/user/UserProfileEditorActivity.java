@@ -91,7 +91,7 @@ public class UserProfileEditorActivity extends AppCompatActivity implements GetU
         }
 
         // Retrieve userProfile profile from db
-        new GetUserProfileAsync(this, this, userProfile).execute();
+        new GetUserProfileAsync(this, userProfile).execute();
 
         // Initial for profile editor screen
         initialViews();

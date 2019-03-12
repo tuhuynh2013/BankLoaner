@@ -1,8 +1,8 @@
 package com.example.tuhuynh.myapplication.asynctask;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.tuhuynh.myapplication.agent.AgentProfile;
 import com.example.tuhuynh.myapplication.bank.BankInfo;
@@ -11,7 +11,6 @@ import com.example.tuhuynh.myapplication.connecthandler.URLs;
 import com.example.tuhuynh.myapplication.customer.CustomerProfile;
 import com.example.tuhuynh.myapplication.user.UserProfile;
 import com.example.tuhuynh.myapplication.user.UserRole;
-import com.example.tuhuynh.myapplication.util.CustomUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,15 +20,13 @@ import java.util.HashMap;
 
 public class GetUserProfileAsync extends AsyncTask<Void, Void, String> {
 
+    private final String TAG = GetUserProfileAsync.class.getSimpleName();
     private GetUserProfileCallBack cb;
-    @SuppressLint("StaticFieldLeak")
-    private Context context;
     @SuppressLint("StaticFieldLeak")
     private UserProfile userProfile;
 
-    public GetUserProfileAsync(GetUserProfileCallBack cb, Context context, UserProfile userProfile) {
+    public GetUserProfileAsync(GetUserProfileCallBack cb, UserProfile userProfile) {
         this.cb = cb;
-        this.context = context;
         this.userProfile = userProfile;
     }
 
@@ -60,6 +57,7 @@ public class GetUserProfileAsync extends AsyncTask<Void, Void, String> {
             // If no error in response
             if (!obj.getBoolean("error")) {
                 JSONObject userJson = obj.getJSONObject("userProfile");
+                userProfile.setEmail(userJson.getString("email"));
                 userProfile.setName(userJson.getString("name"));
                 userProfile.setSurname(userJson.getString("surname"));
                 userProfile.setIdentity(userJson.getString("identity"));
@@ -92,9 +90,11 @@ public class GetUserProfileAsync extends AsyncTask<Void, Void, String> {
                 } else if (userProfile.getRole().equalsIgnoreCase(UserRole.ADMIN)) {
                     cb.responseFromGetUserProfile(userProfile);
                 }
+                Log.v(TAG, msg);
             } else {
-                CustomUtil.displayToast(context.getApplicationContext(), msg);
+                Log.e(TAG, msg);
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
