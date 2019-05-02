@@ -4,6 +4,9 @@
     package="com.example.tuhuynh.myapplication">
     <!-- adding internet permission -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.CALL_PHONE"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -35,7 +38,9 @@
         <activity
             android:name=".admin.AgentProfileActivity"
             android:parentActivityName=".admin.AgentManagementActivity" /> <!-- UserProfile Activities -->
-        <activity android:name=".user.LoginActivity">
+        <activity
+            android:name=".user.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -70,6 +75,7 @@
             android:parentActivityName=".agent.AssignedAppsActivity" />
         <activity
             android:name=".agent.SharingAppsActivity"
+            android:exported="true"
             android:parentActivityName=".agent.AssignedAppsActivity" /> <!-- Customer Activities -->
         <activity
             android:name=".customer.CustomerHomeActivity"

@@ -11,11 +11,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.tuhuynh.myapplication.asynctask.AssignFCMTokenAsync;
 import com.example.tuhuynh.myapplication.asynctask.CustomerRegisterAsync;
 import com.example.tuhuynh.myapplication.asynctask.CustomerRegisterCallBack;
+import com.example.tuhuynh.myapplication.asynctask.GetUserProfileAsync;
+import com.example.tuhuynh.myapplication.asynctask.GetUserProfileCallBack;
+import com.example.tuhuynh.myapplication.customer.CustomerHomeActivity;
 import com.example.tuhuynh.myapplication.util.CustomUtil;
 import com.example.tuhuynh.myapplication.R;
+import com.example.tuhuynh.myapplication.util.SharedPrefManager;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,11 +29,13 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.Objects;
 
 
-public class RegisterActivity extends AppCompatActivity implements CustomerRegisterCallBack {
+public class RegisterActivity extends AppCompatActivity implements CustomerRegisterCallBack, GetUserProfileCallBack {
 
     EditText edtName, edtEmail, edtPassword, edtConfirmPassword;
     TextView tvLogin;
@@ -36,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements CustomerRegis
 
     // Defining firebase auth object
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity implements CustomerRegis
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
                             assert user != null;
                             UserProfile userProfile = new UserProfile();
                             userProfile.setId(user.getUid());
@@ -172,12 +181,32 @@ public class RegisterActivity extends AppCompatActivity implements CustomerRegis
     @Override
     public void responseFromCustomerRegister(String msg) {
         if (msg.equalsIgnoreCase(getString(R.string.db_customer_register_success))) {
-            finish();
-            startActivity(new Intent(this, UserProfileEditorActivity.class));
+            UserProfile userProfile = new UserProfile();
+            userProfile.setId(user.getUid());
+            new GetUserProfileAsync(this, userProfile).execute();
         } else {
             CustomUtil.displayToast(this, msg);
         }
     }
 
+
+    @Override
+    public void responseFromGetUserProfile(Object object) {
+        UserProfile userProfile = (UserProfile) object;
+        // Storing the userProfile in shared preferences
+        SharedPrefManager.getInstance(this).userLogin(userProfile);
+        getFCMToken();
+        finish();
+        startActivity(new Intent(this, CustomerHomeActivity.class));
+    }
+
+    private void getFCMToken() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(RegisterActivity.this, new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                new AssignFCMTokenAsync(user.getUid(), instanceIdResult.getToken()).execute();
+            }
+        });
+    }
 
 }

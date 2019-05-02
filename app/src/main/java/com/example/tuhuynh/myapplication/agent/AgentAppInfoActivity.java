@@ -300,7 +300,7 @@ public class AgentAppInfoActivity extends AppCompatActivity implements GetUserPr
                     new SendNotificationAsync(notificationInfo).execute();
                 }
             }, count);
-            count += 5000;
+            count += 1000;
         }
     }
 

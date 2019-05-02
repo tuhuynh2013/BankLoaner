@@ -1,10 +1,12 @@
 package com.example.tuhuynh.myapplication.agent;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,8 +24,9 @@ import java.util.List;
 
 public class SharingAppsActivity extends AppCompatActivity implements GetAgentAppsCallBack {
 
-    UserProfile userProfile;
-    ListView lvSharingApplications;
+    private UserProfile userProfile;
+    private ListView lvSharingApplications;
+    private String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +61,14 @@ public class SharingAppsActivity extends AppCompatActivity implements GetAgentAp
             SharingAppAdapter sharingAppAdapter = new SharingAppAdapter(this, R.layout.sharing_app_adapter, applications);
             lvSharingApplications.setAdapter(sharingAppAdapter);
 
-//            lvSharingApplications.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-//                    ApplicationInfo application = (ApplicationInfo) parent.getItemAtPosition(position);
-//                    Intent intent = new Intent(parent.getContext(), AgentAppInfoActivity.class);
-//                    intent.putExtra("application", application);
-//                    intent.putExtra("caller", caller);
-//                    parent.getContext().startActivity(intent);
-//                }
-//            });
+            lvSharingApplications.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    ApplicationInfo application = (ApplicationInfo) parent.getItemAtPosition(position);
+                    phoneNumber = application.getCustomer().getPhone().substring(1);
+                    makeCall();
+                }
+            });
         } else {
             // Create text view to show message
             lvSharingApplications.setVisibility(View.INVISIBLE);
@@ -76,6 +77,12 @@ public class SharingAppsActivity extends AppCompatActivity implements GetAgentAp
             tvMsg.setText(msg);
             setContentView(tvMsg);
         }
+    }
+
+    private void makeCall() {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:+84" + phoneNumber));
+        startActivity(intent);
     }
 
 
